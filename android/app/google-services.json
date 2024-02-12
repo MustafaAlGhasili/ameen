@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "8667670214",
+    "project_id": "ameen-501c5",
+    "storage_bucket": "ameen-501c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8667670214:android:051037edc23feb89b099c7",
+        "android_client_info": {
+          "package_name": "com.example.ameed_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvOpyXNHDfKeLo5R90oa04H5K6Zk36Ros"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8667670214:android:952ff9cac97cbebfb099c7",
+        "android_client_info": {
+          "package_name": "com.example.ameen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvOpyXNHDfKeLo5R90oa04H5K6Zk36Ros"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8667670214:android:926d25781807b926b099c7",
+        "android_client_info": {
+          "package_name": "com.example.ameen_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvOpyXNHDfKeLo5R90oa04H5K6Zk36Ros"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
