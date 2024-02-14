@@ -1,7 +1,6 @@
 import 'package:ameen/controller/controller.dart';
 import 'package:ameen/view/ui/sign/sign_up.dart';
 import 'package:ameen/view/ui/sign/start.dart';
-import 'package:ameen/view/ui/sign/student_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,7 +9,7 @@ void main() {
   runApp(GetMaterialApp(
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: const MyApp(),
+    home: const SignUp(),
   ));
 }
 

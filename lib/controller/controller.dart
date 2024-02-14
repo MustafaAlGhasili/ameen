@@ -18,7 +18,8 @@ class SignController extends GetxController {
   late StreamController<ErrorAnimationType> errorController;
   TextEditingController otpController = TextEditingController();
   var onTapRecognizer;
-  String value = '';
+  // String value = '';
+  RxInt step = 0.obs;
 
 
 
