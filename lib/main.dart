@@ -1,15 +1,29 @@
-import 'package:ameen/controller/controller.dart';
-import 'package:ameen/view/ui/sign/sign_up.dart';
+import 'package:ameen/controller/sign_controller.dart';
+import 'package:ameen/view/ui/home/home.dart';
 import 'package:ameen/view/ui/sign/start.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main() {
+import 'controller/home_controller.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   Get.put(SignController());
-  runApp(GetMaterialApp(
+  Get.put(HomeController());
+  // Get.put(CamController());
+  // cameras = await availableCameras();
+  runApp(
+      // DevicePreview(
+      // enabled: !kReleaseMode,
+      // builder: (context) =>
+      GetMaterialApp(
+    useInheritedMediaQuery: true,
+    // locale: DevicePreview.locale(context),
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: const SignUp(),
+    home: const Home(),
+    // )
   ));
 }
 

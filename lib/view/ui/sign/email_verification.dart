@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import '../../../controller/controller.dart';
+import '../../../controller/sign_controller.dart';
 
 class EmailVerification extends StatelessWidget {
   const EmailVerification({super.key});
@@ -55,6 +55,7 @@ class EmailVerification extends StatelessWidget {
                           padding:
                               EdgeInsets.symmetric(horizontal: width * 0.06),
                           child: PinCodeTextField(
+                            controller: controller.emailVerificationCont,
                             appContext: context,
                             pastedTextStyle: const TextStyle(
                               color: Color.fromARGB(255, 113, 65, 146),
@@ -84,14 +85,10 @@ class EmailVerification extends StatelessWidget {
                                 const Duration(milliseconds: 300),
                             textStyle:
                                 const TextStyle(fontSize: 20, height: 1.6),
-                            // enableActiveFill: true,
-                            errorAnimationController:
-                                controller.errorController,
-                            controller: controller.otpController,
+
                             keyboardType: TextInputType.number,
                             onChanged: (value) {
-                              controller.otpController.text = value;
-                              print(controller.otpController.text);
+                              controller.code = value;
                             },
                             onCompleted: (v) async {
                               Get.dialog(
@@ -104,7 +101,7 @@ class EmailVerification extends StatelessWidget {
                               await Future.delayed(const Duration(seconds: 2));
 
                               if (v == '123456') {
-                                Get.back(closeOverlays: true);
+                               Navigator.of(Get.overlayContext!).pop();
                                 Get.showSnackbar(const GetSnackBar(
                                   title: "Good",
                                   message: "Go ahead",
@@ -112,8 +109,8 @@ class EmailVerification extends StatelessWidget {
                                   duration: Duration(seconds: 2),
                                 ));
                               }else {
-                                Get.back(closeOverlays: true);
-
+                                Navigator.of(Get.overlayContext!).pop();
+                                controller.emailVerificationCont.text = '';
                                 Get.showSnackbar(const GetSnackBar(
                                   title: "Error",
                                   message: "Try Again",
@@ -141,7 +138,7 @@ class EmailVerification extends StatelessWidget {
                       ),
                       ButtonModel(
                         onTap: () {
-                          if(controller.otpController.text.isEmpty){
+                          if(controller.code.isEmpty){
                             Get.showSnackbar(const GetSnackBar(
                               title: "sljn",
                               message: "sjkcn",

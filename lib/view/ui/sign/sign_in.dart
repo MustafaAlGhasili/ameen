@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import '../widget/text_field.dart';
-import '../../../controller/controller.dart';
+import '../../../controller/sign_controller.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
@@ -53,9 +53,7 @@ class SignIn extends StatelessWidget {
                         style: TextStyle(fontSize: height * 0.033),
                       ),
                       TextFieldModel(
-                        onChanged: (value) {
-                          controller.email = value;
-                        },
+                        controller: controller.signInEmailCont,
                         obscureText: false,
                         hint: "البريد الاكتروني",
                         label: "البريد الاكتروني",
@@ -64,7 +62,7 @@ class SignIn extends StatelessWidget {
                       ),
                       Obx(
                         () => TextFieldModel(
-                            controller: controller.passCont,
+                            controller: controller.signInPassCont,
                             obscureText: controller.visibility.value,
                             hint: "كلمة السر",
                             label: "كلمة السر",
@@ -83,7 +81,7 @@ class SignIn extends StatelessWidget {
                       SizedBox(height: height * 0.02),
                       ButtonModel(
                         onTap: () {
-                          if (controller.passCont.text.isEmpty) {
+                          if (controller.signInPassCont.text.isEmpty) {
                             Get.showSnackbar(const GetSnackBar(
                               title: "Error",
                               message: "Please enter the password",
@@ -113,7 +111,7 @@ class SignIn extends StatelessWidget {
                             ButtonModel(
                                 onTap: () {
                                   Get.to(
-                                    () => const EmailVerification(),
+                                    () => const ForgetPassword(),
                                   );
                                 },
                                 content: "نسيت كلمه المرور؟",

@@ -1,9 +1,10 @@
+import 'package:ameen/view/ui/sign/email_verification.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import '../widget/text_field.dart';
-import '../../../controller/controller.dart';
+import '../../../controller/sign_controller.dart';
 
 class ForgetPassword extends StatelessWidget {
   const ForgetPassword({super.key});
@@ -51,8 +52,10 @@ class ForgetPassword extends StatelessWidget {
                         height: height * 0.1,
                       ),
                       TextFieldModel(
+                        keyboardType: TextInputType.emailAddress,
                         onChanged: (value) {
-                          controller.email = value;
+                          controller.forgetPassword = value;
+                          print(controller.forgetPassword);
                         },
                         obscureText: false,
                         hint: "البريد الاكتروني",
@@ -65,13 +68,28 @@ class ForgetPassword extends StatelessWidget {
                       ),
                       ButtonModel(
                         onTap: () {
-                          if (controller.passCont.text.isEmpty) {
+                          if (controller.forgetPassword.isEmpty) {
                             Get.showSnackbar(const GetSnackBar(
                               title: "Error",
-                              message: "Please enter the password",
+                              message: "Please enter the email",
                               duration: Duration(seconds: 2),
                               animationDuration: Duration(milliseconds: 600),
                             ));
+                          }else if(!controller.forgetPassword.contains("@")){
+                            Get.showSnackbar(const GetSnackBar(
+                              title: "Error",
+                              message: "Invalid Email",
+                              duration: Duration(seconds: 2),
+                              animationDuration: Duration(milliseconds: 600),
+                            ));
+                          }else {
+                            Get.showSnackbar(const GetSnackBar(
+                              title: "Done",
+                              message: "We Sent email verification to your email",
+                              duration: Duration(seconds: 2),
+                              animationDuration: Duration(milliseconds: 600),
+                            ));
+                            Get.to(const EmailVerification());
                           }
                         },
                         backColor: const Color.fromARGB(255, 113, 65, 146),

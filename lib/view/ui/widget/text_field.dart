@@ -1,4 +1,4 @@
-import 'package:ameen/controller/controller.dart';
+import 'package:ameen/controller/sign_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +12,7 @@ class TextFieldModel extends StatefulWidget {
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final String? text;
+  final TextInputType? keyboardType;
 
   // final String? Function(String?)? validator;
 
@@ -25,7 +26,7 @@ class TextFieldModel extends StatefulWidget {
     required this.obscureText,
     this.controller,
     this.onChanged,
-    this.text,
+    this.text, this.keyboardType,
     // this.validator,
   });
 
@@ -38,7 +39,8 @@ class _TextFieldModelState extends State<TextFieldModel> {
 
   @override
   Widget build(BuildContext context) {
-    double width = Get.width;
+    double width = MediaQuery.of(context).size.width;
+    // double height = MediaQuery.of(context).size.height;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: width * 0.015),
       child: Column(
@@ -51,7 +53,7 @@ class _TextFieldModelState extends State<TextFieldModel> {
                   child: Text(
                     "${widget.text}",
                     textAlign: TextAlign.start,
-                    style: TextStyle(fontSize: width * 0.05),
+                    style: TextStyle(fontSize: width * 0.05,height: 1.5),
                   ),
                 ),
           Container(
@@ -63,8 +65,9 @@ class _TextFieldModelState extends State<TextFieldModel> {
             height: widget.height,
             width: widget.width,
             child: TextFormField(
+              keyboardType: widget.keyboardType,
               style: const TextStyle(
-                height: 1,
+                height: 0.8,
               ),
               controller: widget.controller,
               validator: (value) {
