@@ -1,8 +1,19 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
-class HomeController extends GetxController{
+class HomeController extends GetxController {
   RxInt bottomIndex = 0.obs;
+  RxBool map = false.obs;
 
+  List studentStateNotification = [
+    "الباص علئ وشك الوصول",
+    "تم صعود الطالب للباص",
+    "تم صعود الطالب للباص",
+    "تم صعود الطالب للباص",
+    "تم نزول الطالب من الباص"
+  ];
+
+  RxBool isInTheWay = false.obs;
+  RxBool isClose = false.obs;
+  RxBool isArraived = false.obs;
+  RxBool notificationOn = true.obs;
 }

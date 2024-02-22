@@ -1,4 +1,3 @@
-import 'package:ameen/view/ui/sign/email_verification.dart';
 import 'package:ameen/view/ui/sign/sign_up.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:ameen/view/ui/sign/forget_password.dart';
@@ -58,7 +57,7 @@ class SignIn extends StatelessWidget {
                         hint: "البريد الاكتروني",
                         label: "البريد الاكتروني",
                         sufIcon: const Icon(IconlyLight.profile),
-                        height: height * 0.07,
+                        vPadding: height * 0.07,
                       ),
                       Obx(
                         () => TextFieldModel(
@@ -66,7 +65,7 @@ class SignIn extends StatelessWidget {
                             obscureText: controller.visibility.value,
                             hint: "كلمة السر",
                             label: "كلمة السر",
-                            height: height * 0.07,
+                            vPadding: height * 0.07,
                             sufIcon: controller.visibility.value
                                 ? IconButton(
                                     icon: const Icon(Icons.visibility_outlined),
@@ -92,6 +91,7 @@ class SignIn extends StatelessWidget {
                         },
                         backColor: const Color.fromARGB(255, 113, 65, 146),
                         content: "تسجيل الدخول",
+                        rowMainAxisAlignment: MainAxisAlignment.center,
                         width: width * 0.9,
                         height: height * 0.06,
                         style: TextStyle(

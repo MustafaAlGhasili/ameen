@@ -2,10 +2,8 @@ import 'package:ameen/view/ui/sign/signup_widgets.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 import '../../../controller/sign_controller.dart';
-import '../widget/button_model.dart';
-import '../widget/text_field.dart';
+
 
 SignController controller = Get.find();
 

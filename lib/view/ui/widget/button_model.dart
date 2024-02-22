@@ -7,6 +7,13 @@ class ButtonModel extends StatelessWidget {
   final TextStyle? style;
   final Color? backColor;
   final void Function()? onTap;
+  final TextAlign? textAlign;
+  final IconData? icon;
+  final double? iconSize;
+  final double vMargin;
+  final double hMargin;
+  final double? textWidth;
+  final MainAxisAlignment rowMainAxisAlignment;
 
   const ButtonModel(
       {super.key,
@@ -15,24 +22,40 @@ class ButtonModel extends StatelessWidget {
       required this.content,
       this.style,
       this.backColor,
-      this.onTap});
+      this.onTap,
+      this.textAlign,
+      this.icon,
+      this.iconSize,
+      this.vMargin = 0,
+      this.hMargin = 0,
+      this.textWidth,
+      this.rowMainAxisAlignment = MainAxisAlignment.start});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            color: backColor, borderRadius: BorderRadius.circular(13)),
-        width: width,
-        height: height,
-        child: Text(
-          textAlign: TextAlign.center,
-          content,
-          style: style,
-        ),
-      ),
+          margin: EdgeInsets.symmetric(vertical: vMargin, horizontal: hMargin),
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              color: backColor, borderRadius: BorderRadius.circular(15)),
+          width: width,
+          height: height,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Row(
+              mainAxisAlignment: rowMainAxisAlignment,
+              children: [
+                Text(
+                  textAlign: TextAlign.center,
+                  content,
+                  style: style,
+                ),
+                Icon(icon, color: Colors.white, size: iconSize),
+              ],
+            ),
+          )),
     );
   }
 }

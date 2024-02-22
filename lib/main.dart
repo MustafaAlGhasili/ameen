@@ -1,9 +1,11 @@
 import 'package:ameen/controller/sign_controller.dart';
+import 'package:ameen/view/ui/sign/sign_up.dart';
 import 'package:ameen/view/ui/home/home.dart';
 import 'package:ameen/view/ui/sign/start.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+// import 'package:device_preview/device_preview.dart';
 import 'controller/home_controller.dart';
 
 void main() async {
@@ -11,8 +13,8 @@ void main() async {
 
   Get.put(SignController());
   Get.put(HomeController());
-  // Get.put(CamController());
-  // cameras = await availableCameras();
+
+
   runApp(
       // DevicePreview(
       // enabled: !kReleaseMode,

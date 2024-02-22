@@ -61,7 +61,7 @@ class ForgetPassword extends StatelessWidget {
                         hint: "البريد الاكتروني",
                         label: "البريد الاكتروني",
                         sufIcon: const Icon(IconlyLight.message),
-                        height: height * 0.07,
+                        vPadding: height * 0.07,
                       ),
                       SizedBox(
                         height: height * 0.02,

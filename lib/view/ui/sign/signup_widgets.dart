@@ -1,5 +1,4 @@
 import 'package:ameen/view/ui/home/home.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -9,63 +8,78 @@ import '../widget/text_field.dart';
 
 SignController controller = Get.find();
 
-
-class Parent extends StatelessWidget {
+class Parent extends StatefulWidget {
   const Parent({super.key});
 
   @override
+  State<Parent> createState() => _ParentState();
+}
+
+class _ParentState extends State<Parent> {
+  @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: width * 0.03, vertical: height * 0.04),
-        child: Column(
-          children: [
-            Text("معلومات ولي الأمر", style: TextStyle(fontSize: width * 0.07)),
-            TextFieldModel(
-              text: "الاسم الاول",
-              height: height * 0.06,
-              obscureText: false,
-            ),
-            TextFieldModel(
-              text: "الاسم الأخير",
-              height: height * 0.06,
-              obscureText: false,
-            ),
-            TextFieldModel(
-              text: "رقم الاحوال",
-              height: height * 0.06,
-              obscureText: false,
-            ),
-            TextFieldModel(
-              text: "رقم التواصل",
-              height: height * 0.06,
-              obscureText: false,
-            ),
-            TextFieldModel(
-              text: "ادخل كلمة السر",
-              height: height * 0.06,
-              obscureText: true,
-            ),
-            SizedBox(
-              height: height * 0.05,
-            ),
-            ButtonModel(
-              onTap: () {
-                controller.step.value++;
-                // Get.to(() => const StudentInfo());
-              },
-              width: width * 0.9,
-              content: 'التالي',
-              backColor: const Color.fromARGB(255, 113, 65, 146),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: width * 0.05,
+    return Form(
+      key: formKey,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: width * 0.00, vertical: height * 0.04),
+          child: Column(
+            children: [
+              Text("معلومات ولي الأمر",
+                  style: TextStyle(fontSize: width * 0.07)),
+              TextFieldModel(
+                vPadding: height * 0.02,
+                keyboardType: TextInputType.name,
+                text: "الاسم الاول",
               ),
-            ),
-          ],
+              TextFieldModel(
+                vPadding: height * 0.02,
+                keyboardType: TextInputType.name,
+                text: "الاسم الأخير",
+              ),
+              TextFieldModel(
+                vPadding: height * 0.02,
+                keyboardType: TextInputType.number,
+                text: "رقم الاحوال",
+              ),
+              TextFieldModel(
+                vPadding: height * 0.02,
+                keyboardType: TextInputType.number,
+                text: "رقم التواصل",
+              ),
+              TextFieldModel(
+                vPadding: height * 0.02,
+                keyboardType: TextInputType.visiblePassword,
+                text: "ادخل كلمة السر",
+                obscureText: true,
+              ),
+              SizedBox(
+                height: height * 0.05,
+              ),
+              ButtonModel(
+                onTap: () {
+                  if (formKey.currentState!.validate()) {
+                    controller.step.value++;
+                  }
+                  // Get.to(() => const StudentInfo());
+                },
+                width: width * 0.9,
+                content: 'التالي',
+                rowMainAxisAlignment: MainAxisAlignment.center,
+                textAlign: TextAlign.center,
+                backColor: const Color.fromARGB(255, 113, 65, 146),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: width * 0.05,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -91,24 +105,24 @@ class Student extends StatelessWidget {
               Text("معلومات الطالب", style: TextStyle(fontSize: width * 0.07)),
               TextFieldModel(
                 text: "الاسم الاول",
-                height: height * 0.06,
+                vPadding: height * 0.06,
                 obscureText: false,
               ),
               TextFieldModel(
                 text: "الاسم الأخير",
-                height: height * 0.06,
+                vPadding: height * 0.06,
                 obscureText: false,
               ),
               TextFieldModel(
                 text: "رقم الاحوال",
-                height: height * 0.06,
+                vPadding: height * 0.06,
                 obscureText: false,
               ),
               TextFieldModel(
                 sufIcon: IconButton(
                     onPressed: () {}, icon: const Icon(IconlyLight.calendar)),
                 text: "تاريخ الميلاد",
-                height: height * 0.06,
+                vPadding: height * 0.06,
                 obscureText: false,
               ),
               Obx(
@@ -133,15 +147,15 @@ class Student extends StatelessWidget {
                         ),
                       ),
                       DropdownButton(
-                          items: controller.blood
-                              .map((e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text("$e"),
-                                  ))
-                              .toList(),
-                          onChanged: (value) {
-                            //controller.blood.value = value as RxList;
-                          },
+                        items: controller.blood
+                            .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text("$e"),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          //controller.blood.value = value as RxList;
+                        },
                       ),
                     ],
                   ),
@@ -156,6 +170,8 @@ class Student extends StatelessWidget {
                 },
                 width: width * 0.9,
                 content: 'التالي',
+                rowMainAxisAlignment: MainAxisAlignment.center,
+                textAlign: TextAlign.center,
                 backColor: const Color.fromARGB(255, 113, 65, 146),
                 style: TextStyle(
                   color: Colors.white,
@@ -230,7 +246,7 @@ class School extends StatelessWidget {
                 ]),
             TextFieldModel(
               text: "اكتب موقعك",
-              height: height * 0.06,
+              vPadding: height * 0.06,
               obscureText: true,
             ),
             SizedBox(
@@ -243,6 +259,8 @@ class School extends StatelessWidget {
               },
               width: width * 0.9,
               content: 'التالي',
+              rowMainAxisAlignment: MainAxisAlignment.center,
+              textAlign: TextAlign.center,
               backColor: const Color.fromARGB(255, 113, 65, 146),
               style: TextStyle(
                 color: Colors.white,
@@ -301,7 +319,7 @@ class test extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    // double height = MediaQuery.of(context).size.height;
     return Center(
       child: ButtonModel(
         onTap: () {
@@ -310,6 +328,8 @@ class test extends StatelessWidget {
         },
         width: width * 0.9,
         content: 'التالي',
+        rowMainAxisAlignment: MainAxisAlignment.center,
+        textAlign: TextAlign.center,
         backColor: const Color.fromARGB(255, 113, 65, 146),
         style: TextStyle(
           color: Colors.white,
@@ -359,8 +379,7 @@ class PrivacyTerms extends StatelessWidget {
                     vertical: width * 0.02, horizontal: width * 0.01),
                 child: GestureDetector(
                   onTap: () {
-                    controller.isAccepted.value =
-                    !controller.isAccepted.value;
+                    controller.isAccepted.value = !controller.isAccepted.value;
                   },
                   child: Row(
                     children: [
@@ -373,7 +392,8 @@ class PrivacyTerms extends StatelessWidget {
                       // SizedBox(
                       //   width: width * 0.01,
                       // ),
-                      Text("اوافق على الشروط والاحكام", style: TextStyle(fontSize: width * 0.045)),
+                      Text("اوافق على الشروط والاحكام",
+                          style: TextStyle(fontSize: width * 0.045)),
                     ],
                   ),
                 ),
@@ -382,7 +402,7 @@ class PrivacyTerms extends StatelessWidget {
             ButtonModel(
               onTap: () {
                 if (controller.isAccepted.value) {
-                Get.to(const Home());
+                  Get.to(const Home());
                 } else {
                   Get.showSnackbar(
                     const GetSnackBar(
@@ -396,6 +416,8 @@ class PrivacyTerms extends StatelessWidget {
               },
               width: width * 0.9,
               content: 'التالي',
+              rowMainAxisAlignment: MainAxisAlignment.center,
+              textAlign: TextAlign.center,
               backColor: const Color.fromARGB(255, 113, 65, 146),
               style: TextStyle(
                 color: Colors.white,

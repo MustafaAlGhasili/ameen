@@ -1,11 +1,7 @@
-import 'dart:async';
-import 'dart:typed_data';
-
-import 'package:camera/camera.dart';
+// import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
 class SignController extends GetxController {
   RxBool visibility = true.obs;
