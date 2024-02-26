@@ -1,4 +1,5 @@
 import 'package:ameen/view/ui/home/home.dart';
+// import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -8,14 +9,9 @@ import '../widget/text_field.dart';
 
 SignController controller = Get.find();
 
-class Parent extends StatefulWidget {
+class Parent extends StatelessWidget {
   const Parent({super.key});
 
-  @override
-  State<Parent> createState() => _ParentState();
-}
-
-class _ParentState extends State<Parent> {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
@@ -27,33 +23,43 @@ class _ParentState extends State<Parent> {
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(
-              horizontal: width * 0.00, vertical: height * 0.04),
+              horizontal: width * 0.045, vertical: height * 0.04),
           child: Column(
             children: [
               Text("معلومات ولي الأمر",
                   style: TextStyle(fontSize: width * 0.07)),
               TextFieldModel(
-                vPadding: height * 0.02,
+                onChanged: (value) {
+                  controller.parentInfo['fName'] = value;
+                  print(controller.parentInfo['fName']);
+                },
+                vPadding: height * 0.035,
                 keyboardType: TextInputType.name,
                 text: "الاسم الاول",
               ),
               TextFieldModel(
-                vPadding: height * 0.02,
+                onChanged: (value) {},
+                vPadding: height * 0.035,
                 keyboardType: TextInputType.name,
                 text: "الاسم الأخير",
               ),
               TextFieldModel(
-                vPadding: height * 0.02,
+                onChanged: (value) {},
+                vPadding: height * 0.035,
                 keyboardType: TextInputType.number,
                 text: "رقم الاحوال",
               ),
               TextFieldModel(
-                vPadding: height * 0.02,
+                onChanged: (value) {},
+                vPadding: height * 0.035,
                 keyboardType: TextInputType.number,
                 text: "رقم التواصل",
               ),
               TextFieldModel(
-                vPadding: height * 0.02,
+                onChanged: (value) {
+                  // controller.parentData['firstName'] = value;
+                },
+                vPadding: height * 0.035,
                 keyboardType: TextInputType.visiblePassword,
                 text: "ادخل كلمة السر",
                 obscureText: true,
@@ -65,10 +71,11 @@ class _ParentState extends State<Parent> {
                 onTap: () {
                   if (formKey.currentState!.validate()) {
                     controller.step.value++;
+                    print(controller.parentInfo['fName']);
                   }
                   // Get.to(() => const StudentInfo());
                 },
-                padding: height * 0.015,
+                height: height * 0.06,
                 width: width * 0.9,
                 content: 'التالي',
                 rowMainAxisAlignment: MainAxisAlignment.center,
@@ -100,66 +107,106 @@ class Student extends StatelessWidget {
         textDirection: TextDirection.rtl,
         child: Padding(
           padding: EdgeInsets.symmetric(
-              horizontal: width * 0.03, vertical: height * 0.03),
+              horizontal: width * 0.045, vertical: height * 0.03),
           child: Column(
             children: [
               Text("معلومات الطالب", style: TextStyle(fontSize: width * 0.07)),
               TextFieldModel(
                 text: "الاسم الاول",
-                vPadding: height * 0.06,
+                vPadding: height * 0.035,
                 obscureText: false,
               ),
               TextFieldModel(
                 text: "الاسم الأخير",
-                vPadding: height * 0.06,
+                vPadding: height * 0.035,
                 obscureText: false,
               ),
               TextFieldModel(
                 text: "رقم الاحوال",
-                vPadding: height * 0.06,
+                vPadding: height * 0.035,
                 obscureText: false,
               ),
               TextFieldModel(
                 sufIcon: IconButton(
-                    onPressed: () {}, icon: const Icon(IconlyLight.calendar)),
+                    onPressed: () {},
+                    icon: Icon(
+                      IconlyLight.calendar,
+                      size: width * 0.055,
+                    )),
                 text: "تاريخ الميلاد",
-                vPadding: height * 0.06,
+                vPadding: height * 0.035,
                 obscureText: false,
               ),
-              Obx(
-                () => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const DropdownMenu(
-                        dropdownMenuEntries: [
-                          DropdownMenuEntry(
-                            value: "sckn",
-                            label: "Sckm",
-                          )
-                        ],
-                        hintText: "فصيلة الدم",
-                        menuStyle: MenuStyle(
-                          shape: MaterialStatePropertyAll(
-                              ContinuousRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30)))),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: width * 0.035),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            "فصيلة الدم",
+                            style: TextStyle(fontSize: height * 0.021),
+                          ),
                         ),
-                      ),
-                      DropdownButton(
-                        items: controller.blood
-                            .map((e) => DropdownMenuItem(
-                                  value: e,
-                                  child: Text("$e"),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          //controller.blood.value = value as RxList;
-                        },
-                      ),
-                    ],
-                  ),
+                        SizedBox(
+                          height: height * 0.065,
+                          child: const FittedBox(
+                            fit: BoxFit.fill,
+                            child: DropdownMenu(
+                              dropdownMenuEntries: [
+                                DropdownMenuEntry(
+                                  value: "sckn",
+                                  label: "Sckm",
+                                )
+                              ],
+                              menuStyle: MenuStyle(
+                                shape: MaterialStatePropertyAll(
+                                    ContinuousRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(30)))),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            "الجنس",
+                            style: TextStyle(fontSize: height * 0.021),
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.065,
+                          child: const FittedBox(
+                            fit: BoxFit.fill,
+                            child: DropdownMenu(
+                              dropdownMenuEntries: [
+                                DropdownMenuEntry(
+                                  value: "sckn",
+                                  label: "Sckm",
+                                )
+                              ],
+                              menuStyle: MenuStyle(
+                                shape: MaterialStatePropertyAll(
+                                    ContinuousRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(30)))),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
@@ -170,6 +217,7 @@ class Student extends StatelessWidget {
                   controller.step.value++;
                 },
                 width: width * 0.9,
+                height: height * 0.06,
                 content: 'التالي',
                 rowMainAxisAlignment: MainAxisAlignment.center,
                 textAlign: TextAlign.center,
@@ -197,12 +245,12 @@ class School extends StatelessWidget {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: width * 0.03, vertical: height * 0.04),
+            horizontal: width * 0.045, vertical: height * 0.03),
         child: Column(
           children: [
             Text("معلومات المدرسة", style: TextStyle(fontSize: width * 0.07)),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              padding: EdgeInsets.only(right: 6, top: height * 0.02),
               width: width,
               child: Text(
                 "اختر مدرستك",
@@ -210,21 +258,27 @@ class School extends StatelessWidget {
                 style: TextStyle(fontSize: width * 0.045),
               ),
             ),
-            DropdownMenu(
-                inputDecorationTheme: InputDecorationTheme(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(13),
-                  ),
-                ),
-                menuStyle: const MenuStyle(),
-                width: width * 0.9,
-                dropdownMenuEntries: const [
-                  DropdownMenuEntry(label: "snck", value: 2),
-                  DropdownMenuEntry(label: "lnlkl", value: 2),
-                  DropdownMenuEntry(label: "ibi", value: 2),
-                ]),
+            SizedBox(
+              height: height * 0.075,
+              child: FittedBox(
+                fit: BoxFit.fill,
+                child: DropdownMenu(
+                    inputDecorationTheme: InputDecorationTheme(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                    ),
+                    menuStyle: const MenuStyle(),
+                    width: width * 0.9,
+                    dropdownMenuEntries: const [
+                      DropdownMenuEntry(label: "snck", value: 2),
+                      DropdownMenuEntry(label: "lnlkl", value: 2),
+                      DropdownMenuEntry(label: "ibi", value: 2),
+                    ]),
+              ),
+            ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              padding: EdgeInsets.only(right: 6, top: height * 0.02),
               width: width,
               child: Text(
                 "اختر صفك",
@@ -232,22 +286,29 @@ class School extends StatelessWidget {
                 style: TextStyle(fontSize: width * 0.045),
               ),
             ),
-            DropdownMenu(
-                inputDecorationTheme: InputDecorationTheme(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(13),
-                  ),
-                ),
-                menuStyle: const MenuStyle(),
-                width: width * 0.9,
-                dropdownMenuEntries: const [
-                  DropdownMenuEntry(label: "snck", value: 2),
-                  DropdownMenuEntry(label: "lnlkl", value: 2),
-                  DropdownMenuEntry(label: "ibi", value: 2),
-                ]),
+            SizedBox(
+              height: height * 0.075,
+              child: FittedBox(
+                fit: BoxFit.fill,
+                child: DropdownMenu(
+                    inputDecorationTheme: InputDecorationTheme(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                    ),
+                    menuStyle: const MenuStyle(),
+                    width: width * 0.9,
+                    dropdownMenuEntries: const [
+                      DropdownMenuEntry(label: "snck", value: 2),
+                      DropdownMenuEntry(label: "lnlkl", value: 2),
+                      DropdownMenuEntry(label: "ibi", value: 2),
+                    ]),
+              ),
+            ),
             TextFieldModel(
+              style: TextStyle(height: height * 0.0027),
               text: "اكتب موقعك",
-              vPadding: height * 0.06,
+              vPadding: height * 0.035,
               obscureText: true,
             ),
             SizedBox(
@@ -259,6 +320,7 @@ class School extends StatelessWidget {
                 // Get.to(() => const StudentInfo());
               },
               width: width * 0.9,
+              height: height * 0.06,
               content: 'التالي',
               rowMainAxisAlignment: MainAxisAlignment.center,
               textAlign: TextAlign.center,
@@ -320,7 +382,7 @@ class test extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    // double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
     return Center(
       child: ButtonModel(
         onTap: () {
@@ -328,6 +390,7 @@ class test extends StatelessWidget {
           // Get.to(() => const StudentInfo());
         },
         width: width * 0.9,
+        height: height * 0.06,
         content: 'التالي',
         rowMainAxisAlignment: MainAxisAlignment.center,
         textAlign: TextAlign.center,
@@ -347,7 +410,7 @@ class PrivacyTerms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    // double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       // physics: const BouncingScrollPhysics(),
       child: Padding(
@@ -417,6 +480,7 @@ class PrivacyTerms extends StatelessWidget {
               },
               width: width * 0.9,
               content: 'التالي',
+              height: height * 0.055,
               rowMainAxisAlignment: MainAxisAlignment.center,
               textAlign: TextAlign.center,
               backColor: const Color.fromARGB(255, 113, 65, 146),

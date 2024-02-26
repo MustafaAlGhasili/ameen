@@ -1,13 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   RxInt bottomIndex = 0.obs;
   RxBool map = false.obs;
-  // final paerntFName = TextEditingController();
-  // final paerntLName = TextEditingController();
-  // final paerntSN = TextEditingController();
-  // final paerntNumber = TextEditingController();
-  // final paerntPassword = TextEditingController();
+  final paerntFName = TextEditingController();
+  final paerntLName = TextEditingController();
+  final paerntSN = TextEditingController();
+  final paerntNumber = TextEditingController();
+  final paerntPassword = TextEditingController();
 
   List studentStateNotification = [
     "الباص علئ وشك الوصول",

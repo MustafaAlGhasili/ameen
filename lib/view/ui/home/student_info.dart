@@ -22,7 +22,8 @@ class StudentInfo extends StatelessWidget {
         appBar: AppBar(
           elevation: 5,
           centerTitle: true,
-          title: Text("المعلومات الشخصية", style: TextStyle(fontSize: width * 0.06)),
+          title: Text("المعلومات الشخصية",
+              style: TextStyle(fontSize: width * 0.06)),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -30,60 +31,99 @@ class StudentInfo extends StatelessWidget {
                 horizontal: width * 0.03, vertical: height * 0.03),
             child: Column(
               children: [
-                Text("معلومات الطالب", style: TextStyle(fontSize: width * 0.07)),
+                Text("معلومات الطالب",
+                    style: TextStyle(fontSize: width * 0.07)),
                 TextFieldModel(
                   text: "الاسم الاول",
-                  vPadding: height * 0.06,
+                  vPadding: height * 0.04,
                   obscureText: false,
                 ),
                 TextFieldModel(
                   text: "الاسم الأخير",
-                  vPadding: height * 0.06,
+                  vPadding: height * 0.04,
                   obscureText: false,
                 ),
                 TextFieldModel(
                   text: "رقم الاحوال",
-                  vPadding: height * 0.06,
+                  vPadding: height * 0.04,
                   obscureText: false,
                 ),
                 TextFieldModel(
                   sufIcon: IconButton(
                       onPressed: () {}, icon: const Icon(IconlyLight.calendar)),
                   text: "تاريخ الميلاد",
-                  vPadding: height * 0.06,
+                  vPadding: height * 0.04,
                   obscureText: false,
                 ),
                 Obx(
                   () => Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.only(top: height * 0.04),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const DropdownMenu(
-                          dropdownMenuEntries: [
-                            DropdownMenuEntry(
-                              value: "sckn",
-                              label: "Sckm",
-                            )
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Text(
+                                "فصيلة الدم",
+                                style: TextStyle(fontSize: height * 0.021),
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.065,
+                              child: const FittedBox(
+                                fit: BoxFit.fill,
+                                child: DropdownMenu(
+                                  dropdownMenuEntries: [
+                                    DropdownMenuEntry(
+                                      value: "sckn",
+                                      label: "Sckm",
+                                    )
+                                  ],
+                                  menuStyle: MenuStyle(
+                                    shape: MaterialStatePropertyAll(
+                                        ContinuousRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(30)))),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
-                          hintText: "فصيلة الدم",
-                          menuStyle: MenuStyle(
-                            shape: MaterialStatePropertyAll(
-                                ContinuousRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30)))),
-                          ),
                         ),
-                        DropdownButton(
-                          items: controller.blood
-                              .map((e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text("$e"),
-                                  ))
-                              .toList(),
-                          onChanged: (value) {
-                            //controller.blood.value = value as RxList;
-                          },
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Text(
+                                "الجنس",
+                                style: TextStyle(fontSize: height * 0.021),
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.065,
+                              child: const FittedBox(
+                                fit: BoxFit.fill,
+                                child: DropdownMenu(
+                                  dropdownMenuEntries: [
+                                    DropdownMenuEntry(
+                                      value: "sckn",
+                                      label: "Sckm",
+                                    )
+                                  ],
+                                  menuStyle: MenuStyle(
+                                    shape: MaterialStatePropertyAll(
+                                        ContinuousRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(30)))),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -97,7 +137,10 @@ class StudentInfo extends StatelessWidget {
                     controller.step.value++;
                   },
                   width: width * 0.9,
-                  content: 'التالي',
+                  height: height * 0.06,
+                  content: '',
+                  rowMainAxisAlignment: MainAxisAlignment.center,
+                  textAlign: TextAlign.center,
                   backColor: const Color.fromARGB(255, 113, 65, 146),
                   style: TextStyle(
                     color: Colors.white,

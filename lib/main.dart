@@ -1,4 +1,7 @@
 import 'package:ameen/controller/sign_controller.dart';
+import 'package:ameen/test.dart';
+import 'package:ameen/view/ui/sign/sign_in.dart';
+import 'package:ameen/view/ui/sign/sign_up.dart';
 // import 'package:ameen/test.dart';
 // import 'package:ameen/view/ui/home/home.dart';
 import 'package:ameen/view/ui/sign/start.dart';
@@ -16,7 +19,6 @@ void main() async {
   Get.put(SignController());
   Get.put(HomeController());
 
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -30,7 +32,7 @@ void main() async {
     // locale: DevicePreview.locale(context),
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: const MyApp(),
+    home: const SignUp(),
     // )
   ));
 }

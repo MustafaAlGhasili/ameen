@@ -13,6 +13,7 @@ class TextFieldModel extends StatefulWidget {
   final void Function(String)? onChanged;
   final String? text;
   final TextInputType? keyboardType;
+  final TextStyle? style;
 
   // final String? Function(String?)? validator;
 
@@ -27,7 +28,7 @@ class TextFieldModel extends StatefulWidget {
     this.controller,
     this.onChanged,
     this.text,
-    this.keyboardType,
+    this.keyboardType, this.style,
     // this.validator,
   });
 
@@ -68,6 +69,7 @@ class _TextFieldModelState extends State<TextFieldModel> {
           }
           return null;
         },
+        style: widget.style,
         onChanged: widget.onChanged,
         obscureText: widget.obscureText,
         decoration: InputDecoration(

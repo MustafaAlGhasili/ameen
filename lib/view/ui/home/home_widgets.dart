@@ -239,7 +239,7 @@ class NotificationPage extends StatelessWidget {
               itemBuilder: (context, i) {
                 return Container(
                   margin: EdgeInsets.all(width * 0.015),
-                  padding: EdgeInsets.all(width * 0.015),
+                  padding: EdgeInsets.all(width * 0.04),
                   height: height * 0.08,
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 1.5),
@@ -271,7 +271,7 @@ class NotificationPage extends StatelessWidget {
               itemBuilder: (context, i) {
                 return Container(
                   margin: EdgeInsets.all(width * 0.015),
-                  padding: EdgeInsets.all(width * 0.015),
+                  padding: EdgeInsets.all(width * 0.04),
                   height: height * 0.08,
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 1.5),
@@ -326,6 +326,7 @@ class ProfilePage extends StatelessWidget {
                 height: height * 0.05,
               ),
               ButtonModel(
+                padding: width * 0.03,
                 rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
                 width: width * 0.9,
                 height: height * 0.07,
@@ -341,6 +342,8 @@ class ProfilePage extends StatelessWidget {
                 vMargin: height * 0.01,
               ),
               ButtonModel(
+                                padding: width * 0.03,
+
                 rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
                 width: width * 0.9,
                 height: height * 0.07,
@@ -354,6 +357,8 @@ class ProfilePage extends StatelessWidget {
                 vMargin: height * 0.01,
               ),
               ButtonModel(
+                                padding: width * 0.03,
+
                 rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
                 width: width * 0.9,
                 height: height * 0.07,
