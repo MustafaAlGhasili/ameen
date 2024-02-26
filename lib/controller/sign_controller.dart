@@ -9,8 +9,7 @@ class SignController extends GetxController {
 
   final signInEmailCont = TextEditingController();
   final signInPassCont = TextEditingController();
-  final signUpEmailCont = TextEditingController();
-  final signUpPassCont = TextEditingController();
+
   final emailVerificationCont = TextEditingController();
 
   String forgetPassword = '';
@@ -27,7 +26,6 @@ class SignController extends GetxController {
   RxList blood = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].obs;
   RxBool isAccepted = false.obs;
 
-
   changeVisibility() {
     visibility.value = !visibility.value;
   }
@@ -36,13 +34,11 @@ class SignController extends GetxController {
   void onInit() {
     onTapRecognizer = TapGestureRecognizer()
       ..onTap = () {
-       Get.back(closeOverlays: true);
+        Get.back(closeOverlays: true);
       };
     // errorController = StreamController<ErrorAnimationType>();
     super.onInit();
   }
-
-
 }
 
 

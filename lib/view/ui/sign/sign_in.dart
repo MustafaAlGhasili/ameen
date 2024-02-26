@@ -20,7 +20,6 @@ class SignIn extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 113, 65, 146),
         body: SingleChildScrollView(
           child: Stack(
             children: [
@@ -35,7 +34,8 @@ class SignIn extends StatelessWidget {
                         image: AssetImage("img/logo.png"),
                       ))),
               Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.01),
                   height: height * 0.55,
                   margin: EdgeInsets.only(top: height * 0.45),
                   decoration: const BoxDecoration(
@@ -55,17 +55,17 @@ class SignIn extends StatelessWidget {
                         controller: controller.signInEmailCont,
                         obscureText: false,
                         hint: "البريد الاكتروني",
-                        label: "البريد الاكتروني",
+                        text: "البريد الاكتروني",
                         sufIcon: const Icon(IconlyLight.profile),
-                        vPadding: height * 0.07,
+                        vPadding: height * 0.03,
                       ),
                       Obx(
                         () => TextFieldModel(
                             controller: controller.signInPassCont,
                             obscureText: controller.visibility.value,
                             hint: "كلمة السر",
-                            label: "كلمة السر",
-                            vPadding: height * 0.07,
+                            text: "كلمة السر",
+                            vPadding: height * 0.03,
                             sufIcon: controller.visibility.value
                                 ? IconButton(
                                     icon: const Icon(Icons.visibility_outlined),
@@ -80,29 +80,81 @@ class SignIn extends StatelessWidget {
                       SizedBox(height: height * 0.02),
                       ButtonModel(
                         onTap: () {
-                          if (controller.signInPassCont.text.isEmpty) {
-                            Get.showSnackbar(const GetSnackBar(
-                              title: "Error",
-                              message: "Please enter the password",
-                              duration: Duration(seconds: 2),
-                              animationDuration: Duration(milliseconds: 600),
-                            ));
+                          if (controller.signInEmailCont.text.isEmpty) {
+                            Get.showSnackbar(
+                              GetSnackBar(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: width * 0.045,
+                                    vertical: height * 0.015),
+                                icon: Icon(
+                                  IconlyLight.info_circle,
+                                  color: Colors.white,
+                                  size: width * 0.065,
+                                ),
+                                title: "Error",
+                                message: "Please Enter the Email",
+                                duration: const Duration(seconds: 2),
+                                borderRadius: 20,
+                                animationDuration:
+                                    const Duration(milliseconds: 600),
+                              ),
+                            );
+                          } else if (controller.signInPassCont.text.isEmpty) {
+                            Get.showSnackbar(
+                              GetSnackBar(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: width * 0.045,
+                                    vertical: height * 0.015),
+                                icon: Icon(
+                                  IconlyLight.info_circle,
+                                  color: Colors.white,
+                                  size: width * 0.065,
+                                ),
+                                borderRadius: 20,
+                                title: "Error",
+                                message: "Please Enter the Password",
+                                duration: const Duration(seconds: 2),
+                                animationDuration:
+                                    const Duration(milliseconds: 600),
+                              ),
+                            );
+                          } else if (!controller.signInEmailCont.text
+                              .contains('@')) {
+                            Get.showSnackbar(
+                              GetSnackBar(
+                                borderRadius: 20,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: width * 0.045,
+                                    vertical: height * 0.015),
+                                icon: Icon(
+                                  IconlyLight.info_circle,
+                                  color: Colors.white,
+                                  size: width * 0.065,
+                                ),
+                                title: "Error",
+                                message: "Invalid Email",
+                                duration: const Duration(seconds: 2),
+                                animationDuration:
+                                    const Duration(milliseconds: 600),
+                              ),
+                            );
                           }
                         },
                         backColor: const Color.fromARGB(255, 113, 65, 146),
                         content: "تسجيل الدخول",
                         rowMainAxisAlignment: MainAxisAlignment.center,
-                        width: width * 0.9,
+                        width: width,
                         height: height * 0.06,
                         style: TextStyle(
                             color: Colors.white, fontSize: height * 0.025),
                       ),
                       SizedBox(
-                        width: width * 0.9,
+                        width: width,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ButtonModel(
+                                padding: 10,
                                 onTap: () {
                                   Get.to(() => const SignUp());
                                 },

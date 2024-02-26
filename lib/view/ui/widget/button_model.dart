@@ -14,6 +14,7 @@ class ButtonModel extends StatelessWidget {
   final double hMargin;
   final double? textWidth;
   final MainAxisAlignment rowMainAxisAlignment;
+  final double padding;
 
   const ButtonModel(
       {super.key,
@@ -29,7 +30,8 @@ class ButtonModel extends StatelessWidget {
       this.vMargin = 0,
       this.hMargin = 0,
       this.textWidth,
-      this.rowMainAxisAlignment = MainAxisAlignment.start});
+      this.rowMainAxisAlignment = MainAxisAlignment.start,
+      this.padding = 0.0});
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +39,13 @@ class ButtonModel extends StatelessWidget {
       onTap: onTap,
       child: Container(
           margin: EdgeInsets.symmetric(vertical: vMargin, horizontal: hMargin),
-          padding: const EdgeInsets.all(8),
+          padding: EdgeInsets.all(padding),
           decoration: BoxDecoration(
               color: backColor, borderRadius: BorderRadius.circular(15)),
           width: width,
           height: height,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 00.0),
             child: Row(
               mainAxisAlignment: rowMainAxisAlignment,
               children: [

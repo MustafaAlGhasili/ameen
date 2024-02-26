@@ -1,12 +1,14 @@
 import 'package:ameen/controller/sign_controller.dart';
-import 'package:ameen/view/ui/sign/sign_up.dart';
-import 'package:ameen/view/ui/home/home.dart';
+// import 'package:ameen/test.dart';
+// import 'package:ameen/view/ui/home/home.dart';
 import 'package:ameen/view/ui/sign/start.dart';
+import 'package:firebase_core/firebase_core.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:device_preview/device_preview.dart';
 import 'controller/home_controller.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +16,10 @@ void main() async {
   Get.put(SignController());
   Get.put(HomeController());
 
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(
       // DevicePreview(
@@ -24,7 +30,7 @@ void main() async {
     // locale: DevicePreview.locale(context),
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: const Home(),
+    home: const MyApp(),
     // )
   ));
 }

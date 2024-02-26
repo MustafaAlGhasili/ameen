@@ -68,6 +68,7 @@ class _ParentState extends State<Parent> {
                   }
                   // Get.to(() => const StudentInfo());
                 },
+                padding: height * 0.015,
                 width: width * 0.9,
                 content: 'التالي',
                 rowMainAxisAlignment: MainAxisAlignment.center,

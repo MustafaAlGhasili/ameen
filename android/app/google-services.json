@@ -1,32 +1,14 @@
 {
   "project_info": {
-    "project_number": "8667670214",
-    "project_id": "ameen-501c5",
-    "storage_bucket": "ameen-501c5.appspot.com"
+    "project_number": "303138469439",
+    "firebase_url": "https://amin-519f2-default-rtdb.firebaseio.com",
+    "project_id": "amin-519f2",
+    "storage_bucket": "amin-519f2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:8667670214:android:051037edc23feb89b099c7",
-        "android_client_info": {
-          "package_name": "com.example.ameed_ai"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCvOpyXNHDfKeLo5R90oa04H5K6Zk36Ros"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:8667670214:android:952ff9cac97cbebfb099c7",
+        "mobilesdk_app_id": "1:303138469439:android:a62355d851a385815b6a8a",
         "android_client_info": {
           "package_name": "com.example.ameen"
         }
@@ -34,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCvOpyXNHDfKeLo5R90oa04H5K6Zk36Ros"
+          "current_key": "AIzaSyCnOQt2WCfOuT-w92A1GDJODSky5igqGL4"
         }
       ],
       "services": {
@@ -45,15 +27,15 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:8667670214:android:926d25781807b926b099c7",
+        "mobilesdk_app_id": "1:303138469439:android:d9c57673000502cf5b6a8a",
         "android_client_info": {
-          "package_name": "com.example.ameen_ai"
+          "package_name": "com.example.amin"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCvOpyXNHDfKeLo5R90oa04H5K6Zk36Ros"
+          "current_key": "AIzaSyCnOQt2WCfOuT-w92A1GDJODSky5igqGL4"
         }
       ],
       "services": {

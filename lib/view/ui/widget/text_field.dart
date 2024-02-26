@@ -64,7 +64,7 @@ class _TextFieldModelState extends State<TextFieldModel> {
           if (value == null || value.isEmpty) {
             return '*required';
           } else if (value.length < 3) {
-            return "slkmslkv";
+            return "short";
           }
           return null;
         },
@@ -75,7 +75,7 @@ class _TextFieldModelState extends State<TextFieldModel> {
             isDense: true,
             contentPadding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
             hintText: widget.hint,
-            labelText: widget.label,
+            // labelText: widget.label,
             suffixIcon: widget.sufIcon,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(13),
