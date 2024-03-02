@@ -105,6 +105,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  cr_calendar:
+    dependency: "direct main"
+    description:
+      name: cr_calendar
+      sha256: "165319b8852d7eaf40a01dc1a2fbf75c809c8877fa6a9f0ccc1fa2a7972f0b1b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   cross_file:
     dependency: transitive
     description:
@@ -153,6 +161,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  dropdown_button2:
+    dependency: "direct main"
+    description:
+      name: dropdown_button2
+      sha256: b0fe8d49a030315e9eef6c7ac84ca964250155a6224d491c1365061bc974a9e1
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.9"
   easy_stepper:
     dependency: "direct main"
     description:
@@ -413,6 +429,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.18.1"
+  jiffy:
+    dependency: transitive
+    description:
+      name: jiffy
+      sha256: cc1d4b75016a9156c29b5d61f0c9176c3e0fb0580cc5a0e0422b5d2cab3fbfff
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.1"
   js:
     dependency: transitive
     description:
@@ -565,6 +589,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  scrollable_positioned_list:
+    dependency: transitive
+    description:
+      name: scrollable_positioned_list
+      sha256: "1b54d5f1329a1e263269abc9e2543d90806131aa14fe7c6062a8054d57249287"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.8"
   shared_preferences:
     dependency: "direct main"
     description:

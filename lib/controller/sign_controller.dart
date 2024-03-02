@@ -1,5 +1,6 @@
 // import 'package:camera/camera.dart';
-import 'package:ameen/view/ui/sign/signup_widgets.dart';
+import 'package:ameen/model/parent.dart';
+import 'package:ameen/model/student.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -8,6 +9,19 @@ import 'package:get/get.dart';
 class SignController extends GetxController {
   RxBool visibility = true.obs;
 
+  final parentFName = TextEditingController();
+  final parentLName = TextEditingController();
+  final parentPhone = TextEditingController();
+  final parentNationalId = TextEditingController();
+  final parenPassword = TextEditingController();
+
+  final studentFName = TextEditingController();
+  final studentLName = TextEditingController();
+  final studentNationalId = TextEditingController();
+  final studentBDate = TextEditingController();
+  final studentBlood = TextEditingController();
+  final studentSex = TextEditingController();
+
   final signInEmailCont = TextEditingController();
   final signInPassCont = TextEditingController();
   final emailVerificationCont = TextEditingController();
@@ -15,10 +29,13 @@ class SignController extends GetxController {
   String forgetPassword = '';
   String code = '';
 
+  DateTime? selectedDate;
+
   bool hasError = false;
   var onTapRecognizer;
-  RxInt step = 0.obs;
-  RxList blood = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].obs;
+  RxInt step = 1.obs;
+  RxList<String> blood = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].obs;
+  RxString bloodValue = ''.obs;
   RxBool isAccepted = false.obs;
 
   changeVisibility() {
@@ -35,10 +52,7 @@ class SignController extends GetxController {
     super.onInit();
   }
 
-  Map parentInfo = {
-    'fName' : '',
-  };
-  void sendDataToDatabase(Parent parent) async {
+  void sendDataToDatabase() async {
     //   //parent reference
     //   DatabaseReference pRef = FirebaseDatabase.instance.ref("parent");
     //   DatabaseEvent databaseEvent = await pRef.once();
@@ -53,49 +67,33 @@ class SignController extends GetxController {
     //   });
     // }
 
-    final dbRef = FirebaseDatabase.instance.ref('parents');
+    final parentDBRef = FirebaseDatabase.instance.ref().child('parents').push();
+    final studentDBRef = FirebaseDatabase.instance.ref().child('student').push();
+   
+
     final parent = ParentModel(
-      id: "${dbRef.push().key}",
-      fName: parentInfo['fName'],
-      email: 'johndoe@example.com',
+      id: "${parentDBRef.key}",
+      fName: parentFName.text,
+      lName: parentLName.text,
+      nationalId: parentNationalId.text,
+      email: 'email',
       isEnabled: false,
-      lName: '',
-      phone: '',
-      nationalId: '',
+      phone: parentPhone.text,
+      chiledID: "${studentDBRef.key}",
     );
-    await dbRef.push().set(parent.toMap());
-  }
-}
 
-class ParentModel {
-  final String id;
-  final String fName;
-  final String lName;
-  final String email;
-  final String phone;
-  final String nationalId;
-  final bool isEnabled;
+    final student = StudentModel(
+        id: "${studentDBRef.key}",
+        fName: studentFName.text,
+        lName: studentLName.text,
+        nationalId: studentNationalId.text,
+        isEnabled: false,
+        birthDate: studentBDate.text,
+        sex: studentSex.text,
+        blood: studentBlood.text,
+        parent: "${parentDBRef.key}");
 
-  ParentModel({
-    required this.id,
-    required this.fName,
-    required this.lName,
-    required this.email,
-    required this.phone,
-    required this.nationalId,
-    required this.isEnabled,
-  });
-
-  // Convert model to a map for storing in the database
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'firstNname': fName,
-      'lastName': lName,
-      'email': email,
-      'phone': phone,
-      'nationalId': nationalId,
-      'isEnabled': isEnabled,
-    };
+    await parentDBRef.set(parent.toMap());
+    await studentDBRef.set(student.toMap());
   }
 }

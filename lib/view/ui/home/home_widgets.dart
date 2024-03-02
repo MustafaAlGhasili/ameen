@@ -1,17 +1,15 @@
-import 'dart:math';
-
 import 'package:ameen/controller/home_controller.dart';
 import 'package:ameen/view/ui/home/settings.dart';
 import 'package:ameen/view/ui/home/student_info.dart';
 import 'package:ameen/view/ui/widget/custom_divider.dart';
 import 'package:ameen/view/ui/widget/custom_state.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iconly/iconly.dart';
-
 import '../widget/button_model.dart';
+
+
 
 HomeController controller = Get.find();
 
@@ -130,16 +128,8 @@ class HomePage extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
 class Map extends StatelessWidget {
-  const Map({Key? key}) : super(key: key);
+  const Map({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -147,12 +137,10 @@ class Map extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     // Define a single point on the map
-    LatLng point1 = LatLng(24.6583445, 46.6917818);
-    LatLng point2 = LatLng(24.8583445, 46.6917818);
-    ;
+    LatLng point1 = const LatLng(24.6583445, 46.6917818);
+    LatLng point2 = const LatLng(24.8583445, 46.6917818);
 
     List<LatLng> polylinePoints = [point1, point2];
-
 
     return SizedBox(
       height: height * 0.7,
@@ -165,9 +153,9 @@ class Map extends StatelessWidget {
         myLocationEnabled: true,
         markers: <Marker>{
           Marker(
-            markerId: MarkerId('markerId1'),
+            markerId: const MarkerId('markerId1'),
             position: point1,
-            infoWindow: InfoWindow(
+            infoWindow: const InfoWindow(
               title: 'Marker 1',
               snippet: 'Point 1',
             ),
@@ -175,7 +163,7 @@ class Map extends StatelessWidget {
           Marker(
             markerId: const MarkerId('markerId2'),
             position: point2,
-            infoWindow: InfoWindow(
+            infoWindow: const InfoWindow(
               title: 'Marker 2',
               snippet: 'Point 2',
             ),
@@ -192,7 +180,7 @@ class Map extends StatelessWidget {
         },
 */
         // Padding is added to ensure the marker is not at the edges of the screen
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
       ),
     );
   }
@@ -400,8 +388,7 @@ class ProfilePage extends StatelessWidget {
                 vMargin: height * 0.01,
               ),
               ButtonModel(
-                                padding: width * 0.03,
-
+                padding: width * 0.03,
                 rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
                 width: width * 0.9,
                 height: height * 0.07,
@@ -415,8 +402,7 @@ class ProfilePage extends StatelessWidget {
                 vMargin: height * 0.01,
               ),
               ButtonModel(
-                                padding: width * 0.03,
-
+                padding: width * 0.03,
                 rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
                 width: width * 0.9,
                 height: height * 0.07,

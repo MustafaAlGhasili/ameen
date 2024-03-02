@@ -1,6 +1,6 @@
 import 'package:ameen/controller/sign_controller.dart';
-import 'package:ameen/test.dart';
-import 'package:ameen/view/ui/sign/sign_in.dart';
+// import 'package:ameen/test.dart';
+// import 'package:ameen/view/ui/sign/sign_in.dart';
 import 'package:ameen/view/ui/sign/sign_up.dart';
 // import 'package:ameen/test.dart';
 // import 'package:ameen/view/ui/home/home.dart';

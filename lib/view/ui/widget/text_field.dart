@@ -14,6 +14,7 @@ class TextFieldModel extends StatefulWidget {
   final String? text;
   final TextInputType? keyboardType;
   final TextStyle? style;
+  final bool? isEnabled;
 
   // final String? Function(String?)? validator;
 
@@ -28,7 +29,9 @@ class TextFieldModel extends StatefulWidget {
     this.controller,
     this.onChanged,
     this.text,
-    this.keyboardType, this.style,
+    this.keyboardType,
+    this.style,
+    this.isEnabled = true,
     // this.validator,
   });
 
@@ -58,14 +61,16 @@ class _TextFieldModelState extends State<TextFieldModel> {
         Padding(
       padding: EdgeInsets.only(top: widget.vPadding, left: widget.hPadding),
       child: TextFormField(
+        enableInteractiveSelection: widget.isEnabled,
+        // enabled: widget.isEnabled,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+
         keyboardType: widget.keyboardType,
         cursorRadius: const Radius.circular(10),
         controller: widget.controller,
         validator: (value) {
-          if (value == null || value.isEmpty) {
+          if (value == null || value.isEmpty || value == 'null') {
             return '*required';
-          } else if (value.length < 3) {
-            return "short";
           }
           return null;
         },
@@ -77,7 +82,13 @@ class _TextFieldModelState extends State<TextFieldModel> {
             isDense: true,
             contentPadding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
             hintText: widget.hint,
-            // labelText: widget.label,
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(13),
+              borderSide: const BorderSide(
+                color: Color.fromARGB(255, 113, 65, 146),
+              ),
+            ),
+           
             suffixIcon: widget.sufIcon,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(13),
