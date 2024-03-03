@@ -6,7 +6,6 @@ class ParentModel {
   final String phone;
   final String nationalId;
   final bool isEnabled;
-  final String chiledID;
 
   ParentModel({
     required this.id,
@@ -16,20 +15,18 @@ class ParentModel {
     required this.phone,
     required this.nationalId,
     required this.isEnabled,
-    required this.chiledID,
   });
 
   // Convert model to a map for storing in the database
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'fName': fName,
-      'lName': lName,
+      'firstName': fName,
+      'lastName': lName,
       'email': email,
       'phone': phone,
       'nationalId': nationalId,
       'isEnabled': isEnabled,
-      'chieledID': chiledID,
     };
   }
 }

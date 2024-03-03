@@ -34,8 +34,26 @@ class SignController extends GetxController {
   bool hasError = false;
   var onTapRecognizer;
   RxInt step = 1.obs;
+
   RxList<String> blood = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].obs;
   RxString bloodValue = ''.obs;
+
+  RxList<String> genders = ['ذكر', 'أنثى'].obs;
+  RxString genderValue = ''.obs;
+
+  RxMap<String, int> grades = {
+    'رياض الأطفال': 0,
+    'الصف الأول': 1,
+    'الصف الثاني': 2,
+    'الصف الثالث': 3,
+    'الصف الرابع': 4,
+    'الصف الخامس': 5,
+    'الصف السادس': 6,
+    'الصف السابع': 7,
+    'الصف الثامن': 8,
+    'الصف التاسع': 9,
+  }.obs;
+
   RxBool isAccepted = false.obs;
 
   changeVisibility() {
@@ -79,7 +97,6 @@ class SignController extends GetxController {
       email: 'email',
       isEnabled: false,
       phone: parentPhone.text,
-      chiledID: "${studentDBRef.key}",
     );
 
     final student = StudentModel(
@@ -89,8 +106,9 @@ class SignController extends GetxController {
         nationalId: studentNationalId.text,
         isEnabled: false,
         birthDate: studentBDate.text,
-        sex: studentSex.text,
-        blood: studentBlood.text,
+        gender: genderValue.value,  // Use the genderValue from the controller
+        blood: bloodValue.value,    // Use the bloodValue from the controller
+
         parent: "${parentDBRef.key}");
 
     await parentDBRef.set(parent.toMap());

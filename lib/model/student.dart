@@ -5,7 +5,7 @@ class StudentModel {
   // final String email;
   final String nationalId;
   final String birthDate;
-  final String sex;
+  final String gender;
   final String blood;
   final bool isEnabled;
   final String parent;
@@ -16,7 +16,7 @@ class StudentModel {
       required this.lName,
       required this.nationalId,
       required this.birthDate,
-      required this.sex,
+      required this.gender,
       required this.blood,
       required this.isEnabled,
       required this.parent});
@@ -30,7 +30,7 @@ class StudentModel {
         'lName': lName,
         'nationalId': nationalId,
         'birtDate': birthDate,
-        'sex': sex,
+        'gender': gender,
         'blood': blood,
         'isEnabled': isEnabled,
         'parentID': parent,

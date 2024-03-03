@@ -1,9 +1,11 @@
 import 'package:ameen/view/ui/home/home.dart';
 import 'package:ameen/view/ui/widget/custem_dropdown_menu.dart';
+
 // import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+
 import '../../../controller/sign_controller.dart';
 import '../widget/button_model.dart';
 import '../widget/text_field.dart';
@@ -37,7 +39,7 @@ class Parent extends StatelessWidget {
                 controller: controller.parentFName,
                 // vPadding: height * 0.035,
                 keyboardType: TextInputType.name,
-                text: "الاسم الاول", 
+                text: "الاسم الاول",
               ),
               SizedBox(
                 height: height * 0.035,
@@ -214,24 +216,19 @@ class Student extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            height: height * 0.065,
+                            height: height * 0.055,
                             child: FittedBox(
                               fit: BoxFit.fill,
-                              child: DropdownMenu(
-                                controller: controller.studentBlood,
-                                dropdownMenuEntries: const [
-                                  DropdownMenuEntry(
-                                    value: "sckn",
-                                    label: "Sckm",
-                                  )
-                                ],
-                                menuStyle: const MenuStyle(
-                                  shape: MaterialStatePropertyAll(
-                                      ContinuousRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30)))),
-                                ),
-                              ),
+                              child: Obx(() => CustomDropdownButton2(
+                                  // dropdownWidth: 20,
+                                  hint: '',
+                                  value: controller.bloodValue.value.isEmpty
+                                      ? null
+                                      : controller.bloodValue.value,
+                                  dropdownItems: controller.blood,
+                                  onChanged: (val) {
+                                    controller.bloodValue.value = val!;
+                                  })),
                             ),
                           ),
                         ],
@@ -249,38 +246,18 @@ class Student extends StatelessWidget {
                           SizedBox(
                             height: height * 0.055,
                             child: FittedBox(
-                                fit: BoxFit.fill,
-                                child: Obx(()=>CustomDropdownButton2(
-                                  // dropdownWidth: 20,
+                              fit: BoxFit.fill,
+                              child: Obx(() => CustomDropdownButton2(
                                     hint: '',
-                                    value: controller.bloodValue.value.isEmpty
+                                    value: controller.genderValue.value.isEmpty
                                         ? null
-                                        : controller.bloodValue.value,
-                                    dropdownItems: controller.blood,
+                                        : controller.genderValue.value,
+                                    dropdownItems: controller.genders,
                                     onChanged: (val) {
-                                      controller.bloodValue.value = val!;
-                                    })),
-                                // DropdownMenu(
-
-                                //   controller: controller.studentSex,
-                                //   dropdownMenuEntries: const [
-                                //     DropdownMenuEntry(
-                                //       value: "M",
-                                //       label: "M",
-                                //     ),
-                                //     DropdownMenuEntry(
-                                //       value: "F",
-                                //       label: "F",
-                                //     ),
-                                //   ],
-                                //   menuStyle: const MenuStyle(
-                                //     shape: MaterialStatePropertyAll(
-                                //         ContinuousRectangleBorder(
-                                //             borderRadius: BorderRadius.all(
-                                //                 Radius.circular(30)))),
-                                //   ),
-                                // ),
-                                ),
+                                      controller.genderValue.value = val!;
+                                    },
+                                  )),
+                            ),
                           ),
                         ],
                       ),
@@ -294,12 +271,14 @@ class Student extends StatelessWidget {
                   onTap: () {
                     print(!controller.studentSex.isBlank!);
                     print(!controller.studentBlood.isBlank!);
+                    print("Clicked");
 
-                    if (formKey.currentState!.validate() &&
-                        controller.studentBlood == null &&
-                        controller.studentSex.isBlank!) {
-                      controller.step.value++;
-                      controller.sendDataToDatabase();
+                    if (formKey.currentState!.validate()) {
+                      if (controller.bloodValue.value != null && !controller.genderValue.isBlank!) {
+                        controller.step.value++;
+                        controller.sendDataToDatabase();
+                      } else {
+                      }
                     }
                   },
                   width: width * 0.9,
@@ -358,9 +337,8 @@ class School extends StatelessWidget {
                     menuStyle: const MenuStyle(),
                     width: width * 0.9,
                     dropdownMenuEntries: const [
-                      DropdownMenuEntry(label: "snck", value: 2),
-                      DropdownMenuEntry(label: "lnlkl", value: 2),
-                      DropdownMenuEntry(label: "ibi", value: 2),
+                      DropdownMenuEntry(label: "مدرسة النور", value: 1),
+                      DropdownMenuEntry(label: "مدرسة العلن", value: 2),
                     ]),
               ),
             ),
@@ -378,18 +356,20 @@ class School extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.fill,
                 child: DropdownMenu(
-                    inputDecorationTheme: InputDecorationTheme(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(13),
-                      ),
+                  inputDecorationTheme: InputDecorationTheme(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(13),
                     ),
-                    menuStyle: const MenuStyle(),
-                    width: width * 0.9,
-                    dropdownMenuEntries: const [
-                      DropdownMenuEntry(label: "snck", value: 2),
-                      DropdownMenuEntry(label: "lnlkl", value: 2),
-                      DropdownMenuEntry(label: "ibi", value: 2),
-                    ]),
+                  ),
+                  menuStyle: const MenuStyle(),
+                  width: width * 0.9,
+                  dropdownMenuEntries: controller.grades.keys.map((grade) {
+                    return DropdownMenuEntry(
+                      label: grade,
+                      value: controller.grades[grade],
+                    );
+                  }).toList(),
+                ),
               ),
             ),
             TextFieldModel(
