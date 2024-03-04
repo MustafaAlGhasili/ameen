@@ -48,6 +48,12 @@ dependencies:
   firebase_database: ^10.4.6
   google_maps_flutter: ^2.5.3
   geolocator: ^11.0.0
+  map_location_picker: ^0.0.1
+  permission_handler: ^11.3.0
+  flutter_google_location_picker: ^0.0.3
+  image_picker: ^1.0.7
+  dio: ^5.4.1
+  firebase_auth: ^4.17.3
  
 
 dev_dependencies:

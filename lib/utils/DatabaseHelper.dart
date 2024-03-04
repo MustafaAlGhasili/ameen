@@ -1,5 +1,7 @@
+import 'package:ameen/model/student.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import '../model/parent.dart';
 import '../model/school.dart';
 import 'data_converter.dart';
 
@@ -9,10 +11,17 @@ class DatabaseHelper {
   Future<String?> save<T extends ToMapConvertible>(
       T model, String refName) async {
     try {
+      print("Is being save");
       DatabaseReference newModelRef = _rootRef.child(refName).push();
+      String modelId = newModelRef.key ?? '';
+
+      if (model is ParentModel) {
+        model.id = modelId!;
+      } else if (model is StudentModel) {
+        model.id = modelId!;
+      }
       await newModelRef.set(model.toMap());
 
-      String modelId = newModelRef.key ?? '';
       print('${T.toString()} saved successfully with ID: $modelId');
       return modelId;
     } catch (error) {

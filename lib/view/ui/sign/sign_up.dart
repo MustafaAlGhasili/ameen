@@ -18,7 +18,7 @@ class SignUp extends StatelessWidget {
         textDirection: TextDirection.rtl,
         child: SingleChildScrollView(
           child: Obx(
-            () => SizedBox(
+                () => SizedBox(
               height: height,
               width: width,
               child: Scaffold(
@@ -38,7 +38,7 @@ class SignUp extends StatelessWidget {
                         showStepBorder: false,
                         stepBorderRadius: 0,
                         finishedStepBackgroundColor:
-                            Colors.black.withOpacity(0),
+                        Colors.black.withOpacity(0),
                         steps: [
                           EasyStep(
                             customStep: CircleAvatar(
@@ -123,7 +123,7 @@ class SignUp extends StatelessWidget {
                     } else if (controller.step.value == 2) {
                       return const School();
                     } else if(controller.step.value == 3) {
-                      return const test();
+                      return const UploadImage();
                     }else {
                       return const PrivacyTerms();                    }
                   },

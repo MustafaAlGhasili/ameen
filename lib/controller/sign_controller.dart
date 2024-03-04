@@ -1,15 +1,20 @@
 // import 'package:camera/camera.dart';
 import 'package:ameen/model/parent.dart';
-import 'package:ameen/model/student.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_location_picker/google_map_location_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../utils/DatabaseHelper.dart';
 
 class SignController extends GetxController {
   RxBool visibility = true.obs;
 
   final parentFName = TextEditingController();
+  final parentEmail = TextEditingController();
   final parentLName = TextEditingController();
   final parentPhone = TextEditingController();
   final parentNationalId = TextEditingController();
@@ -54,6 +59,9 @@ class SignController extends GetxController {
     'الصف التاسع': 9,
   }.obs;
 
+  RxDouble latitude = 0.0.obs;
+  RxDouble longitude = 0.0.obs;
+
   RxBool isAccepted = false.obs;
 
   changeVisibility() {
@@ -70,48 +78,105 @@ class SignController extends GetxController {
     super.onInit();
   }
 
-  void sendDataToDatabase() async {
-    //   //parent reference
-    //   DatabaseReference pRef = FirebaseDatabase.instance.ref("parent");
-    //   DatabaseEvent databaseEvent = await pRef.once();
-    //   DataSnapshot snapshot = databaseEvent.snapshot;
-    //   print(snapshot.value);
-    //   Map<String, dynamic>? map = (snapshot.value == null ? null : snapshot.value)
-    //       as Map<String, dynamic>?;
-    //   map?.forEach((key, value) {
-    //     Map m = {"key": key};
-    //     m.addAll(value);
-    //     l.add(value);
-    //   });
-    // }
+  Future<bool> _requestPermission() async {
+    final status = await Permission.locationWhenInUse.request();
+    return status == PermissionStatus.granted;
+  }
 
-    final parentDBRef = FirebaseDatabase.instance.ref().child('parents').push();
-    final studentDBRef = FirebaseDatabase.instance.ref().child('student').push();
-   
+  Future<void> getLocation(BuildContext context) async {
+    if (await _requestPermission()) {
+      LocationResult? result = await showLocationPicker(
+        context,
+        "AIzaSyBlHVCC3b6bsDxyJAPL7rsdkDarJYd-SeI",
+        initialCenter: const LatLng(40.7128, -74.0060),
+        layersButtonEnabled: true,
+        desiredAccuracy: LocationAccuracy.bestForNavigation,
+        language: 'ar',
+        countries: ['SA'],
+        requiredGPS: true,
+        searchBarBoxDecoration:
+            null, // Set searchBarBoxDecoration to null to hide the search bar
+      );
+
+      if (result != null) {
+        print("Selected location:");
+        print("Address: ${result.address}");
+        print("LatLng: ${result.latLng.latitude}, ${result.latLng.longitude}");
+
+        latitude.value = result.latLng.latitude;
+        longitude.value = result.latLng.longitude;
+      } else {
+        print("Location picking canceled");
+      }
+    } else {
+      print("Permission denied");
+    }
+  }
+
+  void registerParent() async {
+    DatabaseHelper _databaseHelper = DatabaseHelper();
+
+    print(parentFName.text);
+    print(parentLName.text);
+    await createUserWithEmailAndPassword(parentEmail.text, parenPassword.text);
 
     final parent = ParentModel(
-      id: "${parentDBRef.key}",
       fName: parentFName.text,
       lName: parentLName.text,
       nationalId: parentNationalId.text,
-      email: 'email',
+      email: parentEmail.text,
       isEnabled: false,
       phone: parentPhone.text,
     );
 
+    /* String? parentId =
+        await _databaseHelper.save<ParentModel>(parent, "parents");
+
     final student = StudentModel(
-        id: "${studentDBRef.key}",
-        fName: studentFName.text,
-        lName: studentLName.text,
-        nationalId: studentNationalId.text,
-        isEnabled: false,
-        birthDate: studentBDate.text,
-        gender: genderValue.value,  // Use the genderValue from the controller
-        blood: bloodValue.value,    // Use the bloodValue from the controller
+      fName: studentFName.text,
+      lName: studentLName.text,
+      nationalId: studentNationalId.text,
+      birthDate: studentBDate.text,
+      gender: genderValue.value,
+      blood: bloodValue.value,
+      isEnabled: false,
+      parentId: parentId!,
+    );
 
-        parent: "${parentDBRef.key}");
+    String? studentId =
+        await _databaseHelper.save<StudentModel>(student, "students");*/
+  }
 
-    await parentDBRef.set(parent.toMap());
-    await studentDBRef.set(student.toMap());
+  Future<void> createUserWithEmailAndPassword(
+
+      String email, String password) async {
+    try {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Get the newly created user's ID
+      final String userId = userCredential.user!.uid;
+
+      // Perform any additional actions, e.g., store user data, navigate to a different screen
+      print('User created successfully: $userId');
+    } on FirebaseAuthException catch (e) {
+      print('FirebaseAuthException - Code: ${e.code}, Message: ${e.message}');
+
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The email address is already in use by another user.');
+      } else {
+        print("Error");
+        print(e.code);
+      }
+    } catch (e) {
+      print(e); // Handle other exceptions
+    }
   }
 }

@@ -1,10 +1,13 @@
+import 'dart:io';
+
+import 'package:ameen/controller/camera_controller.dart';
 import 'package:ameen/view/ui/home/home.dart';
 import 'package:ameen/view/ui/widget/custem_dropdown_menu.dart';
-
-// import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../controller/sign_controller.dart';
 import '../widget/button_model.dart';
@@ -72,6 +75,15 @@ class Parent extends StatelessWidget {
                 height: height * 0.035,
               ),
               TextFieldModel(
+                controller: controller.parentEmail,
+                // vPadding: height * 0.035,
+                keyboardType: TextInputType.emailAddress,
+                text: "الإيميل",
+              ),
+              SizedBox(
+                height: height * 0.035,
+              ),
+              TextFieldModel(
                 controller: controller.parenPassword,
                 // vPadding: height * 0.035,
                 keyboardType: TextInputType.visiblePassword,
@@ -117,7 +129,7 @@ Future<void> _selectDate(BuildContext context) async {
   if (selected != null && selected != DateTime.now()) {
     // controller.selectedDate = selected;
     controller.studentBDate.text =
-        "${selected.year}-${selected.month}-${selected.day}";
+    "${selected.year}-${selected.month}-${selected.day}";
     print(controller.studentBDate.text);
   }
 }
@@ -220,7 +232,7 @@ class Student extends StatelessWidget {
                             child: FittedBox(
                               fit: BoxFit.fill,
                               child: Obx(() => CustomDropdownButton2(
-                                  // dropdownWidth: 20,
+                                // dropdownWidth: 20,
                                   hint: '',
                                   value: controller.bloodValue.value.isEmpty
                                       ? null
@@ -248,15 +260,15 @@ class Student extends StatelessWidget {
                             child: FittedBox(
                               fit: BoxFit.fill,
                               child: Obx(() => CustomDropdownButton2(
-                                    hint: '',
-                                    value: controller.genderValue.value.isEmpty
-                                        ? null
-                                        : controller.genderValue.value,
-                                    dropdownItems: controller.genders,
-                                    onChanged: (val) {
-                                      controller.genderValue.value = val!;
-                                    },
-                                  )),
+                                hint: '',
+                                value: controller.genderValue.value.isEmpty
+                                    ? null
+                                    : controller.genderValue.value,
+                                dropdownItems: controller.genders,
+                                onChanged: (val) {
+                                  controller.genderValue.value = val!;
+                                },
+                              )),
                             ),
                           ),
                         ],
@@ -274,11 +286,11 @@ class Student extends StatelessWidget {
                     print("Clicked");
 
                     if (formKey.currentState!.validate()) {
-                      if (controller.bloodValue.value != null && !controller.genderValue.isBlank!) {
+                      if (controller.bloodValue.value != null &&
+                          !controller.genderValue.isBlank!) {
                         controller.step.value++;
-                        controller.sendDataToDatabase();
-                      } else {
-                      }
+                        // controller.sendDataToDatabase();
+                      } else {}
                     }
                   },
                   width: width * 0.9,
@@ -329,17 +341,18 @@ class School extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.fill,
                 child: DropdownMenu(
-                    inputDecorationTheme: InputDecorationTheme(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(13),
-                      ),
+                  inputDecorationTheme: InputDecorationTheme(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(13),
                     ),
-                    menuStyle: const MenuStyle(),
-                    width: width * 0.9,
-                    dropdownMenuEntries: const [
-                      DropdownMenuEntry(label: "مدرسة النور", value: 1),
-                      DropdownMenuEntry(label: "مدرسة العلن", value: 2),
-                    ]),
+                  ),
+                  menuStyle: const MenuStyle(),
+                  width: width * 0.9,
+                  dropdownMenuEntries: const [
+                    DropdownMenuEntry(label: "مدرسة النور", value: 1),
+                    DropdownMenuEntry(label: "مدرسة العلن", value: 2),
+                  ],
+                ),
               ),
             ),
             Container(
@@ -372,9 +385,28 @@ class School extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              height: height * 0.05,
+            ),
+            ButtonModel(
+              onTap: () {
+                controller.getLocation(context);
+              },
+              icon: Icons.map,
+              width: width * 0.9,
+              height: height * 0.06,
+              content: 'اختر الموقع على الخريطة',
+              rowMainAxisAlignment: MainAxisAlignment.center,
+              textAlign: TextAlign.center,
+              backColor: const Color.fromARGB(255, 113, 65, 146),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: width * 0.05,
+              ),
+            ),
             TextFieldModel(
               style: TextStyle(height: height * 0.0027),
-              text: "اكتب موقعك",
+              text: "اكتب وصف موقعك",
               vPadding: height * 0.035,
               obscureText: true,
             ),
@@ -403,69 +435,121 @@ class School extends StatelessWidget {
     );
   }
 }
-//
-// class FaceRecognition extends StatelessWidget {
-//   const FaceRecognition({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     CamController cameraController  = Get.find();
-//     return FutureBuilder(
-//         future: cameraController.initializeControllerFuture(),
-//         builder: (context, snapshot) {
-//           if (!cameraController.cameraController.value.isInitialized) {
-//             return const Center(
-//                 child: CircularProgressIndicator(
-//                   color: Colors.white,
-//                 ));
-//           }
-//           return Align(
-//             alignment: Alignment.center,
-//             child: Container(
-//
-//               decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(1000),
-//                   border: Border.all(width: 10, color: Colors.white)),
-//               child: ClipRRect(
-//                 borderRadius: BorderRadius.circular(1000),
-//                 child: SizedBox(
-//                   width: width * 0.9,
-//                   child: AspectRatio(
-//                     aspectRatio: 1,
-//                     child: CameraPreview(
-//                         cameraController.cameraController),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           );
-//         });
-//   }
-// }
 
-class test extends StatelessWidget {
-  const test({super.key});
+class UploadImage extends StatefulWidget {
+  const UploadImage({super.key});
+
+  @override
+  State<UploadImage> createState() => _UploadImageState();
+}
+
+class _UploadImageState extends State<UploadImage> {
+  final CamController camController =
+  Get.find(); // Assuming GetX controller instance
+  String? _selectedImagePath; // Store the selected image path
+
+  Future<void> _handleCameraPick(ImageSource imageSource) async {
+    final response = await camController.takePhotoFromCamera(imageSource);
+    setState(() {
+      _selectedImagePath = camController.picture.path;
+    });
+    if (response == 200) {
+      // Assuming success code is 200
+      setState(() {
+        _selectedImagePath = camController.picture.path;
+      });
+    }
+    // Handle other response codes
+  }
+
+  void _showImageOptionsDialog(BuildContext context) async {
+    final cameraStatus = await Permission.camera.request();
+    final storageStatus = await Permission.storage.request();
+
+    if (cameraStatus.isGranted && storageStatus.isGranted) {
+      final imagePicker = ImagePicker();
+
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('أختر طريقة أخذ الصورة'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min, // Don't let content overflow
+              children: [
+                ListTile(
+                  title: const Text('الكاميرا'),
+                  onTap: () => _handleCameraPick(ImageSource.camera),
+                ),
+                ListTile(
+                  title: const Text('معرض الصور'),
+                  onTap: () => _handleCameraPick(ImageSource.camera),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } else {
+      // Handle permission denied case (e.g., show a message)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please grant camera and storage permissions'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
     return Center(
-      child: ButtonModel(
-        onTap: () {
-          controller.step.value++;
-          // Get.to(() => const StudentInfo());
-        },
-        width: width * 0.9,
-        height: height * 0.06,
-        content: 'التالي',
-        rowMainAxisAlignment: MainAxisAlignment.center,
-        textAlign: TextAlign.center,
-        backColor: const Color.fromARGB(255, 113, 65, 146),
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: width * 0.05,
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Display selected image if available
+          _selectedImagePath != null
+              ? Image.file(
+            File(_selectedImagePath!),
+            // Adjust width and height as needed
+            width: width,
+            height: height * 0.3, // Adjust height as needed
+          )
+              : const SizedBox.shrink(),
+
+          // Your image upload icon
+          IconButton(
+            onPressed: () {
+              _showImageOptionsDialog(context);
+            },
+            icon: Icon(
+              Icons.add_a_photo,
+              size: width * 0.3, // Adjust the size as needed
+              color: const Color.fromARGB(255, 113, 65, 146),
+            ),
+          ),
+          SizedBox(height: height * 0.02), // Adjust spacing as needed
+
+          // Your next button
+          ButtonModel(
+            onTap: () {
+              controller.step.value++;
+              // Get.to(() => const StudentInfo());
+            },
+            width: width * 0.9,
+            height: height * 0.06,
+            content: 'التالي',
+            rowMainAxisAlignment: MainAxisAlignment.center,
+            textAlign: TextAlign.center,
+            backColor: const Color.fromARGB(255, 113, 65, 146),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: width * 0.05,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -479,7 +563,6 @@ class PrivacyTerms extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
-      // physics: const BouncingScrollPhysics(),
       child: Padding(
         padding: EdgeInsets.all(width * 0.03),
         child: Column(
@@ -491,21 +574,21 @@ class PrivacyTerms extends StatelessWidget {
             Text(
                 style: TextStyle(fontSize: width * 0.04),
                 "مرحبًا بك في تطبيق أمين "
-                "يرجى قراءة هذه الشروط والأحكام بعناية قبل استخدام التطبيق. بمجرد استخدامك للتطبيق، فإنك توافق على هذه الشروط والأحكام بشكل كامل وملزم.\n"
-                "1. ملكية المحتوى: "
-                "المحتوى الذي يتم مشاركته أو نشره عبر تطبيق أمين هو ملكية التطبيق والمستخدمين والجهات الخارجية. لا يجوز نسخ أو نشر المحتوى دون إذن كتابي.\n"
-                "2. تراخيص الاستخدام: "
-                "يجب استخدام تطبيق أمين بأمان وبالامتثال لجميع القوانين واللوائح المحلية والدولية. يجب عدم استخدام التطبيق بأي طريقة تنتهك حقوق الملكية الفكرية أو تعرض سلامة المستخدمين للخطر.\n"
-                "3. الخصوصية وحماية البيانات: "
-                "نحن نلتزم بحماية خصوصية المستخدمين. سيتم جمع واستخدام البيانات الشخصية وفقًا لسياسة الخصوصية المتاحة في التطبيق.\n"
-                "4. التعويض والضمان: "
-                "يجب على المستخدمين فهم أن التطبيق يقدم كما هو ودون أي ضمانات صريحة أو ضمانات من أي نوع.\n"
-                "5. إنهاء الخدمة: "
-                "يمكن أن تؤدي انتهاكات الشروط والأحكام إلى إنهاء حظر المستخدمين. نحتفظ بالحق في إنهاء الخدمة في أي وقت.\n"
-                "6. تحديث الشروط والأحكام: "
-                "يمكن أن تتغير هذه الشروط والأحكام مع مرور الوقت. سيتم إشعار المستخدمين بأي تغييرات."),
+                    "يرجى قراءة هذه الشروط والأحكام بعناية قبل استخدام التطبيق. بمجرد استخدامك للتطبيق، فإنك توافق على هذه الشروط والأحكام بشكل كامل وملزم.\n"
+                    "1. ملكية المحتوى: "
+                    "المحتوى الذي يتم مشاركته أو نشره عبر تطبيق أمين هو ملكية التطبيق والمستخدمين والجهات الخارجية. لا يجوز نسخ أو نشر المحتوى دون إذن كتابي.\n"
+                    "2. تراخيص الاستخدام: "
+                    "يجب استخدام تطبيق أمين بأمان وبالامتثال لجميع القوانين واللوائح المحلية والدولية. يجب عدم استخدام التطبيق بأي طريقة تنتهك حقوق الملكية الفكرية أو تعرض سلامة المستخدمين للخطر.\n"
+                    "3. الخصوصية وحماية البيانات: "
+                    "نحن نلتزم بحماية خصوصية المستخدمين. سيتم جمع واستخدام البيانات الشخصية وفقًا لسياسة الخصوصية المتاحة في التطبيق.\n"
+                    "4. التعويض والضمان: "
+                    "يجب على المستخدمين فهم أن التطبيق يقدم كما هو ودون أي ضمانات صريحة أو ضمانات من أي نوع.\n"
+                    "5. إنهاء الخدمة: "
+                    "يمكن أن تؤدي انتهاكات الشروط والأحكام إلى إنهاء حظر المستخدمين. نحتفظ بالحق في إنهاء الخدمة في أي وقت.\n"
+                    "6. تحديث الشروط والأحكام: "
+                    "يمكن أن تتغير هذه الشروط والأحكام مع مرور الوقت. سيتم إشعار المستخدمين بأي تغييرات."),
             Obx(
-              () => Padding(
+                  () => Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: width * 0.02, horizontal: width * 0.01),
                 child: GestureDetector(
@@ -515,46 +598,38 @@ class PrivacyTerms extends StatelessWidget {
                   child: Row(
                     children: [
                       Checkbox(
-                          value: controller.isAccepted.value,
-                          onChanged: (val) {
-                            controller.isAccepted.value =
-                                !controller.isAccepted.value;
-                          }),
-                      // SizedBox(
-                      //   width: width * 0.01,
-                      // ),
-                      Text("اوافق على الشروط والاحكام",
-                          style: TextStyle(fontSize: width * 0.045)),
+                        value: controller.isAccepted.value,
+                        onChanged: (val) {
+                          controller.isAccepted.value =
+                          !controller.isAccepted.value;
+                        },
+                      ),
+                      Text(
+                        "أوافق على الشروط والأحكام",
+                        style: TextStyle(fontSize: width * 0.045),
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
-            ButtonModel(
-              onTap: () {
-                if (controller.isAccepted.value) {
-                  Get.offAll(() => const Home());
-                  controller.sendDataToDatabase();
-                } else {
-                  Get.showSnackbar(
-                    const GetSnackBar(
-                      title: "Bad",
-                      message: "Very Bad",
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
-                }
-                // Get.to(() => const StudentInfo());
-              },
-              width: width * 0.9,
-              content: 'التالي',
-              height: height * 0.055,
-              rowMainAxisAlignment: MainAxisAlignment.center,
-              textAlign: TextAlign.center,
-              backColor: const Color.fromARGB(255, 113, 65, 146),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: width * 0.05,
+            ElevatedButton(
+              onPressed: controller.isAccepted.value
+                  ? () {
+                controller.registerParent();
+                //Get.offAll(() => const Home());
+              }
+                  : null, // Set onPressed to null if checkbox is not checked
+              style: ElevatedButton.styleFrom(
+                primary: const Color.fromARGB(255, 113, 65, 146),
+                minimumSize: Size(width * 0.9, height * 0.055),
+              ),
+              child: Text(
+                'التالي',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: width * 0.05,
+                ),
               ),
             ),
           ],

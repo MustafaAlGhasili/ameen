@@ -1,5 +1,7 @@
-class ParentModel {
-  final String id;
+import '../utils/data_converter.dart';
+
+class ParentModel implements ToMapConvertible {
+  String id;
   final String fName;
   final String lName;
   final String email;
@@ -8,16 +10,17 @@ class ParentModel {
   final bool isEnabled;
 
   ParentModel({
-    required this.id,
     required this.fName,
     required this.lName,
     required this.email,
     required this.phone,
     required this.nationalId,
     required this.isEnabled,
+    this.id = "",
   });
 
   // Convert model to a map for storing in the database
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,
