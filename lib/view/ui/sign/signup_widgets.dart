@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:ameen/controller/camera_controller.dart';
-import 'package:ameen/view/ui/home/home.dart';
+import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/view/ui/widget/custem_dropdown_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,6 +22,7 @@ class Parent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
+    DatabaseHelper _databaseHelper = DatabaseHelper();
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -129,7 +130,7 @@ Future<void> _selectDate(BuildContext context) async {
   if (selected != null && selected != DateTime.now()) {
     // controller.selectedDate = selected;
     controller.studentBDate.text =
-    "${selected.year}-${selected.month}-${selected.day}";
+        "${selected.year}-${selected.month}-${selected.day}";
     print(controller.studentBDate.text);
   }
 }
@@ -232,7 +233,7 @@ class Student extends StatelessWidget {
                             child: FittedBox(
                               fit: BoxFit.fill,
                               child: Obx(() => CustomDropdownButton2(
-                                // dropdownWidth: 20,
+                                  // dropdownWidth: 20,
                                   hint: '',
                                   value: controller.bloodValue.value.isEmpty
                                       ? null
@@ -260,15 +261,15 @@ class Student extends StatelessWidget {
                             child: FittedBox(
                               fit: BoxFit.fill,
                               child: Obx(() => CustomDropdownButton2(
-                                hint: '',
-                                value: controller.genderValue.value.isEmpty
-                                    ? null
-                                    : controller.genderValue.value,
-                                dropdownItems: controller.genders,
-                                onChanged: (val) {
-                                  controller.genderValue.value = val!;
-                                },
-                              )),
+                                    hint: '',
+                                    value: controller.genderValue.value.isEmpty
+                                        ? null
+                                        : controller.genderValue.value,
+                                    dropdownItems: controller.genders,
+                                    onChanged: (val) {
+                                      controller.genderValue.value = val!;
+                                    },
+                                  )),
                             ),
                           ),
                         ],
@@ -348,10 +349,17 @@ class School extends StatelessWidget {
                   ),
                   menuStyle: const MenuStyle(),
                   width: width * 0.9,
-                  dropdownMenuEntries: const [
-                    DropdownMenuEntry(label: "مدرسة النور", value: 1),
-                    DropdownMenuEntry(label: "مدرسة العلن", value: 2),
-                  ],
+                  dropdownMenuEntries: controller.schools.keys.map((school) {
+                    return DropdownMenuEntry(
+                      label: school,
+                      value: controller.schools[school],
+                    );
+                  }).toList(),
+                  onSelected: (value) {
+                    controller.schoolValue.value = value!;
+                    print(
+                        'Selected: $value'); // Replace with your actual action
+                  },
                 ),
               ),
             ),
@@ -382,6 +390,11 @@ class School extends StatelessWidget {
                       value: controller.grades[grade],
                     );
                   }).toList(),
+                  onSelected: (value) {
+                    controller.gradeValue.value = value!;
+                    print(
+                        'Selected: $value'); // Replace with your actual action
+                  },
                 ),
               ),
             ),
@@ -445,7 +458,7 @@ class UploadImage extends StatefulWidget {
 
 class _UploadImageState extends State<UploadImage> {
   final CamController camController =
-  Get.find(); // Assuming GetX controller instance
+      Get.find(); // Assuming GetX controller instance
   String? _selectedImagePath; // Store the selected image path
 
   Future<void> _handleCameraPick(ImageSource imageSource) async {
@@ -512,11 +525,11 @@ class _UploadImageState extends State<UploadImage> {
           // Display selected image if available
           _selectedImagePath != null
               ? Image.file(
-            File(_selectedImagePath!),
-            // Adjust width and height as needed
-            width: width,
-            height: height * 0.3, // Adjust height as needed
-          )
+                  File(_selectedImagePath!),
+                  // Adjust width and height as needed
+                  width: width,
+                  height: height * 0.3, // Adjust height as needed
+                )
               : const SizedBox.shrink(),
 
           // Your image upload icon
@@ -574,21 +587,21 @@ class PrivacyTerms extends StatelessWidget {
             Text(
                 style: TextStyle(fontSize: width * 0.04),
                 "مرحبًا بك في تطبيق أمين "
-                    "يرجى قراءة هذه الشروط والأحكام بعناية قبل استخدام التطبيق. بمجرد استخدامك للتطبيق، فإنك توافق على هذه الشروط والأحكام بشكل كامل وملزم.\n"
-                    "1. ملكية المحتوى: "
-                    "المحتوى الذي يتم مشاركته أو نشره عبر تطبيق أمين هو ملكية التطبيق والمستخدمين والجهات الخارجية. لا يجوز نسخ أو نشر المحتوى دون إذن كتابي.\n"
-                    "2. تراخيص الاستخدام: "
-                    "يجب استخدام تطبيق أمين بأمان وبالامتثال لجميع القوانين واللوائح المحلية والدولية. يجب عدم استخدام التطبيق بأي طريقة تنتهك حقوق الملكية الفكرية أو تعرض سلامة المستخدمين للخطر.\n"
-                    "3. الخصوصية وحماية البيانات: "
-                    "نحن نلتزم بحماية خصوصية المستخدمين. سيتم جمع واستخدام البيانات الشخصية وفقًا لسياسة الخصوصية المتاحة في التطبيق.\n"
-                    "4. التعويض والضمان: "
-                    "يجب على المستخدمين فهم أن التطبيق يقدم كما هو ودون أي ضمانات صريحة أو ضمانات من أي نوع.\n"
-                    "5. إنهاء الخدمة: "
-                    "يمكن أن تؤدي انتهاكات الشروط والأحكام إلى إنهاء حظر المستخدمين. نحتفظ بالحق في إنهاء الخدمة في أي وقت.\n"
-                    "6. تحديث الشروط والأحكام: "
-                    "يمكن أن تتغير هذه الشروط والأحكام مع مرور الوقت. سيتم إشعار المستخدمين بأي تغييرات."),
+                "يرجى قراءة هذه الشروط والأحكام بعناية قبل استخدام التطبيق. بمجرد استخدامك للتطبيق، فإنك توافق على هذه الشروط والأحكام بشكل كامل وملزم.\n"
+                "1. ملكية المحتوى: "
+                "المحتوى الذي يتم مشاركته أو نشره عبر تطبيق أمين هو ملكية التطبيق والمستخدمين والجهات الخارجية. لا يجوز نسخ أو نشر المحتوى دون إذن كتابي.\n"
+                "2. تراخيص الاستخدام: "
+                "يجب استخدام تطبيق أمين بأمان وبالامتثال لجميع القوانين واللوائح المحلية والدولية. يجب عدم استخدام التطبيق بأي طريقة تنتهك حقوق الملكية الفكرية أو تعرض سلامة المستخدمين للخطر.\n"
+                "3. الخصوصية وحماية البيانات: "
+                "نحن نلتزم بحماية خصوصية المستخدمين. سيتم جمع واستخدام البيانات الشخصية وفقًا لسياسة الخصوصية المتاحة في التطبيق.\n"
+                "4. التعويض والضمان: "
+                "يجب على المستخدمين فهم أن التطبيق يقدم كما هو ودون أي ضمانات صريحة أو ضمانات من أي نوع.\n"
+                "5. إنهاء الخدمة: "
+                "يمكن أن تؤدي انتهاكات الشروط والأحكام إلى إنهاء حظر المستخدمين. نحتفظ بالحق في إنهاء الخدمة في أي وقت.\n"
+                "6. تحديث الشروط والأحكام: "
+                "يمكن أن تتغير هذه الشروط والأحكام مع مرور الوقت. سيتم إشعار المستخدمين بأي تغييرات."),
             Obx(
-                  () => Padding(
+              () => Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: width * 0.02, horizontal: width * 0.01),
                 child: GestureDetector(
@@ -601,7 +614,7 @@ class PrivacyTerms extends StatelessWidget {
                         value: controller.isAccepted.value,
                         onChanged: (val) {
                           controller.isAccepted.value =
-                          !controller.isAccepted.value;
+                              !controller.isAccepted.value;
                         },
                       ),
                       Text(
@@ -616,9 +629,9 @@ class PrivacyTerms extends StatelessWidget {
             ElevatedButton(
               onPressed: controller.isAccepted.value
                   ? () {
-                controller.registerParent();
-                //Get.offAll(() => const Home());
-              }
+                      controller.registerParent();
+                      //Get.offAll(() => const Home());
+                    }
                   : null, // Set onPressed to null if checkbox is not checked
               style: ElevatedButton.styleFrom(
                 primary: const Color.fromARGB(255, 113, 65, 146),

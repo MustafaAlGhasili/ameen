@@ -8,13 +8,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_location_picker/google_map_location_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../model/school.dart';
 import '../model/student.dart';
-import '../services/auth_service/AuthService.dart';
 import '../utils/DatabaseHelper.dart';
 
 class SignController extends GetxController {
-  final AuthService _authService = AuthService();
-
   RxBool visibility = true.obs;
 
   final parentFName = TextEditingController();
@@ -49,6 +47,9 @@ class SignController extends GetxController {
 
   RxList<String> genders = ['ذكر', 'أنثى'].obs;
   RxString genderValue = ''.obs;
+  RxInt schoolValue = 0.obs;
+  RxInt gradeValue = 0.obs;
+  DatabaseHelper _databaseHelper = DatabaseHelper();
 
   RxMap<String, int> grades = {
     'رياض الأطفال': 0,
@@ -62,6 +63,12 @@ class SignController extends GetxController {
     'الصف الثامن': 8,
     'الصف التاسع': 9,
   }.obs;
+
+  RxMap<String, int> schools = {
+    'مدرسة النور': 1,
+    'مدرسة العلم': 2,
+  }.obs;
+//  RxMap<String, int> schools = {0: 'test'}.obs as RxMap<String, int>;
 
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
@@ -80,6 +87,7 @@ class SignController extends GetxController {
       };
     // errorController = StreamController<ErrorAnimationType>();
     super.onInit();
+    //addSchoolsToMenu();
   }
 
   Future<bool> _requestPermission() async {
@@ -118,11 +126,9 @@ class SignController extends GetxController {
   }
 
   void registerParent() async {
-    DatabaseHelper _databaseHelper = DatabaseHelper();
-
     print(parentFName.text);
     print(parentLName.text);
-    String? parentId = await _authService.createUserWithEmailAndPassword(
+    String? parentId = await createUserWithEmailAndPassword(
         parentEmail.text, parenPassword.text);
     final parent = ParentModel(
       id: parentId!,
@@ -144,7 +150,7 @@ class SignController extends GetxController {
       gender: genderValue.value,
       blood: bloodValue.value,
       isEnabled: false,
-      parentId: parentId,
+      parentId: parentId!,
     );
 
     String? studentId =
@@ -183,5 +189,15 @@ class SignController extends GetxController {
       print(e); // Handle other exceptions
     }
     return null;
+  }
+
+  void addSchoolsToMenu() async {
+    List<SchoolModel> schools = await _databaseHelper.getAllSchools();
+    for (var school in schools) {
+      // Access school properties here
+      print('School ID: ${school.id}');
+      print('School Name: ${school.name}');
+      // Add any other properties you want to access
+    }
   }
 }
