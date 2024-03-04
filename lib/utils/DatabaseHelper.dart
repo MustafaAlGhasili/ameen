@@ -32,7 +32,7 @@ class DatabaseHelper {
       ParentModel parentModel, String refName) async {
     try {
       print("Is being save");
-      print("Parent Id:"+parentModel.id);
+      print("Parent Id:${parentModel.id}");
       DatabaseReference newModelRef = _rootRef.child(refName).child(parentModel.id);
       await newModelRef.set(parentModel.toMap());
 

@@ -9,9 +9,12 @@ import 'package:map_location_picker/google_map_location_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../model/student.dart';
+import '../services/auth_service/AuthService.dart';
 import '../utils/DatabaseHelper.dart';
 
 class SignController extends GetxController {
+  final AuthService _authService = AuthService();
+
   RxBool visibility = true.obs;
 
   final parentFName = TextEditingController();
@@ -119,7 +122,7 @@ class SignController extends GetxController {
 
     print(parentFName.text);
     print(parentLName.text);
-    String? parentId = await createUserWithEmailAndPassword(
+    String? parentId = await _authService.createUserWithEmailAndPassword(
         parentEmail.text, parenPassword.text);
     final parent = ParentModel(
       id: parentId!,
@@ -141,7 +144,7 @@ class SignController extends GetxController {
       gender: genderValue.value,
       blood: bloodValue.value,
       isEnabled: false,
-      parentId: parentId!,
+      parentId: parentId,
     );
 
     String? studentId =
