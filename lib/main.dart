@@ -37,7 +37,7 @@ void main() async {
         // locale: DevicePreview.locale(context),
         theme: ThemeData(
             scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-        home:  TestFirebase(),
+        home:  SignUp(),
         // )
       ));
 }

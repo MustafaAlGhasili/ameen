@@ -75,8 +75,8 @@ class TestFirebase extends StatelessWidget {
                 GestureDetector(
                   onTap: () async {
                     SchoolModel school = SchoolModel(
-                      name: 'Example School',
-                      id: 'school123',
+                      name: 'Example School2',
+                      id: 'school1234',
                       address: '@@ May',
                       latitude: 40.7128,
                       longitude: -74.0060,

@@ -16,6 +16,7 @@ class SignController extends GetxController {
   RxBool visibility = true.obs;
 
   final parentFName = TextEditingController();
+  final address = TextEditingController();
   final parentEmail = TextEditingController();
   final parentLName = TextEditingController();
   final parentPhone = TextEditingController();
@@ -49,7 +50,6 @@ class SignController extends GetxController {
   RxString genderValue = ''.obs;
   RxInt schoolValue = 0.obs;
   RxInt gradeValue = 0.obs;
-  DatabaseHelper _databaseHelper = DatabaseHelper();
 
   RxMap<String, int> grades = {
     'رياض الأطفال': 0,
@@ -68,7 +68,8 @@ class SignController extends GetxController {
     'مدرسة النور': 1,
     'مدرسة العلم': 2,
   }.obs;
-//  RxMap<String, int> schools = {0: 'test'}.obs as RxMap<String, int>;
+
+  RxList<SchoolModel> generalSchoolsList = <SchoolModel>[].obs;
 
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
@@ -126,6 +127,8 @@ class SignController extends GetxController {
   }
 
   void registerParent() async {
+    DatabaseHelper _databaseHelper = DatabaseHelper();
+
     print(parentFName.text);
     print(parentLName.text);
     String? parentId = await createUserWithEmailAndPassword(
@@ -151,7 +154,17 @@ class SignController extends GetxController {
       blood: bloodValue.value,
       isEnabled: false,
       parentId: parentId!,
+      schoolId: generalSchoolsList[schoolValue.value!-1].id!,
+      grade: gradeValue.value,
+      latitude: latitude.value,
+      longitude: longitude.value,
+      address: address.text,
     );
+
+    print("Student");
+    print("Student school:" + student.schoolId);
+    print(student.grade);
+    print(student.toMap());
 
     String? studentId =
         await _databaseHelper.save<StudentModel>(student, "students");
@@ -192,8 +205,16 @@ class SignController extends GetxController {
   }
 
   void addSchoolsToMenu() async {
-    List<SchoolModel> schools = await _databaseHelper.getAllSchools();
-    for (var school in schools) {
+    DatabaseHelper _databaseHelper = DatabaseHelper();
+    List<SchoolModel> schoolsList = await _databaseHelper.getAllSchools();
+    generalSchoolsList = schoolsList.obs;
+    print("School Id");
+    print(schools);
+    int count = 1;
+    schools.clear();
+    for (var school in schoolsList) {
+      schools[school.name!] = count;
+      count++;
       // Access school properties here
       print('School ID: ${school.id}');
       print('School Name: ${school.name}');

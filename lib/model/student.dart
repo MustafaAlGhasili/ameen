@@ -12,9 +12,14 @@ class StudentModel implements ToMapConvertible {
   final String blood;
   final bool isEnabled;
   final String parentId;
+  final String address;
+  final String schoolId;
+  final int grade;
+  final double? latitude;
+  final double? longitude;
 
   StudentModel({
-     this.id="",
+    this.id = "",
     required this.fName,
     required this.lName,
     required this.nationalId,
@@ -23,6 +28,11 @@ class StudentModel implements ToMapConvertible {
     required this.blood,
     required this.isEnabled,
     required this.parentId,
+    required this.schoolId,
+    required this.grade,
+    required this.longitude,
+    required this.latitude,
+    required this.address,
   });
 
   factory StudentModel.fromSnapshot(DataSnapshot snapshot) {
@@ -37,6 +47,11 @@ class StudentModel implements ToMapConvertible {
       blood: data['blood'] as String,
       isEnabled: data['isEnabled'] as bool,
       parentId: data['parentId'] as String,
+      schoolId: data['schoolId'] as String,
+      grade: data['grade'] as int,
+      longitude: data['longitude'] as double,
+      latitude: data['latitude'] as double,
+      address: data['address'] as String,
     );
   }
 
@@ -53,6 +68,11 @@ class StudentModel implements ToMapConvertible {
       'blood': blood,
       'isEnabled': isEnabled,
       'parentId': parentId,
+      'schoolId': schoolId,
+      'grade': grade,
+      'longitude': longitude,
+      'latitude': latitude,
+      'address': address,
     };
   }
 }

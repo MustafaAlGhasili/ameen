@@ -321,6 +321,7 @@ class School extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    controller.addSchoolsToMenu();
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -418,10 +419,10 @@ class School extends StatelessWidget {
               ),
             ),
             TextFieldModel(
+              controller: controller.address,
               style: TextStyle(height: height * 0.0027),
               text: "اكتب وصف موقعك",
               vPadding: height * 0.035,
-              obscureText: true,
             ),
             SizedBox(
               height: height * 0.09,
