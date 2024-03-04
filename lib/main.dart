@@ -11,14 +11,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:device_preview/device_preview.dart';
+import 'controller/camera_controller.dart';
 import 'controller/home_controller.dart';
 import 'firebase_options.dart';
+import 'view/ui/test/test_map_picker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Get.put(SignController());
   Get.put(HomeController());
+  Get.put(CamController());
+
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -33,7 +37,7 @@ void main() async {
     // locale: DevicePreview.locale(context),
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: const TestFirebase(),
+    home:  SignUp(),
     // )
   ));
 }

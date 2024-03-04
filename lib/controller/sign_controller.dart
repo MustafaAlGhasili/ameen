@@ -5,6 +5,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_location_picker/google_map_location_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../utils/DatabaseHelper.dart';
 
 class SignController extends GetxController {
   RxBool visibility = true.obs;
@@ -54,6 +59,9 @@ class SignController extends GetxController {
     'الصف التاسع': 9,
   }.obs;
 
+  RxDouble latitude = 0.0.obs;
+  RxDouble longitude = 0.0.obs;
+
   RxBool isAccepted = false.obs;
 
   changeVisibility() {
@@ -70,27 +78,48 @@ class SignController extends GetxController {
     super.onInit();
   }
 
-  void sendDataToDatabase() async {
-    //   //parent reference
-    //   DatabaseReference pRef = FirebaseDatabase.instance.ref("parent");
-    //   DatabaseEvent databaseEvent = await pRef.once();
-    //   DataSnapshot snapshot = databaseEvent.snapshot;
-    //   print(snapshot.value);
-    //   Map<String, dynamic>? map = (snapshot.value == null ? null : snapshot.value)
-    //       as Map<String, dynamic>?;
-    //   map?.forEach((key, value) {
-    //     Map m = {"key": key};
-    //     m.addAll(value);
-    //     l.add(value);
-    //   });
-    // }
+  Future<bool> _requestPermission() async {
+    final status = await Permission.locationWhenInUse.request();
+    return status == PermissionStatus.granted;
+  }
 
-    final parentDBRef = FirebaseDatabase.instance.ref().child('parents').push();
-    final studentDBRef = FirebaseDatabase.instance.ref().child('student').push();
-   
+  Future<void> getLocation(BuildContext context) async {
+    if (await _requestPermission()) {
+      LocationResult? result = await showLocationPicker(
+        context,
+        "AIzaSyBlHVCC3b6bsDxyJAPL7rsdkDarJYd-SeI",
+        initialCenter: const LatLng(40.7128, -74.0060),
+        layersButtonEnabled: true,
+        desiredAccuracy: LocationAccuracy.bestForNavigation,
+        language: 'ar',
+        countries: ['SA'],
+        requiredGPS: true,
+        searchBarBoxDecoration:
+            null, // Set searchBarBoxDecoration to null to hide the search bar
+      );
+
+      if (result != null) {
+        print("Selected location:");
+        print("Address: ${result.address}");
+        print("LatLng: ${result.latLng.latitude}, ${result.latLng.longitude}");
+
+        latitude.value = result.latLng.latitude;
+        longitude.value = result.latLng.longitude;
+      } else {
+        print("Location picking canceled");
+      }
+    } else {
+      print("Permission denied");
+    }
+  }
+
+  void registerParent() async {
+    DatabaseHelper _databaseHelper = DatabaseHelper();
+
+    print(parentFName.text);
+    print(parentLName.text);
 
     final parent = ParentModel(
-      id: "${parentDBRef.key}",
       fName: parentFName.text,
       lName: parentLName.text,
       nationalId: parentNationalId.text,
@@ -99,19 +128,9 @@ class SignController extends GetxController {
       phone: parentPhone.text,
     );
 
-    final student = StudentModel(
-        id: "${studentDBRef.key}",
-        fName: studentFName.text,
-        lName: studentLName.text,
-        nationalId: studentNationalId.text,
-        isEnabled: false,
-        birthDate: studentBDate.text,
-        gender: genderValue.value,  // Use the genderValue from the controller
-        blood: bloodValue.value,    // Use the bloodValue from the controller
+    String? parentId =
+        await _databaseHelper.save<ParentModel>(parent, "parents");
 
-        parent: "${parentDBRef.key}");
-
-    await parentDBRef.set(parent.toMap());
-    await studentDBRef.set(student.toMap());
   }
+
 }

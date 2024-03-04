@@ -123,7 +123,7 @@ class SignUp extends StatelessWidget {
                     } else if (controller.step.value == 2) {
                       return const School();
                     } else if(controller.step.value == 3) {
-                      return const test();
+                      return const UploadImage();
                     }else {
                       return const PrivacyTerms();                    }
                   },
