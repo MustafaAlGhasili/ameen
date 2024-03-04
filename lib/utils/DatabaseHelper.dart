@@ -1,7 +1,7 @@
+import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-import '../model/parent.dart';
 import '../model/school.dart';
 import 'data_converter.dart';
 
@@ -15,9 +15,7 @@ class DatabaseHelper {
       DatabaseReference newModelRef = _rootRef.child(refName).push();
       String modelId = newModelRef.key ?? '';
 
-      if (model is ParentModel) {
-        model.id = modelId!;
-      } else if (model is StudentModel) {
+      if (model is StudentModel) {
         model.id = modelId!;
       }
       await newModelRef.set(model.toMap());
@@ -26,6 +24,21 @@ class DatabaseHelper {
       return modelId;
     } catch (error) {
       print('Error saving ${T.toString()}: $error');
+      return null;
+    }
+  }
+
+  Future<String?> saveParent(
+      ParentModel parentModel, String refName) async {
+    try {
+      print("Is being save");
+      print("Parent Id:"+parentModel.id);
+      DatabaseReference newModelRef = _rootRef.child(refName).child(parentModel.id);
+      await newModelRef.set(parentModel.toMap());
+
+      return parentModel.id;
+    } catch (error) {
+      print('Error saving ${parentModel.toString()}: $error');
       return null;
     }
   }

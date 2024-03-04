@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_location_picker/google_map_location_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../model/student.dart';
 import '../utils/DatabaseHelper.dart';
 
 class SignController extends GetxController {
@@ -118,9 +119,10 @@ class SignController extends GetxController {
 
     print(parentFName.text);
     print(parentLName.text);
-    await createUserWithEmailAndPassword(parentEmail.text, parenPassword.text);
-
+    String? parentId = await createUserWithEmailAndPassword(
+        parentEmail.text, parenPassword.text);
     final parent = ParentModel(
+      id: parentId!,
       fName: parentFName.text,
       lName: parentLName.text,
       nationalId: parentNationalId.text,
@@ -129,8 +131,7 @@ class SignController extends GetxController {
       phone: parentPhone.text,
     );
 
-    /* String? parentId =
-        await _databaseHelper.save<ParentModel>(parent, "parents");
+    await _databaseHelper.saveParent(parent, "parents");
 
     final student = StudentModel(
       fName: studentFName.text,
@@ -144,11 +145,10 @@ class SignController extends GetxController {
     );
 
     String? studentId =
-        await _databaseHelper.save<StudentModel>(student, "students");*/
+        await _databaseHelper.save<StudentModel>(student, "students");
   }
 
-  Future<void> createUserWithEmailAndPassword(
-
+  Future<String?> createUserWithEmailAndPassword(
       String email, String password) async {
     try {
       final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -164,6 +164,7 @@ class SignController extends GetxController {
 
       // Perform any additional actions, e.g., store user data, navigate to a different screen
       print('User created successfully: $userId');
+      return userId;
     } on FirebaseAuthException catch (e) {
       print('FirebaseAuthException - Code: ${e.code}, Message: ${e.message}');
 
@@ -178,5 +179,6 @@ class SignController extends GetxController {
     } catch (e) {
       print(e); // Handle other exceptions
     }
+    return null;
   }
 }
