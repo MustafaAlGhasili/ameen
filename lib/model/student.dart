@@ -55,7 +55,25 @@ class StudentModel implements ToMapConvertible {
     );
   }
 
-  // Convert model to a map for storing in the database
+  factory StudentModel.fromMap(Map<String, dynamic> map) {
+    return StudentModel(
+      id: map['id'] as String,
+      fName: map['fName'] as String,
+      lName: map['lName'] as String,
+      nationalId: map['nationalId'] as String,
+      birthDate: map['birthDate'] as String,
+      gender: map['gender'] as String,
+      blood: map['blood'] as String,
+      isEnabled: map['isEnabled'] as bool,
+      parentId: map['parentId'] as String,
+      schoolId: map['schoolId'] as String,
+      grade: map['grade'] as int,
+      longitude: map['longitude'] as double,
+      latitude: map['latitude'] as double,
+      address: map['address'] as String,
+    );
+  }
+
   @override
   Map<String, dynamic> toMap() {
     return {

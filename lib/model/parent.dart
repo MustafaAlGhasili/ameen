@@ -46,4 +46,16 @@ class ParentModel implements ToMapConvertible {
       isEnabled: data['isEnabled'] as bool,
     );
   }
+
+  factory ParentModel.fromMap(Map<String, dynamic> map) {
+    return ParentModel(
+      id: map['id'] as String,
+      fName: map['firstName'] as String,
+      lName: map['lastName'] as String,
+      email: map['email'] as String,
+      phone: map['phone'] as String,
+      nationalId: map['nationalId'] as String,
+      isEnabled: map['isEnabled'] as bool,
+    );
+  }
 }

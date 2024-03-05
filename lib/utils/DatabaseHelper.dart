@@ -28,12 +28,12 @@ class DatabaseHelper {
     }
   }
 
-  Future<String?> saveParent(
-      ParentModel parentModel, String refName) async {
+  Future<String?> saveParent(ParentModel parentModel, String refName) async {
     try {
       print("Is being save");
       print("Parent Id:${parentModel.id}");
-      DatabaseReference newModelRef = _rootRef.child(refName).child(parentModel.id);
+      DatabaseReference newModelRef =
+          _rootRef.child(refName).child(parentModel.id);
       await newModelRef.set(parentModel.toMap());
 
       return parentModel.id;
@@ -54,23 +54,27 @@ class DatabaseHelper {
       return [];
     }
   }
+
   Future<ParentModel?> getUserById(String userId) async {
     try {
       // Try to find the user in the 'parents' category
-      DataSnapshot parentSnapshot = await _rootRef.child('parents').child(userId).get();
+      DataSnapshot parentSnapshot =
+          await _rootRef.child('parents').child(userId).get();
       if (parentSnapshot.exists) {
         return ParentModel.fromSnapshot(parentSnapshot);
       }
 
-      DataSnapshot driverSnapshot = await _rootRef.child('drivers').child(userId).get();
+      DataSnapshot driverSnapshot =
+          await _rootRef.child('drivers').child(userId).get();
       if (driverSnapshot.exists) {
 //        return DriverModel.fromSnapshot(driverSnapshot); // Adjust the return type and model accordingly
       }
 
       // If not found in 'drivers', try in 'admins' category
-      DataSnapshot adminSnapshot = await _rootRef.child('admins').child(userId).get();
+      DataSnapshot adminSnapshot =
+          await _rootRef.child('admins').child(userId).get();
       if (adminSnapshot.exists) {
-  //      return AdminModel.fromSnapshot(adminSnapshot); // Adjust the return type and model accordingly
+        //      return AdminModel.fromSnapshot(adminSnapshot); // Adjust the return type and model accordingly
       }
 
       // If not found in any category, return null
@@ -81,6 +85,36 @@ class DatabaseHelper {
     }
   }
 
+  Future<StudentModel?> getStudentByParentId(String parentId) async {
+    try {
+      DataSnapshot studentSnapshot = await _rootRef
+          .child('students')
+          .orderByChild('parentId')
+          .equalTo(parentId)
+          .get();
 
+      print("Student Data Try:");
+
+      if (studentSnapshot.exists) {
+        // Ensure studentSnapshot.value is not null before accessing values
+        if (studentSnapshot.value != null) {
+          print("Student Data:");
+          print(studentSnapshot.value);
+          // Map<String, dynamic> studentData = studentSnapshot.value.values.first;
+          // return StudentModel.fromMap(studentData);
+          return null;
+        } else {
+          // Handle the case where studentSnapshot.value is unexpectedly null
+          print("Unexpected data structure: studentSnapshot.value is null");
+          return null;
+        }
+      } else {
+        // Not found
+        return null;
+      }
+    } catch (error) {
+      print('Error getting student by parent ID: $error');
+      return null;
+    }
+  }
 }
-

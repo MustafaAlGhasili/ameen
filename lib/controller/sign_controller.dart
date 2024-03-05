@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../model/school.dart';
 import '../model/student.dart';
+import '../services/LocalStorageService.dart';
 import '../utils/DatabaseHelper.dart';
 
 class SignController extends GetxController {
@@ -151,7 +152,8 @@ class SignController extends GetxController {
         lName: parentLName.text,
         nationalId: parentNationalId.text,
         email: parentEmail.text,
-        isEnabled: true, //TODO Change it after admin
+        isEnabled: true,
+        //TODO Change it after admin
         phone: parentPhone.text,
       );
 
@@ -240,9 +242,13 @@ class SignController extends GetxController {
         if (!parent.isEnabled) {
           _isLoading(false);
           loginErrorValue.value = "في إنتظار تفعيل حسابك";
-
           return false;
         }
+        StudentModel? student =
+            await _databaseHelper.getStudentByParentId(parent.id);
+
+        await LocalStorageService.saveParent(parent);
+        await LocalStorageService.saveStudent(student!);
       }
 
       _isLoading(false);
