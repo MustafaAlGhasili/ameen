@@ -34,4 +34,19 @@ class AuthService {
     }
     return null;
   }
+
+  Future signInWithEmailAndPassword(String email, String password) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      print("eeeeeee $e codeeee ${e.code}");
+      if (e.code == "network-request-failed") {
+      } else if (e.code == 'user-not-found' ||
+          e.code == 'wrong-password' ||
+          e.code == 'invalid-credential') {
+
+      }
+    }
+  }
 }

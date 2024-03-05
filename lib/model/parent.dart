@@ -1,3 +1,5 @@
+import 'package:firebase_database/firebase_database.dart';
+
 import '../utils/data_converter.dart';
 
 class ParentModel implements ToMapConvertible {
@@ -19,7 +21,6 @@ class ParentModel implements ToMapConvertible {
     required this.isEnabled,
   });
 
-  // Convert model to a map for storing in the database
   @override
   Map<String, dynamic> toMap() {
     return {
@@ -31,5 +32,18 @@ class ParentModel implements ToMapConvertible {
       'nationalId': nationalId,
       'isEnabled': isEnabled,
     };
+  }
+
+  factory ParentModel.fromSnapshot(DataSnapshot snapshot) {
+    final Map<Object?, Object?> data = snapshot.value as Map<Object?, Object?>;
+    return ParentModel(
+      id: data['id'] as String,
+      fName: data['firstName'] as String,
+      lName: data['lastName'] as String,
+      email: data['email'] as String,
+      phone: data['phone'] as String,
+      nationalId: data['nationalId'] as String,
+      isEnabled: data['isEnabled'] as bool,
+    );
   }
 }

@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-
 
 late List<CameraDescription> cameras;
 
@@ -16,10 +16,10 @@ class CamController extends GetxController {
   late XFile picture;
   Uint8List? _imageBytes;
   final ImagePicker _imagePicker = ImagePicker();
+  late String fullName;
 
   bool _isLoading = false; // Add this variable
   bool get isLoading => _isLoading;
-
 
   void setLoading(bool loading) {
     _isLoading = loading;
@@ -47,16 +47,16 @@ class CamController extends GetxController {
     update();
   }
 
-  Future<int> registerBusVisitorFace({required File file}) async {
-
+  Future<int> registerStudentFace({required File file}) async {
     String fileExtension = extension(file.path);
-    String fileName = "test${Random().nextInt(1000)}$fileExtension";
 
+    String fileName = "test${Random().nextInt(1000)}$fileExtension";
+    fileName = '${this.fullName}$fileExtension';
     print('File Name: $fileName');
 
     String studentName = "Moha_Hasan_2444";
     final String url =
-        'https://nfaa7msxkb.execute-api.us-east-1.amazonaws.com/dev/bus-visitors-2-2/$fileName'; // Replace with your API Gateway endpoint
+        'https://wyr5ba7f7h.execute-api.us-east-1.amazonaws.com/dev/students-image11/$fileName'; // Replace with your API Gateway endpoint
 /*
     final String url =
         'https://nfaa7msxkb.execute-api.us-east-1.amazonaws.com/dev/students-images-4-4/$studentName'; // Replace with your API Gateway endpoint
@@ -74,15 +74,14 @@ class CamController extends GetxController {
       final response = await Dio().put(url,
           data: Stream.fromIterable(image.map((e) => [e])), options: options);
       print(response);
+      Get.back(closeOverlays: true);
 
       if (response.statusCode == 200) {
-        Get.back(closeOverlays: true);
         // Image uploaded successfully.
         print('Image uploaded successfully!');
 
         // await Future.delayed(const Duration(seconds: 1));
-
-        return makeGetRequest(fileName);
+        return 200;
       } else {
         Get.back(closeOverlays: true);
         // Failed to upload image.
@@ -93,8 +92,8 @@ class CamController extends GetxController {
     } on DioException catch (error) {
       Get.back(closeOverlays: true);
       print("object ${error.message}");
-      if (error.message!.contains("The connection errored: Failed host lookup:")) {
-
+      if (error.message!
+          .contains("The connection errored: Failed host lookup:")) {
         Get.snackbar('Error', "pleas connect to the internet",
             colorText: Colors.white,
             duration: const Duration(seconds: 2),
@@ -118,51 +117,11 @@ class CamController extends GetxController {
     }
   }
 
-  Future<int> makeGetRequest(String fileName) async {
-    int status = 500;
-    final String url =
-        'https://nfaa7msxkb.execute-api.us-east-1.amazonaws.com/dev/students?objectKey=$fileName';
-
-    print('Get API: $url');
-
-    try {
-      final response = await Dio().get(url);
-      print(response);
-      if (response.statusCode == 200) {
-        // Image uploaded successfully.
-        print('Validated successfully!');
-
-        /// todo success dialog
-        // showCustomDialog(context, "Done");
-
-        // Make a GET request with the generated name
-      }
-
-      status = response.statusCode!;
-      return status;
-      // Handle the response from the GET request as needed.
-    } on DioException catch (error) {
-      status = error.response?.statusCode ?? 500;
-      print(error.message);
-      return status;
-
-      rethrow;
-    } catch (e) {
-      status = 500;
-      print(e.toString());
-      return status;
-      // Handle other exceptions
-      print(e.toString());
-
-      throw 'error is ${e.toString()}';
-    }
-  }
-
   Future<XFile?> capturePhoto() async {
     Get.dialog(const Center(
         child: CircularProgressIndicator(
-          color: Colors.white,
-        )));
+      color: Colors.white,
+    )));
     if (cameraController.value.isTakingPicture) {
       return null;
     }
@@ -182,7 +141,7 @@ class CamController extends GetxController {
       if (xFile.path.isNotEmpty) {
         picture = xFile;
         File file = File(picture.path);
-        return registerBusVisitorFace(file: file);
+        return registerStudentFace(file: file);
 
         print("pathh =========${picture.path}");
       }
@@ -190,9 +149,17 @@ class CamController extends GetxController {
     }
     return 502;
   }
-  Future<int> takePhotoFromCamera(ImageSource imageSource) async {
+
+  Future<int> takePhotoFromCamera(
+      ImageSource imageSource, String fullName) async {
     setLoading(true); // Set loading state to true before processing
 
+    print("Full Name");
+    print(fullName);
+    this.fullName = fullName;
+
+    print("General Name");
+    print(this.fullName);
     try {
       final xFile = await _imagePicker.pickImage(
         source: imageSource,
@@ -202,7 +169,7 @@ class CamController extends GetxController {
         if (xFile.path.isNotEmpty) {
           picture = xFile;
           File file = File(picture.path);
-          return registerBusVisitorFace(file: file);
+          return registerStudentFace(file: file);
         }
         print("pathh =========${picture.path}");
       }
@@ -210,8 +177,7 @@ class CamController extends GetxController {
     } catch (e) {
       print("Error while picking image from camera: $e");
       return 504; // Return null in case of errors
-    }
-    finally {
+    } finally {
       setLoading(false); // Set loading state to false after processing
     }
   }
@@ -228,4 +194,3 @@ class CamController extends GetxController {
     super.dispose();
   }
 }
-

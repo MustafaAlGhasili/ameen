@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../controller/sign_controller.dart';
+import '../home/home.dart';
 import '../widget/button_model.dart';
 import '../widget/text_field.dart';
 // import 'package:cr_calendar/cr_calendar.dart';
@@ -170,6 +171,7 @@ class Student extends StatelessWidget {
                   obscureText: false,
                 ),
                 TextFieldModel(
+                  keyboardType:TextInputType.number ,
                   controller: controller.studentNationalId,
                   text: "رقم الاحوال",
                   vPadding: height * 0.035,
@@ -462,8 +464,10 @@ class _UploadImageState extends State<UploadImage> {
       Get.find(); // Assuming GetX controller instance
   String? _selectedImagePath; // Store the selected image path
 
-  Future<void> _handleCameraPick(ImageSource imageSource) async {
-    final response = await camController.takePhotoFromCamera(imageSource);
+  Future<void> _handleCameraPick(
+      ImageSource imageSource, String fullName) async {
+    final response =
+        await camController.takePhotoFromCamera(imageSource, fullName);
     setState(() {
       _selectedImagePath = camController.picture.path;
     });
@@ -493,12 +497,13 @@ class _UploadImageState extends State<UploadImage> {
               children: [
                 ListTile(
                   title: const Text('الكاميرا'),
-                  onTap: () => _handleCameraPick(ImageSource.camera),
+                  onTap: () => _handleCameraPick(ImageSource.camera,
+                      '${controller.studentFName.text}_${controller.studentLName.text}_1'),
                 ),
                 ListTile(
                   title: const Text('معرض الصور'),
-                  onTap: () => _handleCameraPick(ImageSource.camera),
-                ),
+                  onTap: () => _handleCameraPick(ImageSource.gallery,
+                      '${controller.studentFName.text}_${controller.studentLName.text}_1'),                ),
               ],
             ),
           );
@@ -627,25 +632,40 @@ class PrivacyTerms extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: controller.isAccepted.value
-                  ? () {
-                      controller.registerParent();
-                      //Get.offAll(() => const Home());
-                    }
-                  : null, // Set onPressed to null if checkbox is not checked
-              style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(255, 113, 65, 146),
-                minimumSize: Size(width * 0.9, height * 0.055),
-              ),
-              child: Text(
-                'التالي',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: width * 0.05,
-                ),
-              ),
-            ),
+           Obx(() =>
+               ElevatedButton(
+             onPressed: controller.isAccepted.value
+                 ? ()async {
+               final result = await controller.registerParent();
+
+               print("result is $result");
+               if(result){
+                 Get.offAll(() => const Home());
+               }
+             }
+                 : null, // Set onPressed to null if checkbox is not checked
+             style: ElevatedButton.styleFrom(
+               primary: const Color.fromARGB(255, 113, 65, 146),
+               minimumSize: Size(width * 0.9, height * 0.055),
+             ),
+             child: Visibility(
+               visible: !controller.isLoading.value,
+               replacement: SizedBox(
+                 height: 20,
+                 width: 20,
+                 child: CircularProgressIndicator(
+                   color: Colors.white,
+                 ),
+               ),
+               child: Text(
+                 'التالي',
+                 style: TextStyle(
+                   color: Colors.white,
+                   fontSize: width * 0.05,
+                 ),
+               ),
+             ),
+           ),)
           ],
         ),
       ),

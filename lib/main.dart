@@ -1,4 +1,5 @@
 import 'package:ameen/controller/sign_controller.dart';
+import 'package:ameen/view/ui/sign/sign_in.dart';
 // import 'package:ameen/test.dart';
 // import 'package:ameen/view/ui/sign/sign_in.dart';
 import 'package:ameen/view/ui/sign/sign_up.dart';
@@ -37,7 +38,7 @@ void main() async {
         // locale: DevicePreview.locale(context),
         theme: ThemeData(
             scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-        home:  SignUp(),
+        home:  SignIn(),
         // )
       ));
 }

@@ -45,6 +45,7 @@ class SignController extends GetxController {
 
   RxList<String> blood = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].obs;
   RxString bloodValue = ''.obs;
+  RxString loginErrorValue = ''.obs;
 
   RxList<String> genders = ['ذكر', 'أنثى'].obs;
   RxString genderValue = ''.obs;
@@ -126,48 +127,140 @@ class SignController extends GetxController {
     }
   }
 
-  void registerParent() async {
+  RxBool _isLoading = false.obs; // Add this variable
+  RxBool get isLoading => _isLoading;
+
+  // void setLoading(RxBool loading) {
+  //   print("loading is $loading");
+  //   _isLoading.value = loading.value;
+  //   update(); // Update UI when loading state changes
+  // }
+
+  Future<bool> registerParent() async {
     DatabaseHelper _databaseHelper = DatabaseHelper();
 
-    print(parentFName.text);
-    print(parentLName.text);
-    String? parentId = await createUserWithEmailAndPassword(
-        parentEmail.text, parenPassword.text);
-    final parent = ParentModel(
-      id: parentId!,
-      fName: parentFName.text,
-      lName: parentLName.text,
-      nationalId: parentNationalId.text,
-      email: parentEmail.text,
-      isEnabled: false,
-      phone: parentPhone.text,
-    );
+    _isLoading(true);
+    try {
+      print(parentFName.text);
+      print(parentLName.text);
+      String? parentId = await createUserWithEmailAndPassword(
+          parentEmail.text, parenPassword.text);
+      final parent = ParentModel(
+        id: parentId!,
+        fName: parentFName.text,
+        lName: parentLName.text,
+        nationalId: parentNationalId.text,
+        email: parentEmail.text,
+        isEnabled: true, //TODO Change it after admin
+        phone: parentPhone.text,
+      );
 
-    await _databaseHelper.saveParent(parent, "parents");
+      await _databaseHelper.saveParent(parent, "parents");
 
-    final student = StudentModel(
-      fName: studentFName.text,
-      lName: studentLName.text,
-      nationalId: studentNationalId.text,
-      birthDate: studentBDate.text,
-      gender: genderValue.value,
-      blood: bloodValue.value,
-      isEnabled: false,
-      parentId: parentId!,
-      schoolId: generalSchoolsList[schoolValue.value!-1].id!,
-      grade: gradeValue.value,
-      latitude: latitude.value,
-      longitude: longitude.value,
-      address: address.text,
-    );
+      final student = StudentModel(
+        fName: studentFName.text,
+        lName: studentLName.text,
+        nationalId: studentNationalId.text,
+        birthDate: studentBDate.text,
+        gender: genderValue.value,
+        blood: bloodValue.value,
+        isEnabled: false,
+        parentId: parentId!,
+        schoolId: generalSchoolsList[schoolValue.value! - 1].id!,
+        grade: gradeValue.value,
+        latitude: latitude.value,
+        longitude: longitude.value,
+        address: address.text,
+      );
 
-    print("Student");
-    print("Student school:" + student.schoolId);
-    print(student.grade);
-    print(student.toMap());
+      print("Student");
+      print("Student school:" + student.schoolId);
+      print(student.grade);
+      print(student.toMap());
 
-    String? studentId =
-        await _databaseHelper.save<StudentModel>(student, "students");
+      String? studentId =
+          await _databaseHelper.save<StudentModel>(student, "students");
+
+      _isLoading(false);
+      return true;
+    } catch (e) {
+      _isLoading(false);
+      return false;
+    }
+  }
+
+  Future<bool> resetPassword(String email) async {
+    print("Email is $email");
+    _isLoading(true);
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      // Password reset email sent successfully
+      _isLoading(false);
+      return true;
+      print("Password reset email sent successfully");
+    } on FirebaseAuthException catch (e) {
+      // Handle FirebaseAuthException errors
+      print("FirebaseAuthException - Code: ${e.code}, Message: ${e.message}");
+      if (e.code == 'user-not-found') {
+        // Handle user not found error
+        print('User not found. Please check the email address.');
+      } else {
+        // Handle other errors as needed
+        print('Error sending password reset email: $e');
+      }
+      _isLoading(false);
+
+      return false;
+    } catch (e) {
+      // Handle other exceptions
+      print('Error sending password reset email: $e');
+      _isLoading(false);
+      return false;
+    }
+  }
+
+  Future<bool> signInWithEmailAndPassword(String email, String password) async {
+    DatabaseHelper _databaseHelper = DatabaseHelper();
+
+    print('Sign is email: $email And Pass is $password');
+    _isLoading(true);
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      String userId = userCredential.user?.uid ?? '';
+      print('User ID: $userId');
+      ParentModel? parent = await _databaseHelper.getUserById(userId);
+      print("Found Parent");
+      print(parent);
+      if (parent != null) {
+        if (!parent.isEnabled) {
+          _isLoading(false);
+          loginErrorValue.value = "في إنتظار تفعيل حسابك";
+
+          return false;
+        }
+      }
+
+      _isLoading(false);
+      return true;
+    } on FirebaseAuthException catch (e) {
+      print("eeeeeee $e codeeee ${e.code}");
+      if (e.code == "network-request-failed") {
+        loginErrorValue.value = "network-request-failed";
+      } else if (e.code == 'user-not-found' ||
+          e.code == 'wrong-password' ||
+          e.code == 'invalid-credential') {
+        loginErrorValue.value = "الإيميل او كلمة المرور خاطئة";
+      } else if (e.code == 'user-disabled') {
+        loginErrorValue.value = "الحساب موقف حالياُ";
+      }
+      _isLoading(false);
+      return false;
+    }
   }
 
   Future<String?> createUserWithEmailAndPassword(
@@ -191,6 +284,7 @@ class SignController extends GetxController {
       print('FirebaseAuthException - Code: ${e.code}, Message: ${e.message}');
 
       if (e.code == 'weak-password') {
+        loginErrorValue.value = "The password provided is too weak";
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
         print('The email address is already in use by another user.');

@@ -54,4 +54,33 @@ class DatabaseHelper {
       return [];
     }
   }
+  Future<ParentModel?> getUserById(String userId) async {
+    try {
+      // Try to find the user in the 'parents' category
+      DataSnapshot parentSnapshot = await _rootRef.child('parents').child(userId).get();
+      if (parentSnapshot.exists) {
+        return ParentModel.fromSnapshot(parentSnapshot);
+      }
+
+      DataSnapshot driverSnapshot = await _rootRef.child('drivers').child(userId).get();
+      if (driverSnapshot.exists) {
+//        return DriverModel.fromSnapshot(driverSnapshot); // Adjust the return type and model accordingly
+      }
+
+      // If not found in 'drivers', try in 'admins' category
+      DataSnapshot adminSnapshot = await _rootRef.child('admins').child(userId).get();
+      if (adminSnapshot.exists) {
+  //      return AdminModel.fromSnapshot(adminSnapshot); // Adjust the return type and model accordingly
+      }
+
+      // If not found in any category, return null
+      return null;
+    } catch (error) {
+      print('Error getting user: $error');
+      return null;
+    }
+  }
+
+
 }
+

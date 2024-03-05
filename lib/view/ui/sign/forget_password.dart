@@ -1,10 +1,9 @@
-import 'package:ameen/view/ui/sign/email_verification.dart';
-import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-import '../widget/text_field.dart';
+
 import '../../../controller/sign_controller.dart';
+import '../widget/text_field.dart';
 
 class ForgetPassword extends StatelessWidget {
   const ForgetPassword({super.key});
@@ -33,6 +32,10 @@ class ForgetPassword extends StatelessWidget {
                         image: AssetImage("img/logo.png"),
                       ))),
               Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: width * 0.03,
+                    vertical: height * 0.01,
+                  ),
                   height: height * 0.55,
                   margin: EdgeInsets.only(top: height * 0.45),
                   decoration: const BoxDecoration(
@@ -45,59 +48,77 @@ class ForgetPassword extends StatelessWidget {
                         height: 30,
                       ),
                       Text(
-                        "نسيت كلمه المرور؟",
+                        "إستعادة كلمة المرور",
                         style: TextStyle(fontSize: height * 0.033),
                       ),
                       SizedBox(
-                        height: height * 0.1,
+                        height: height * 0.05,
                       ),
                       TextFieldModel(
-                        keyboardType: TextInputType.emailAddress,
-                        onChanged: (value) {
-                          controller.forgetPassword = value;
-                          print(controller.forgetPassword);
-                        },
+                        controller: controller.signInEmailCont,
                         obscureText: false,
                         hint: "البريد الاكتروني",
-                        label: "البريد الاكتروني",
-                        sufIcon: const Icon(IconlyLight.message),
-                        vPadding: height * 0.07,
+                        text: "البريد الاكتروني",
+                        sufIcon: const Icon(IconlyLight.profile),
+                        vPadding: height * 0.03,
                       ),
                       SizedBox(
                         height: height * 0.02,
                       ),
-                      ButtonModel(
-                        onTap: () {
-                          if (controller.forgetPassword.isEmpty) {
-                            Get.showSnackbar(const GetSnackBar(
-                              title: "Error",
-                              message: "Please enter the email",
-                              duration: Duration(seconds: 2),
-                              animationDuration: Duration(milliseconds: 600),
-                            ));
-                          }else if(!controller.forgetPassword.contains("@")){
-                            Get.showSnackbar(const GetSnackBar(
-                              title: "Error",
-                              message: "Invalid Email",
-                              duration: Duration(seconds: 2),
-                              animationDuration: Duration(milliseconds: 600),
-                            ));
-                          }else {
-                            Get.showSnackbar(const GetSnackBar(
-                              title: "Done",
-                              message: "We Sent email verification to your email",
-                              duration: Duration(seconds: 2),
-                              animationDuration: Duration(milliseconds: 600),
-                            ));
-                            Get.to(const EmailVerification());
-                          }
-                        },
-                        backColor: const Color.fromARGB(255, 113, 65, 146),
-                        content: "ارسل",
-                        width: width * 0.9,
-                        height: height * 0.06,
-                        style: TextStyle(
-                            color: Colors.white, fontSize: height * 0.025),
+                      Obx(
+                        () => ElevatedButton(
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : () async {
+                                  final result = await controller.resetPassword(
+                                    controller.signInEmailCont.text,
+                                  );
+                                  print("result is $result");
+                                  if (result) {
+                                  } else {
+                                    Get.showSnackbar(
+                                      GetSnackBar(
+                                        borderRadius: 20,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: width * 0.045,
+                                            vertical: height * 0.015),
+                                        icon: Icon(
+                                          IconlyLight.info_circle,
+                                          color: Colors.white,
+                                          size: width * 0.065,
+                                        ),
+                                        title: "Error",
+                                        message:
+                                            controller.loginErrorValue.value,
+                                        duration: const Duration(seconds: 2),
+                                        animationDuration:
+                                            const Duration(milliseconds: 600),
+                                      ),
+                                    );
+                                  }
+                                },
+                          style: ElevatedButton.styleFrom(
+                            primary: const Color.fromARGB(255, 113, 65, 146),
+                            minimumSize: Size(width * 0.9, height * 0.055),
+                          ),
+                          child: Visibility(
+                            visible: !controller.isLoading.value,
+                            replacement: SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                            child: Text(
+                              'إستعادة',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: width * 0.05,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   )),

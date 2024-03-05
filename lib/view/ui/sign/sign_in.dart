@@ -1,11 +1,13 @@
+import 'package:ameen/view/ui/sign/forget_password.dart';
 import 'package:ameen/view/ui/sign/sign_up.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
-import 'package:ameen/view/ui/sign/forget_password.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-import '../widget/text_field.dart';
+
 import '../../../controller/sign_controller.dart';
+import '../home/home.dart';
+import '../widget/text_field.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
@@ -78,75 +80,58 @@ class SignIn extends StatelessWidget {
                                   )),
                       ),
                       SizedBox(height: height * 0.02),
-                      ButtonModel(
-                        onTap: () {
-                          if (controller.signInEmailCont.text.isEmpty) {
-                            Get.showSnackbar(
-                              GetSnackBar(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: width * 0.045,
-                                    vertical: height * 0.015),
-                                icon: Icon(
-                                  IconlyLight.info_circle,
-                                  color: Colors.white,
-                                  size: width * 0.065,
+                      Obx(
+                            () => ElevatedButton(
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : () async {
+                            final result = await controller.signInWithEmailAndPassword(
+                                controller.signInEmailCont.text,
+                                controller.signInPassCont.text);
+                            print("result is $result");
+                            if (result) {
+                              Get.offAll(() => const Home());
+                            } else {
+                              Get.showSnackbar(
+                                GetSnackBar(
+                                  borderRadius: 20,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: width * 0.045, vertical: height * 0.015),
+                                  icon: Icon(
+                                    IconlyLight.info_circle,
+                                    color: Colors.white,
+                                    size: width * 0.065,
+                                  ),
+                                  title: "Error",
+                                  message: controller.loginErrorValue.value,
+                                  duration: const Duration(seconds: 2),
+                                  animationDuration: const Duration(milliseconds: 600),
                                 ),
-                                title: "Error",
-                                message: "Please Enter the Email",
-                                duration: const Duration(seconds: 2),
-                                borderRadius: 20,
-                                animationDuration:
-                                    const Duration(milliseconds: 600),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: const Color.fromARGB(255, 113, 65, 146),
+                            minimumSize: Size(width * 0.9, height * 0.055),
+                          ),
+                          child: Visibility(
+                            visible: !controller.isLoading.value,
+                            replacement: SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
                               ),
-                            );
-                          } else if (controller.signInPassCont.text.isEmpty) {
-                            Get.showSnackbar(
-                              GetSnackBar(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: width * 0.045,
-                                    vertical: height * 0.015),
-                                icon: Icon(
-                                  IconlyLight.info_circle,
-                                  color: Colors.white,
-                                  size: width * 0.065,
-                                ),
-                                borderRadius: 20,
-                                title: "Error",
-                                message: "Please Enter the Password",
-                                duration: const Duration(seconds: 2),
-                                animationDuration:
-                                    const Duration(milliseconds: 600),
+                            ),
+                            child: Text(
+                              'تسجيل الدخول',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: width * 0.05,
                               ),
-                            );
-                          } else if (!controller.signInEmailCont.text
-                              .contains('@')) {
-                            Get.showSnackbar(
-                              GetSnackBar(
-                                borderRadius: 20,
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: width * 0.045,
-                                    vertical: height * 0.015),
-                                icon: Icon(
-                                  IconlyLight.info_circle,
-                                  color: Colors.white,
-                                  size: width * 0.065,
-                                ),
-                                title: "Error",
-                                message: "Invalid Email",
-                                duration: const Duration(seconds: 2),
-                                animationDuration:
-                                    const Duration(milliseconds: 600),
-                              ),
-                            );
-                          }
-                        },
-                        backColor: const Color.fromARGB(255, 113, 65, 146),
-                        content: "تسجيل الدخول",
-                        rowMainAxisAlignment: MainAxisAlignment.center,
-                        width: width,
-                        height: height * 0.06,
-                        style: TextStyle(
-                            color: Colors.white, fontSize: height * 0.025),
+                            ),
+                          ),
+                        ),
                       ),
                       SizedBox(
                         width: width,
@@ -178,5 +163,65 @@ class SignIn extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool validateInputs(BuildContext context, double height, double width) {
+    if (controller.signInEmailCont.text.isEmpty) {
+      Get.showSnackbar(
+        GetSnackBar(
+          margin: EdgeInsets.symmetric(
+              horizontal: width * 0.045, vertical: height * 0.015),
+          icon: Icon(
+            IconlyLight.info_circle,
+            color: Colors.white,
+            size: width * 0.065,
+          ),
+          title: "Error",
+          message: "Please Enter the Email",
+          duration: const Duration(seconds: 2),
+          borderRadius: 20,
+          animationDuration: const Duration(milliseconds: 600),
+        ),
+      );
+      return false;
+    } else if (controller.signInPassCont.text.isEmpty) {
+      Get.showSnackbar(
+        GetSnackBar(
+          margin: EdgeInsets.symmetric(
+              horizontal: width * 0.045, vertical: height * 0.015),
+          icon: Icon(
+            IconlyLight.info_circle,
+            color: Colors.white,
+            size: width * 0.065,
+          ),
+          borderRadius: 20,
+          title: "Error",
+          message: "Please Enter the Password",
+          duration: const Duration(seconds: 2),
+          animationDuration: const Duration(milliseconds: 600),
+        ),
+      );
+      return false;
+    } else if (!controller.signInEmailCont.text.contains('@')) {
+      Get.showSnackbar(
+        GetSnackBar(
+          borderRadius: 20,
+          margin: EdgeInsets.symmetric(
+              horizontal: width * 0.045, vertical: height * 0.015),
+          icon: Icon(
+            IconlyLight.info_circle,
+            color: Colors.white,
+            size: width * 0.065,
+          ),
+          title: "Error",
+          message: "Invalid Email",
+          duration: const Duration(seconds: 2),
+          animationDuration: const Duration(milliseconds: 600),
+        ),
+      );
+
+      return false;
+    }
+    return true;
   }
 }
