@@ -171,7 +171,7 @@ class Student extends StatelessWidget {
                   obscureText: false,
                 ),
                 TextFieldModel(
-                  keyboardType:TextInputType.number ,
+                  keyboardType: TextInputType.number,
                   controller: controller.studentNationalId,
                   text: "رقم الاحوال",
                   vPadding: height * 0.035,
@@ -503,14 +503,27 @@ class _UploadImageState extends State<UploadImage> {
                 ListTile(
                   title: const Text('معرض الصور'),
                   onTap: () => _handleCameraPick(ImageSource.gallery,
-                      '${controller.studentFName.text}_${controller.studentLName.text}_1'),                ),
+                      '${controller.studentFName.text}_${controller.studentLName.text}_1'),
+                ),
               ],
             ),
           );
         },
       );
     } else {
-      // Handle permission denied case (e.g., show a message)
+      await _requestPermissions(context);
+    }
+  }
+
+  Future<void> _requestPermissions(BuildContext context) async {
+    final cameraStatus = await Permission.camera.request();
+    final storageStatus = await Permission.storage.request();
+
+    if (cameraStatus.isGranted && storageStatus.isGranted) {
+      // Permissions granted after request, show the image options dialog
+      _showImageOptionsDialog(context);
+    } else {
+      // Permissions still not granted, handle accordingly (show a message, etc.)
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please grant camera and storage permissions'),
@@ -632,40 +645,42 @@ class PrivacyTerms extends StatelessWidget {
                 ),
               ),
             ),
-           Obx(() =>
-               ElevatedButton(
-             onPressed: controller.isAccepted.value
-                 ? ()async {
-               final result = await controller.registerParent();
+            Obx(
+              () => ElevatedButton(
+                onPressed: controller.isAccepted.value
+                    ? () async {
+                        final result = await controller.registerParent();
 
-               print("result is $result");
-               if(result){
-                 Get.offAll(() => const Home());
-               }
-             }
-                 : null, // Set onPressed to null if checkbox is not checked
-             style: ElevatedButton.styleFrom(
-               primary: const Color.fromARGB(255, 113, 65, 146),
-               minimumSize: Size(width * 0.9, height * 0.055),
-             ),
-             child: Visibility(
-               visible: !controller.isLoading.value,
-               replacement: SizedBox(
-                 height: 20,
-                 width: 20,
-                 child: CircularProgressIndicator(
-                   color: Colors.white,
-                 ),
-               ),
-               child: Text(
-                 'التالي',
-                 style: TextStyle(
-                   color: Colors.white,
-                   fontSize: width * 0.05,
-                 ),
-               ),
-             ),
-           ),)
+                        print("result is $result");
+                        if (result) {
+                          Get.offAll(() => const Home());
+                        }
+                      }
+                    : null,
+                // Set onPressed to null if checkbox is not checked
+                style: ElevatedButton.styleFrom(
+                  primary: const Color.fromARGB(255, 113, 65, 146),
+                  minimumSize: Size(width * 0.9, height * 0.055),
+                ),
+                child: Visibility(
+                  visible: !controller.isLoading.value,
+                  replacement: const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                  child: Text(
+                    'التالي',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: width * 0.05,
+                    ),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
