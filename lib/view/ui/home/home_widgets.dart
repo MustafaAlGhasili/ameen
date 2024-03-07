@@ -1,7 +1,7 @@
 import 'package:ameen/controller/home_controller.dart';
 import 'package:ameen/view/ui/home/settings.dart';
 import 'package:ameen/view/ui/home/student_info.dart';
-import 'package:ameen/view/ui/sign/sign_in.dart';
+import 'package:ameen/view/ui/sign/sign_in/sign_in.dart';
 import 'package:ameen/view/ui/widget/custom_divider.dart';
 import 'package:ameen/view/ui/widget/custom_state.dart';
 import 'package:flutter/material.dart';

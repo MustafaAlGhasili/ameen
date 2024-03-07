@@ -1,8 +1,13 @@
-import 'package:ameen/view/ui/sign/signup_widgets.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../controller/sign_controller.dart';
+import 'parent_sign.dart';
+import 'student_sign.dart';
+import 'privacy_terms.dart';
+import 'school_sign.dart';
+import 'photo_upload.dart';
+import '../../../../controller/sign_controller.dart';
+
 
 
 SignController controller = Get.find();

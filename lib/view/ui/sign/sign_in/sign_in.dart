@@ -1,13 +1,13 @@
-import 'package:ameen/view/ui/sign/forget_password.dart';
-import 'package:ameen/view/ui/sign/sign_up.dart';
+import 'package:ameen/view/ui/sign/sign_in/forget_password.dart';
+import 'package:ameen/view/ui/sign/sign_up/sign_up.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
-import '../../../controller/sign_controller.dart';
-import '../home/home.dart';
-import '../widget/text_field.dart';
+import '../../../../controller/sign_controller.dart';
+import '../../home/home.dart';
+import '../../widget/text_field.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});

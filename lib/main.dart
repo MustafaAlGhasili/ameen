@@ -1,17 +1,17 @@
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/view/ui/home/home.dart';
 import 'package:ameen/view/ui/home/student_info.dart';
-import 'package:ameen/view/ui/sign/sign_in.dart';
-// import 'package:ameen/test.dart';
-// import 'package:ameen/view/ui/sign/sign_in.dart';
-import 'package:ameen/view/ui/sign/sign_up.dart';
+import 'package:ameen/view/ui/sign/sign_in/sign_in.dart';
+import 'package:ameen/view/ui/sign/sign_up/sign_up.dart';
 import 'package:ameen/view/ui/sign/start.dart';
+import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:map_location_picker/generated/l10n.dart';
 import 'controller/camera_controller.dart';
 import 'controller/home_controller.dart';
+
 import 'firebase_options.dart';
 
 void main() async {

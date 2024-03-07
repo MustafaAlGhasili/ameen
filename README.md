@@ -1,4 +1,4 @@
-# ameen
+# amin
 
 A new Flutter project.
 

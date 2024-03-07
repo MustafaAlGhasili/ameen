@@ -29,7 +29,7 @@ class SignController extends GetxController {
   final studentNationalId = TextEditingController();
   final studentBDate = TextEditingController();
   final studentBlood = TextEditingController();
-  final studentSex = TextEditingController();
+  final studentGender = TextEditingController();
 
   final signInEmailCont = TextEditingController();
   final signInPassCont = TextEditingController();

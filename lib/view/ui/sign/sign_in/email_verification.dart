@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import '../../../controller/sign_controller.dart';
+import '../../../../controller/sign_controller.dart';
 
 class EmailVerification extends StatelessWidget {
   const EmailVerification({super.key});
