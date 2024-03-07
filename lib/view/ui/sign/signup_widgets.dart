@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:ameen/controller/camera_controller.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/view/ui/widget/custem_dropdown_menu.dart';
@@ -13,7 +12,6 @@ import '../../../controller/sign_controller.dart';
 import '../home/home.dart';
 import '../widget/button_model.dart';
 import '../widget/text_field.dart';
-// import 'package:cr_calendar/cr_calendar.dart';
 
 SignController controller = Get.find();
 
@@ -171,7 +169,7 @@ class Student extends StatelessWidget {
                   obscureText: false,
                 ),
                 TextFieldModel(
-                  keyboardType:TextInputType.number ,
+                  keyboardType: TextInputType.number,
                   controller: controller.studentNationalId,
                   text: "رقم الاحوال",
                   vPadding: height * 0.035,
@@ -209,7 +207,6 @@ class Student extends StatelessWidget {
                         IconlyLight.calendar,
                         size: width * 0.055,
                       )),
-                  isEnabled: false,
                   keyboardType: TextInputType.datetime,
                   text: "تاريخ الميلاد",
                   vPadding: height * 0.035,
@@ -284,8 +281,6 @@ class Student extends StatelessWidget {
                 ),
                 ButtonModel(
                   onTap: () {
-                    print(!controller.studentSex.isBlank!);
-                    print(!controller.studentBlood.isBlank!);
                     print("Clicked");
 
                     if (formKey.currentState!.validate()) {
@@ -503,7 +498,8 @@ class _UploadImageState extends State<UploadImage> {
                 ListTile(
                   title: const Text('معرض الصور'),
                   onTap: () => _handleCameraPick(ImageSource.gallery,
-                      '${controller.studentFName.text}_${controller.studentLName.text}_1'),                ),
+                      '${controller.studentFName.text}_${controller.studentLName.text}_1'),
+                ),
               ],
             ),
           );
@@ -632,40 +628,43 @@ class PrivacyTerms extends StatelessWidget {
                 ),
               ),
             ),
-           Obx(() =>
-               ElevatedButton(
-             onPressed: controller.isAccepted.value
-                 ? ()async {
-               final result = await controller.registerParent();
 
-               print("result is $result");
-               if(result){
-                 Get.offAll(() => const Home());
-               }
-             }
-                 : null, // Set onPressed to null if checkbox is not checked
-             style: ElevatedButton.styleFrom(
-               primary: const Color.fromARGB(255, 113, 65, 146),
-               minimumSize: Size(width * 0.9, height * 0.055),
-             ),
-             child: Visibility(
-               visible: !controller.isLoading.value,
-               replacement: SizedBox(
-                 height: 20,
-                 width: 20,
-                 child: CircularProgressIndicator(
-                   color: Colors.white,
-                 ),
-               ),
-               child: Text(
-                 'التالي',
-                 style: TextStyle(
-                   color: Colors.white,
-                   fontSize: width * 0.05,
-                 ),
-               ),
-             ),
-           ),)
+            Obx(
+              () => ElevatedButton(
+                onPressed: controller.isAccepted.value
+                    ? () async {
+                        final result = await controller.registerParent();
+
+                        print("result is $result");
+                        if (result) {
+                          Get.offAll(() => const Home());
+                        }
+                      }
+                    : null,
+                // Set onPressed to null if checkbox is not checked
+                style: ElevatedButton.styleFrom(
+                  primary: const Color.fromARGB(255, 113, 65, 146),
+                  minimumSize: Size(width * 0.9, height * 0.055),
+                ),
+                child: Visibility(
+                  visible: !controller.isLoading.value,
+                  replacement: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                  child: Text(
+                    'التالي',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: width * 0.05,
+                    ),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

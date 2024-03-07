@@ -81,42 +81,46 @@ class SignIn extends StatelessWidget {
                       ),
                       SizedBox(height: height * 0.02),
                       Obx(
-                            () => ElevatedButton(
+                        () => ElevatedButton(
                           onPressed: controller.isLoading.value
                               ? null
                               : () async {
-                            final result = await controller.signInWithEmailAndPassword(
-                                controller.signInEmailCont.text,
-                                controller.signInPassCont.text);
-                            print("result is $result");
-                            if (result) {
-                              Get.offAll(() => const Home());
-                            } else {
-                              Get.showSnackbar(
-                                GetSnackBar(
-                                  borderRadius: 20,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: width * 0.045, vertical: height * 0.015),
-                                  icon: Icon(
-                                    IconlyLight.info_circle,
-                                    color: Colors.white,
-                                    size: width * 0.065,
-                                  ),
-                                  title: "Error",
-                                  message: controller.loginErrorValue.value,
-                                  duration: const Duration(seconds: 2),
-                                  animationDuration: const Duration(milliseconds: 600),
-                                ),
-                              );
-                            }
-                          },
+                                  final result = await controller
+                                      .signInWithEmailAndPassword(
+                                          controller.signInEmailCont.text,
+                                          controller.signInPassCont.text);
+                                  print("result is $result");
+                                  if (result) {
+                                    Get.offAll(() => const Home());
+                                  } else {
+                                    Get.showSnackbar(
+                                      GetSnackBar(
+                                        borderRadius: 20,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: width * 0.045,
+                                            vertical: height * 0.015),
+                                        icon: Icon(
+                                          IconlyLight.info_circle,
+                                          color: Colors.white,
+                                          size: width * 0.065,
+                                        ),
+                                        title: "Error",
+                                        message:
+                                            controller.loginErrorValue.value,
+                                        duration: const Duration(seconds: 2),
+                                        animationDuration:
+                                            const Duration(milliseconds: 600),
+                                      ),
+                                    );
+                                  }
+                                },
                           style: ElevatedButton.styleFrom(
                             primary: const Color.fromARGB(255, 113, 65, 146),
                             minimumSize: Size(width * 0.9, height * 0.055),
                           ),
                           child: Visibility(
                             visible: !controller.isLoading.value,
-                            replacement: SizedBox(
+                            replacement: const SizedBox(
                               height: 20,
                               width: 20,
                               child: CircularProgressIndicator(
@@ -167,6 +171,7 @@ class SignIn extends StatelessWidget {
 
   bool validateInputs(BuildContext context, double height, double width) {
     if (controller.signInEmailCont.text.isEmpty) {
+
       Get.showSnackbar(
         GetSnackBar(
           margin: EdgeInsets.symmetric(

@@ -42,7 +42,7 @@ class SignController extends GetxController {
 
   bool hasError = false;
   var onTapRecognizer;
-  RxInt step = 1.obs;
+  RxInt step = 0.obs;
 
   RxList<String> blood = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].obs;
   RxString bloodValue = ''.obs;
@@ -101,6 +101,7 @@ class SignController extends GetxController {
   Future<void> getLocation(BuildContext context) async {
     if (await _requestPermission()) {
       LocationResult? result = await showLocationPicker(
+
         context,
         "AIzaSyBlHVCC3b6bsDxyJAPL7rsdkDarJYd-SeI",
         initialCenter: const LatLng(40.7128, -74.0060),
@@ -320,5 +321,11 @@ class SignController extends GetxController {
       print('School Name: ${school.name}');
       // Add any other properties you want to access
     }
+  }
+
+
+
+  void fetchInfo(){
+
   }
 }

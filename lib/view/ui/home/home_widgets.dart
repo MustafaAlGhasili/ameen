@@ -221,7 +221,7 @@ class State extends StatelessWidget {
             rightMargin: width * 0.132,
           ),
           Obx(() => CustomState(
-                state: controller.isArraived.value,
+                state: controller.isArrived.value,
                 childText: "3",
                 text: "وصلت الحافلة",
               )),

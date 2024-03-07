@@ -62,9 +62,8 @@ class _TextFieldModelState extends State<TextFieldModel> {
       padding: EdgeInsets.only(top: widget.vPadding, left: widget.hPadding),
       child: TextFormField(
         enableInteractiveSelection: widget.isEnabled,
-        // enabled: widget.isEnabled,
+        enabled: widget.isEnabled,
         autovalidateMode: AutovalidateMode.onUserInteraction,
-
         keyboardType: widget.keyboardType,
         cursorRadius: const Radius.circular(10),
         controller: widget.controller,
@@ -88,8 +87,14 @@ class _TextFieldModelState extends State<TextFieldModel> {
                 color: Color.fromARGB(255, 113, 65, 146),
               ),
             ),
-           
             suffixIcon: widget.sufIcon,
+            labelStyle: const TextStyle(color: Colors.black),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(13),
+              borderSide: const BorderSide(
+                color: Colors.black,
+              ),
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(13),
               borderSide: const BorderSide(
