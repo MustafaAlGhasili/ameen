@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:iconly/iconly.dart';
 import '../../../../utils/DatabaseHelper.dart';
 import '../../widget/button_model.dart';
 import '../../widget/text_field.dart';
@@ -75,7 +74,7 @@ class Parent extends StatelessWidget {
                 height: height * 0.035,
               ),
               Obx(() => TextFieldModel(
-                label: "ادخل كلمة المرور",
+                text: "ادخل كلمة المرور",
                   sufIcon: controller.visibility.value
                       ? IconButton(
                           icon: const Icon(Icons.visibility_outlined),

@@ -29,10 +29,12 @@ class School extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: height * 0.075,
+              width: width * 0.9,
+              height: height * 0.07,
               child: FittedBox(
                 fit: BoxFit.fill,
-                child: DropdownMenu(
+                child:
+                DropdownMenu(
                   inputDecorationTheme: InputDecorationTheme(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(13),
@@ -64,7 +66,8 @@ class School extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: height * 0.075,
+              width: width * 0.9,
+              height: height * 0.07,
               child: FittedBox(
                 fit: BoxFit.fill,
                 child: DropdownMenu(

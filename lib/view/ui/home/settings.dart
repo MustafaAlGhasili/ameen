@@ -1,5 +1,5 @@
 import 'package:ameen/controller/home_controller.dart';
-import 'package:ameen/view/ui/home/supoort.dart';
+import 'package:ameen/view/ui/home/support.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

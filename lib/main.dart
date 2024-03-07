@@ -1,6 +1,7 @@
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/view/ui/home/home.dart';
 import 'package:ameen/view/ui/home/student_info.dart';
+import 'package:ameen/view/ui/home/support.dart';
 import 'package:ameen/view/ui/sign/sign_in/sign_in.dart';
 import 'package:ameen/view/ui/sign/sign_up/sign_up.dart';
 import 'package:ameen/view/ui/sign/start.dart';
@@ -31,10 +32,9 @@ void main() async {
     ],
     supportedLocales: S.delegate.supportedLocales,
     useInheritedMediaQuery: true,
-    // locale: DevicePreview.locale(context),
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: const SignUp(),
+    home: const Support(),
   ));
 }
 

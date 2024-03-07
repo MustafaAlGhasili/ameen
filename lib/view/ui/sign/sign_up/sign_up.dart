@@ -9,7 +9,6 @@ import 'photo_upload.dart';
 import '../../../../controller/sign_controller.dart';
 
 
-
 SignController controller = Get.find();
 
 class SignUp extends StatelessWidget {

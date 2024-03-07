@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 class TextFieldModel extends StatefulWidget {
   final String? hint;
-  final String? label;
   final Widget? sufIcon;
   final double vPadding;
   final double hPadding;
@@ -21,7 +20,6 @@ class TextFieldModel extends StatefulWidget {
   const TextFieldModel({
     super.key,
     this.hint,
-    this.label,
     this.sufIcon,
     this.vPadding = 0.0,
     this.hPadding = 0.0,
@@ -79,13 +77,11 @@ class _TextFieldModelState extends State<TextFieldModel> {
         decoration: InputDecoration(
             label: Text("${widget.text}"),
             isDense: true,
-            contentPadding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+            contentPadding: const EdgeInsets.fromLTRB(25, 27, 25, 0),
             hintText: widget.hint,
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(13),
-              borderSide: const BorderSide(
-                color: Color.fromARGB(255, 113, 65, 146),
-              ),
+              borderSide: BorderSide(color: Colors.red.shade300),
             ),
             suffixIcon: widget.sufIcon,
             labelStyle: const TextStyle(color: Colors.black),
