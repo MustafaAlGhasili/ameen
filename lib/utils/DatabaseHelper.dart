@@ -1,3 +1,4 @@
+import 'package:ameen/model/location.dart';
 import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -40,6 +41,18 @@ class DatabaseHelper {
     } catch (error) {
       print('Error saving ${parentModel.toString()}: $error');
       return null;
+    }
+  }
+  Future<void> saveDriverLocation(DriverLocationModel driverLocationModel, String refName) async {
+    try {
+      print("Is being save");
+      print("Driver Id:${driverLocationModel.driverId}");
+      DatabaseReference newModelRef =
+          _rootRef.child(refName).child(driverLocationModel.driverId);
+      await newModelRef.set(driverLocationModel.toMap());
+
+    } catch (error) {
+      print('Error saving ${driverLocationModel.toString()}: $error');
     }
   }
 
