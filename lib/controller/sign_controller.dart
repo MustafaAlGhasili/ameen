@@ -1,4 +1,5 @@
 // import 'package:camera/camera.dart';
+import 'package:ameen/model/admin.dart';
 import 'package:ameen/model/parent.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -77,6 +78,9 @@ class SignController extends GetxController {
   RxDouble longitude = 0.0.obs;
 
   RxBool isAccepted = false.obs;
+  late DatabaseHelper _databaseHelper;
+
+  late FirebaseAuth _auth;
 
   changeVisibility() {
     visibility.value = !visibility.value;
@@ -84,6 +88,8 @@ class SignController extends GetxController {
 
   @override
   void onInit() {
+    _databaseHelper = DatabaseHelper();
+    _auth = FirebaseAuth.instance;
     onTapRecognizer = TapGestureRecognizer()
       ..onTap = () {
         Get.back(closeOverlays: true);
@@ -101,7 +107,6 @@ class SignController extends GetxController {
   Future<void> getLocation(BuildContext context) async {
     if (await _requestPermission()) {
       LocationResult? result = await showLocationPicker(
-
         context,
         "AIzaSyBlHVCC3b6bsDxyJAPL7rsdkDarJYd-SeI",
         initialCenter: const LatLng(40.7128, -74.0060),
@@ -139,8 +144,6 @@ class SignController extends GetxController {
   // }
 
   Future<bool> registerParent() async {
-    DatabaseHelper _databaseHelper = DatabaseHelper();
-
     _isLoading(true);
     try {
       print(parentFName.text);
@@ -197,7 +200,7 @@ class SignController extends GetxController {
     _isLoading(true);
 
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      await _auth.sendPasswordResetEmail(email: email);
       // Password reset email sent successfully
       _isLoading(false);
       return true;
@@ -223,35 +226,52 @@ class SignController extends GetxController {
     }
   }
 
-  Future<bool> signInWithEmailAndPassword(String email, String password) async {
-    DatabaseHelper _databaseHelper = DatabaseHelper();
-
+  Future<bool> signInWithEmailAndPassword(
+      String email, String password, int loginType) async {
     print('Sign is email: $email And Pass is $password');
     _isLoading(true);
     try {
       UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+          await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
       String userId = userCredential.user?.uid ?? '';
       print('User ID: $userId');
-      ParentModel? parent = await _databaseHelper.getUserById(userId);
-      print("Found Parent");
-      print(parent);
-      if (parent != null) {
-        if (!parent.isEnabled) {
+      if (loginType == 0) {
+        ParentModel? parent =
+            await _databaseHelper.getUserById<ParentModel>(userId, loginType);
+        print("Found Parent");
+        print(parent);
+        if (parent != null) {
+          if (!parent.isEnabled) {
+            _isLoading(false);
+            loginErrorValue.value = "في إنتظار تفعيل حسابك";
+            return false;
+          }
+          StudentModel? student =
+              await _databaseHelper.getStudentByParentId(parent.id);
+
+          await LocalStorageService.saveParent(parent);
+          await LocalStorageService.saveStudent(student!);
+          return true;
+        }
+      } else if (loginType == 1) {
+        //TODO driver Login
+        return true;
+      } else {
+        AdminModel? admin =
+            await _databaseHelper.getUserById<AdminModel>(userId, loginType);
+        print("Found Admin");
+        print(admin);
+        if (admin == null) {
           _isLoading(false);
-          loginErrorValue.value = "في إنتظار تفعيل حسابك";
+          loginErrorValue.value = "لست مشرف";
           return false;
         }
-        StudentModel? student =
-            await _databaseHelper.getStudentByParentId(parent.id);
-
-        await LocalStorageService.saveParent(parent);
-        await LocalStorageService.saveStudent(student!);
+        _isLoading(false);
+        return true;
       }
-
       _isLoading(false);
       return true;
     } on FirebaseAuthException catch (e) {
@@ -273,10 +293,8 @@ class SignController extends GetxController {
   Future<String?> createUserWithEmailAndPassword(
       String email, String password) async {
     try {
-      final FirebaseAuth _auth = FirebaseAuth.instance;
-
       final UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -306,7 +324,6 @@ class SignController extends GetxController {
   }
 
   void addSchoolsToMenu() async {
-    DatabaseHelper _databaseHelper = DatabaseHelper();
     List<SchoolModel> schoolsList = await _databaseHelper.getAllSchools();
     generalSchoolsList = schoolsList.obs;
     print("School Id");
@@ -323,9 +340,5 @@ class SignController extends GetxController {
     }
   }
 
-
-
-  void fetchInfo(){
-
-  }
+  void fetchInfo() {}
 }

@@ -13,13 +13,13 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   Get.put(SignController());
   Get.put(HomeController());
   Get.put(CamController());
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
   runApp(GetMaterialApp(
     localizationsDelegates: const [
@@ -29,7 +29,7 @@ void main() async {
     useInheritedMediaQuery: true,
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: TestMapTracking(),
+    home: const Start(),
   ));
 }
 

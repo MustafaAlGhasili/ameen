@@ -10,13 +10,16 @@ import '../../home/home.dart';
 import '../../widget/text_field.dart';
 
 class SignIn extends StatelessWidget {
-  const SignIn({super.key});
+  final int? loginType;
+
+  SignIn({Key? key, this.loginType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
+    print("User Type:$loginType");
     SignController controller = Get.find();
 
     return Directionality(
@@ -88,10 +91,23 @@ class SignIn extends StatelessWidget {
                                   final result = await controller
                                       .signInWithEmailAndPassword(
                                           controller.signInEmailCont.text,
-                                          controller.signInPassCont.text);
+                                          controller.signInPassCont.text,
+                                          loginType!);
                                   print("result is $result");
                                   if (result) {
-                                    Get.offAll(() => const Home());
+                                    switch (loginType) {
+                                      case 0:
+                                        Get.offAll(() => const Home());
+                                        break;
+                                      case 1:
+                                        //TODO Driver Home Page
+                                        break;
+                                      case 2:
+                                        //TODO Driver Home Page
+                                        break;
+                                      default:
+                                        break;
+                                    }
                                   } else {
                                     Get.showSnackbar(
                                       GetSnackBar(
@@ -142,21 +158,24 @@ class SignIn extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ButtonModel(
+                            Visibility(
+                              visible: loginType == 0,
+                              child: ButtonModel(
                                 padding: 10,
                                 onTap: () {
                                   Get.to(() => const SignUp());
                                 },
                                 content: "تسجيل جديد",
-                                style: TextStyle(fontSize: height * 0.02)),
+                                style: TextStyle(fontSize: height * 0.02),
+                              ),
+                            ),
                             ButtonModel(
-                                onTap: () {
-                                  Get.to(
-                                    () => const ForgetPassword(),
-                                  );
-                                },
-                                content: "نسيت كلمه المرور؟",
-                                style: TextStyle(fontSize: height * 0.02)),
+                              onTap: () {
+                                Get.to(() => const ForgetPassword());
+                              },
+                              content: "نسيت كلمه المرور؟",
+                              style: TextStyle(fontSize: height * 0.02),
+                            ),
                           ],
                         ),
                       )
@@ -171,7 +190,6 @@ class SignIn extends StatelessWidget {
 
   bool validateInputs(BuildContext context, double height, double width) {
     if (controller.signInEmailCont.text.isEmpty) {
-
       Get.showSnackbar(
         GetSnackBar(
           margin: EdgeInsets.symmetric(

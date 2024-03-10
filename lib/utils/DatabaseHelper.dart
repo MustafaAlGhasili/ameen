@@ -3,6 +3,7 @@ import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import '../model/admin.dart';
 import '../model/school.dart';
 import 'data_converter.dart';
 
@@ -43,14 +44,15 @@ class DatabaseHelper {
       return null;
     }
   }
-  Future<void> saveDriverLocation(DriverLocationModel driverLocationModel, String refName) async {
+
+  Future<void> saveDriverLocation(
+      DriverLocationModel driverLocationModel, String refName) async {
     try {
       print("Is being save");
       print("Driver Id:${driverLocationModel.driverId}");
       DatabaseReference newModelRef =
           _rootRef.child(refName).child(driverLocationModel.driverId);
       await newModelRef.set(driverLocationModel.toMap());
-
     } catch (error) {
       print('Error saving ${driverLocationModel.toString()}: $error');
     }
@@ -68,29 +70,29 @@ class DatabaseHelper {
     }
   }
 
-  Future<ParentModel?> getUserById(String userId) async {
+  Future<T?> getUserById<T extends ToMapConvertible>(
+      String userId, int loginType) async {
     try {
-      // Try to find the user in the 'parents' category
-      DataSnapshot parentSnapshot =
-          await _rootRef.child('parents').child(userId).get();
-      if (parentSnapshot.exists) {
-        return ParentModel.fromSnapshot(parentSnapshot);
+      if (loginType == 0) {
+        DataSnapshot parentSnapshot =
+            await _rootRef.child('parents').child(userId).get();
+        if (parentSnapshot.exists) {
+          return ParentModel.fromSnapshot(parentSnapshot) as T?;
+        }
+      } else if (loginType == 1) {
+        DataSnapshot driverSnapshot =
+            await _rootRef.child('drivers').child(userId).get();
+        if (driverSnapshot.exists) {
+          // return DriverModel.fromSnapshot(driverSnapshot) as T?;
+        }
+      } else {
+        DataSnapshot adminSnapshot =
+            await _rootRef.child('admins').child(userId).get();
+        if (adminSnapshot.exists) {
+          return AdminModel.fromSnapshot(adminSnapshot) as T?;
+        }
       }
 
-      DataSnapshot driverSnapshot =
-          await _rootRef.child('drivers').child(userId).get();
-      if (driverSnapshot.exists) {
-//        return DriverModel.fromSnapshot(driverSnapshot); // Adjust the return type and model accordingly
-      }
-
-      // If not found in 'drivers', try in 'admins' category
-      DataSnapshot adminSnapshot =
-          await _rootRef.child('admins').child(userId).get();
-      if (adminSnapshot.exists) {
-        //      return AdminModel.fromSnapshot(adminSnapshot); // Adjust the return type and model accordingly
-      }
-
-      // If not found in any category, return null
       return null;
     } catch (error) {
       print('Error getting user: $error');

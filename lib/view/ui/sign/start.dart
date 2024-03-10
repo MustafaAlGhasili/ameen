@@ -54,7 +54,7 @@ class Start extends StatelessWidget {
                                 MaterialStateProperty.all(Colors.white),
                           ),
                           onPressed: () {
-                            Get.to(() => const SignIn());
+                            Get.to(() => SignIn(loginType: i));
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
