@@ -112,7 +112,7 @@ class SignUp extends StatelessWidget {
                             // title: 'الشروط والاحكام',
                           ),
                         ],
-                        onStepReached: (index) => controller.step.value = index,
+                        // onStepReached: (index) => controller.step.value = index,
                       ),
                     ),
                   ),

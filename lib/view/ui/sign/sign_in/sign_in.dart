@@ -4,8 +4,8 @@ import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-
 import '../../../../controller/sign_controller.dart';
+import '../../admin/menu.dart';
 import '../../home/home.dart';
 import '../../widget/text_field.dart';
 
@@ -88,47 +88,48 @@ class SignIn extends StatelessWidget {
                           onPressed: controller.isLoading.value
                               ? null
                               : () async {
-                                  final result = await controller
-                                      .signInWithEmailAndPassword(
-                                          controller.signInEmailCont.text,
-                                          controller.signInPassCont.text,
-                                          loginType!);
-                                  print("result is $result");
-                                  if (result) {
-                                    switch (loginType) {
-                                      case 0:
-                                        Get.offAll(() => const Home());
-                                        break;
-                                      case 1:
-                                        //TODO Driver Home Page
-                                        break;
-                                      case 2:
-                                        //TODO Driver Home Page
-                                        break;
-                                      default:
-                                        break;
-                                    }
-                                  } else {
-                                    Get.showSnackbar(
-                                      GetSnackBar(
-                                        borderRadius: 20,
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: width * 0.045,
-                                            vertical: height * 0.015),
-                                        icon: Icon(
-                                          IconlyLight.info_circle,
-                                          color: Colors.white,
-                                          size: width * 0.065,
-                                        ),
-                                        title: "Error",
-                                        message:
-                                            controller.loginErrorValue.value,
-                                        duration: const Duration(seconds: 2),
-                                        animationDuration:
-                                            const Duration(milliseconds: 600),
-                                      ),
-                                    );
+                                  // final result = await controller
+                                  //     .signInWithEmailAndPassword(
+                                  //         controller.signInEmailCont.text,
+                                  //         controller.signInPassCont.text,
+                                  //         loginType!);
+                                  // print("result is $result");
+                                  // if (result) {
+                                  switch (loginType) {
+                                    case 0:
+                                      Get.offAll(() => const Home());
+                                      break;
+                                    case 1:
+                                      //TODO Driver Home Page
+                                      break;
+                                    case 2:
+                                      Get.offAll(() => const Menu());
+
+                                      break;
+                                    default:
+                                      break;
                                   }
+                                  //   } else {
+                                  //     Get.showSnackbar(
+                                  //       GetSnackBar(
+                                  //         borderRadius: 20,
+                                  //         margin: EdgeInsets.symmetric(
+                                  //             horizontal: width * 0.045,
+                                  //             vertical: height * 0.015),
+                                  //         icon: Icon(
+                                  //           IconlyLight.info_circle,
+                                  //           color: Colors.white,
+                                  //           size: width * 0.065,
+                                  //         ),
+                                  //         title: "Error",
+                                  //         message:
+                                  //             controller.loginErrorValue.value,
+                                  //         duration: const Duration(seconds: 2),
+                                  //         animationDuration:
+                                  //             const Duration(milliseconds: 600),
+                                  //       ),
+                                  //     );
+                                  //   }
                                 },
                           style: ElevatedButton.styleFrom(
                             primary: const Color.fromARGB(255, 113, 65, 146),

@@ -19,8 +19,7 @@ class _TestMapState extends State<TestMap> {
   LatLng point2 = const LatLng(24.744671, 46.655624);
   List<LatLng> polylinePoints = [];
   late Uint8List customMarker, busMarker;
-  late  Completer<GoogleMapController> _mapController = Completer();
-
+  late Completer<GoogleMapController> _mapController = Completer();
 
   final busIcon = const Icon(
     Icons.bus_alert_sharp, // Choose your desired built-in icon
@@ -61,7 +60,6 @@ class _TestMapState extends State<TestMap> {
             .toList();
       });
       moveCameraToCoverPoints();
-
     } else {
       print('No points found in the route result.');
     }
@@ -124,7 +122,8 @@ class _TestMapState extends State<TestMap> {
     loadMarkers();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Route Line Example'),
+        title: const Text('Route Line Example'),
+        centerTitle: true,
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -179,13 +178,15 @@ class _TestMapState extends State<TestMap> {
                   );
 
                   // Create CameraUpdate with animation
-                  final CameraUpdate cameraUpdate = CameraUpdate.newLatLngBounds(bounds, 100); // Add optional padding
+                  final CameraUpdate cameraUpdate =
+                      CameraUpdate.newLatLngBounds(
+                          bounds, 100); // Add optional padding
 
                   // Animate the camera to the target bounds
                   await controller.animateCamera(cameraUpdate);
                   fetchRoute();
                 }),
-          /*  Align(
+            /*  Align(
               alignment: Alignment.bottomRight,
               child: FloatingActionButton(
                 onPressed: fetchRoute,

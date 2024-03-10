@@ -1,6 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_faq/flutter_faq.dart';
-import 'package:iconly/iconly.dart';
+
+List userGuiedd = [
+  ""
+];
+
+final String userGuied = "تصميم واجهة التطبيق أمين شريك طفلك بالرحلة المدرسية"
+    "تم تصميم واجهة التطبيق أمين شريك طفلك بالرحلة المدرسية لتلبية احتياجات الأهل والسائقين والمشرفين. ستجد هنا وصفًا مفصلاً للواجهات المختلفة في التطبيق ووظائفها."
+    "واجهة الترحيب:"
+    "تحتوي على شعار أمين وتوضح أن التطبيق هو شريك طفلك بالرحلة المدرسية"
+    "واجهة الاختيار:"
+    "تتيح للمستخدم اختيار بين الأهل والسائقين والمشرفين ."
+    "واجهة تسجيل الدخول للأهل:"
+    'تسمح للأهل بإنشاء حساب جديد أو تسجيل الدخول باستخدام البريد الإلكتروني وكلمة المرور .'
+    "استعادة كلمة المرور:"
+    'يمكن للأهل استعادة كلمة المرور عن طريق إدخال عنوان البريد الإلكتروني واتباع الخطوات المطلوبة.'
+    'التسجيل:'
+    'يمكن للأهل إنشاء حساب جديد عن طريق إدخال المعلومات الشخصية ومعلومات الطالب واختيار المدرسة وتحميل صورة وجه الطالب والموافقة على الشروط والأحكام'
+    "صفحة الأهل:"
+    "تعرض معلومات الطالب والخيارات المتاحة للأهل مثل عرض معلومات الحافلة وتتبع الموقع على الخريطة والحالة ."
+    "صفحة الخريطة:"
+    "تعرض موقع الحافلة ومسار الرحلة من المنزل إلى المدرسة والعودة ."
+    'صفحة الحالة:'
+    "يمكن للأهل التحقق من حالة استلام الطالب بشريط يعرض أهداف الرحلة ."
+    "صفحة الإشعارات:"
+    'تعرض الأحداث الهامة وجميع المعلومات التي يتلقاها الأهل .'
+    "صفحة ملف الأهل:"
+    "يمكن للأهل عرض صورة واسم الطالب والوصول إلى خيارات مثل حسابي وإبلاغ الغياب والإعدادات وتسجيل الخروج."
+    "صفحة حسابي:"
+    "يمكن للأهل عرض جميع معلوماتهم ومعلومات الطالب."
+    "واجهة تسجيل الدخول للمشرف والسائق:"
+    "افتح التطبيق وأدخل رقم المعرف الخاص بك وكلمة المرور."
+    "انقر على زر تسجيل الدخول للوصول إلى الحساب المناسب."
+    'صفحة البداية للسائق:'
+    "بعد تسجيل الدخول كسائق، ستظهر لك صفحة البداية للسائق."
+    "هنا، لديك ثلاثة خيارات: بدء وردية العمل، عرض المزيد من الخيارات، أو تسجيل الخروج."
+    "القائمة:"
+    "انقر فوق أيقونة القائمة للوصول إلى خدمات التطبيق الإضافية للسائقين."
+    "من القائمة، يمكنك تحديد الخيارات مثل معلوماتي لعرض تفاصيلك الشخصية، وقائمة الطلاب لعرض قائمة الطلاب الموكلين إلى حافلتك، وحالة الطوارئ للحالات الطارئة."
+    "قوائم اليوم:"
+    'انقر على "بدء العمل" لعرض قائمة الطلاب الذين يجب عليك نقلهم.'
+    "بالنسبة لكل طالب، انقر على بدء لبدء الرحلة."
+    "بمجرد الانتهاء من جميع عمليات نقل الطلاب، ستظهر خيار إنهاء العمل."
+    "صفحة انتهاء الرحلة:"
+    " بعد الانتهاء من جميع رحلات النقل، ستظهر لك صفحة انتهاء الرحلة."
+    "يمكنك هنا تأكيد ما إذا تم نقل جميع الطلاب في القائمة أم لا."
+    "       صفحة الخريطة:"
+    "        عند النقر على الخريطة، ستظهر لك الخريطة العادية للسائق."
+    "     يمكنك رؤية وجهة الطالب، موقعك الحالي ومعلومات أخرى حول موقع الطالب.";
 
 class Support extends StatelessWidget {
   const Support({super.key});
@@ -12,6 +59,7 @@ class Support extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          foregroundColor: Colors.white,
           title: const Text("الدعم",
               style: TextStyle(
                 color: Colors.white,
@@ -19,7 +67,7 @@ class Support extends StatelessWidget {
           centerTitle: true,
           backgroundColor: const Color.fromARGB(255, 114, 64, 164),
         ),
-        body: const Column(
+        body: Column(
           children: [
             Faq(
               question: "الأسئلة الأكثر شيوعا",
@@ -36,17 +84,37 @@ class Support extends StatelessWidget {
               answer:
                   "تواصل عبر الايميل amin@gmail.com \nالرقم الموحد 05xxxxxxxxx",
             ),
-            Faq(
-              question: "دليل المستخدم",
-              answer:
-              "دليل المستخدم",
-            ),
+            Faq(question: "دليل المستخدم", answer: userGuied),
           ],
         ),
       ),
     );
   }
 }
+
+const Map<String, String> userGuideMap = {
+  // Welcome Screen
+  'appTitle': "أمين شريك طفلك بالرحلة المدرسية",
+  'welcomeScreenTitle': "أمين",
+  'welcomeScreenSubtitle': "شريك طفلك بالرحلة المدرسية",
+
+  // Choose Role Screen
+  'chooseRoleScreenTitle': "اختر دورك",
+
+  // Parent Login Screen
+  'parentLoginScreenTitle': "تسجيل الدخول (أولياء الأمور)",
+  'parentLoginEmailLabel': "البريد الإلكتروني",
+  'parentLoginPasswordLabel': "كلمة المرور",
+  'parentLoginForgotPasswordLabel': "نسيت كلمة المرور؟",
+
+  // ... (similar structure for other sections)
+
+  // Supervisor Add Driver Screen (example ending)
+  'supervisorDriverName': "اسم السائق",
+};
+
+// Accessing values:
+String? welcomeTitle = userGuideMap['welcomeScreenTitle'];
 
 class Faq extends StatelessWidget {
   final String question;
@@ -75,7 +143,7 @@ class Faq extends StatelessWidget {
         color: Colors.white,
         border: Border(bottom: BorderSide(color: Colors.black)),
       ),
-      ansStyle:  TextStyle(color: Colors.black, fontSize: width * 0.043),
+      ansStyle: TextStyle(color: Colors.black, fontSize: width * 0.043),
       queStyle: TextStyle(color: Colors.black, fontSize: width * 0.055),
       separator: const SizedBox(
         height: 15,
