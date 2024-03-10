@@ -132,4 +132,54 @@ class DatabaseHelper {
       return null;
     }
   }
+
+  Future<void> deleteById(String id, String refName) async {
+    try {
+      DatabaseReference modelRef = _rootRef.child(refName).child(id);
+      await modelRef.remove();
+      print('Item with ID: $id deleted from $refName');
+    } catch (error) {
+      print('Error deleting item with ID $id from $refName: $error');
+    }
+  }
+
+  Future<List<StudentModel>> getStudentsByBusId(String busId) async {
+    try {
+      final snapshot = await _rootRef
+          .child('students')
+          .orderByChild('busId')
+          .equalTo(busId)
+          .get();
+      return snapshot.children
+          .map((child) => StudentModel.fromSnapshot(child))
+          .toList();
+    } catch (error) {
+      print('Error getting students in bus $busId: $error');
+      return [];
+    }
+  }
+
+  Future<void> updateParentStatus(String parentId, bool isEnabled) async {
+    try {
+      DatabaseReference parentRef = _rootRef.child('parents').child(parentId);
+
+      await parentRef.update({'isEnabled': isEnabled});
+
+      print('Parent with ID: $parentId - isEnabled updated to: $isEnabled');
+    } catch (error) {
+      print('Error updating parent isEnabled status: $error');
+    }
+  }
+
+  Future<void> updateField(
+      String reference, String id, String fieldName, String value) async {
+    try {
+      DatabaseReference ref = _rootRef.child(reference).child(id);
+      await ref.update({fieldName: value});
+
+      print('$reference with ID: $id - $fieldName updated to: $value');
+    } catch (error) {
+      print('Error updating $fieldName status: $error');
+    }
+  }
 }
