@@ -26,6 +26,7 @@ class StudentDetails extends StatelessWidget {
           width: width,
           child: SingleChildScrollView(
             child: Column(
+
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(

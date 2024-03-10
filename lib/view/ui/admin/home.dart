@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import '../widget/button_model.dart';
 import 'notification.dart';
 
-class Menu extends StatelessWidget {
-  const Menu({super.key});
+class AdminHome extends StatelessWidget {
+  const AdminHome({super.key});
 
   @override
   Widget build(BuildContext context) {
