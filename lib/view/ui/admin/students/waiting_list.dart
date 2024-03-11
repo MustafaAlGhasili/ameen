@@ -1,4 +1,6 @@
+import 'package:ameen/view/ui/admin/students/waiting_student.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../widget/button_model.dart';
 
@@ -28,7 +30,9 @@ class WaitingList extends StatelessWidget {
                 itemBuilder: (context, i) {
                   return ButtonModel(
                       onTap: () {
-                        // Get.to(() => DriverInfo(driver: drivers[i]));
+                        Get.to(() => WaitingStudent(
+                              student: student[i],
+                            ));
                       },
                       bus: false,
                       imgPath: student[i]['img']!,

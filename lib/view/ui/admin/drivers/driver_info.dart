@@ -1,3 +1,5 @@
+import 'package:ameen/view/ui/widget/cusom_dialog.dart';
+
 import 'driver_presoanl_info.dart';
 import 'student_with_driver.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +84,9 @@ class DriverInfo extends StatelessWidget {
               ),
               ButtonModel(
                   onTap: () {
-                    // Get.to(() => DriverInfo(driver: ));
+                    Get.dialog(
+                      CustomDialog(buttonText: "نعم", content: "هل متأكد من حذف الحساب؟")
+                    );
                   },
                   padding: 10,
                   hMargin: width * 0.05,

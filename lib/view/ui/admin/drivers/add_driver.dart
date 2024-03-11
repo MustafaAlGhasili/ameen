@@ -1,3 +1,5 @@
+import 'package:ameen/utils/constants.dart';
+import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:ameen/view/ui/widget/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
@@ -77,6 +79,14 @@ class AddDriver extends StatelessWidget {
                   text: "رقم الباص ",
                 ),
               ),
+              ButtonModel(
+                content: "حفط",
+                rowMainAxisAlignment: MainAxisAlignment.center,
+                backColor: PRIMARY_COLOR,
+                height: height * 0.06,
+                hMargin: width * 0.07,
+                style: TextStyle(color: Colors.white),
+              )
             ],
           ),
         ),
