@@ -1,4 +1,5 @@
 import 'package:ameen/controller/sign_controller.dart';
+import 'package:ameen/view/ui/sign/splash_screen.dart';
 import 'package:ameen/view/ui/sign/start.dart';
 import 'package:ameen/view/ui/test/test_tracking_map.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,7 +30,7 @@ void main() async {
     useInheritedMediaQuery: true,
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: const Start(),
+    home: SplashScreen(),
   ));
 }
 

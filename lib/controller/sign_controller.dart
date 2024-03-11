@@ -231,13 +231,13 @@ class SignController extends GetxController {
     print('Sign is email: $email And Pass is $password');
     _isLoading(true);
     try {
-      UserCredential userCredential =
-          await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
       String userId = userCredential.user?.uid ?? '';
       print('User ID: $userId');
+      LocalStorageService.saveUserType(loginType);
       if (loginType == 0) {
         ParentModel? parent =
             await _databaseHelper.getUserById<ParentModel>(userId, loginType);

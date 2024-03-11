@@ -1,17 +1,16 @@
 import 'package:ameen/controller/home_controller.dart';
 import 'package:ameen/view/ui/home/settings.dart';
 import 'package:ameen/view/ui/home/student_info.dart';
-import 'package:ameen/view/ui/sign/sign_in/sign_in.dart';
 import 'package:ameen/view/ui/sign/start.dart';
 import 'package:ameen/view/ui/widget/custom_divider.dart';
 import 'package:ameen/view/ui/widget/custom_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iconly/iconly.dart';
+
 import '../widget/button_model.dart';
-
-
 
 HomeController controller = Get.find();
 
@@ -423,9 +422,9 @@ class ProfilePage extends StatelessWidget {
                 rowMainAxisAlignment: MainAxisAlignment.center,
                 width: width * 0.9,
                 height: height * 0.07,
-                onTap: () {
-                  Get.to(() =>  Start());
-
+                onTap: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Get.to(() => Start());
                 },
                 backColor: Colors.red,
                 content: "تسجيل خروج",

@@ -46,4 +46,15 @@ class LocalStorageService {
       return null;
     }
   }
+
+  static void saveUserType(int userType) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('userType', userType);
+  }
+
+  static Future<int?> getUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('userType');
+  }
+
 }
