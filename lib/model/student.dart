@@ -14,6 +14,8 @@ class StudentModel implements ToMapConvertible {
   final String parentId;
   final String address;
   final String schoolId;
+  final String? busId; // Make it nullable
+  final String? imgUrl; // Make it nullable
   final int grade;
   final double? latitude;
   final double? longitude;
@@ -33,6 +35,8 @@ class StudentModel implements ToMapConvertible {
     required this.longitude,
     required this.latitude,
     required this.address,
+    this.busId, // Optional busId
+    this.imgUrl, // Optional busId
   });
 
   factory StudentModel.fromSnapshot(DataSnapshot snapshot) {
@@ -52,6 +56,8 @@ class StudentModel implements ToMapConvertible {
       longitude: data['longitude'] as double,
       latitude: data['latitude'] as double,
       address: data['address'] as String,
+      busId: data['busId'] as String?,
+      imgUrl: data['imgUrl'] as String?,
     );
   }
 
@@ -71,6 +77,8 @@ class StudentModel implements ToMapConvertible {
       longitude: map['longitude'] as double,
       latitude: map['latitude'] as double,
       address: map['address'] as String,
+      busId: map['busId'] as String?, // Use null-aware operator
+      imgUrl: map['imgUrl'] as String?, // Use null-aware operator
     );
   }
 
@@ -91,6 +99,8 @@ class StudentModel implements ToMapConvertible {
       'longitude': longitude,
       'latitude': latitude,
       'address': address,
+      'busId': busId,
+      'imgUrl': imgUrl,
     };
   }
 }

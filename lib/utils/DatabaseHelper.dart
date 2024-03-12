@@ -9,6 +9,8 @@ import 'data_converter.dart';
 
 class DatabaseHelper {
   final DatabaseReference _rootRef = FirebaseDatabase.instance.ref();
+  static final DatabaseReference studentsRef =
+      FirebaseDatabase.instance.ref().child('students');
 
   Future<String?> save<T extends ToMapConvertible>(
       T model, String refName) async {

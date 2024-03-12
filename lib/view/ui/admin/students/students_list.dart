@@ -1,12 +1,14 @@
-import 'package:ameen/view/ui/admin/drivers/add_driver.dart';
 import 'package:ameen/view/ui/admin/students/student_info.dart';
 import 'package:ameen/view/ui/admin/students/waiting_list.dart';
-import 'package:ameen/view/ui/home/student_info.dart';
-
-import '../../widget/button_model.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+
+import '../../../../model/student.dart';
+import '../../../../utils/DatabaseHelper.dart';
+import '../../widget/button_model.dart';
 
 class StudentsList extends StatelessWidget {
   const StudentsList({super.key});
@@ -40,22 +42,24 @@ class StudentsList extends StatelessWidget {
         body: Column(
           children: [
             SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Container(
-                height: height * 0.7,
-                padding: EdgeInsets.only(top: height * 0.05),
-                child: ListView.builder(
-                  itemCount: student.length,
-                  itemBuilder: (context, i) {
-                    return ButtonModel(
+                physics: const BouncingScrollPhysics(),
+                child: Container(
+                  height: height * 0.7,
+                  padding: EdgeInsets.only(top: height * 0.05),
+                  child: FirebaseAnimatedList(
+                    query: DatabaseHelper.studentsRef,
+                    itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                        Animation<double> animation, int index) {
+                      StudentModel student =
+                          StudentModel.fromSnapshot(snapshot);
+
+                      return ButtonModel(
                         onTap: () {
-                          Get.to(() => StudentDetails(
-                                student: student[i],
-                              ));
+                          Get.to(() => StudentDetails(student: student));
                         },
-                        busName: student[i]["busName"]!,
+                        busName: student.busId ?? student.schoolId,
                         bus: true,
-                        imgPath: student[i]['img']!,
+                        imgPath: "img/st1.png",
                         padding: 10,
                         hMargin: width * 0.05,
                         vMargin: height * 0.02,
@@ -64,12 +68,11 @@ class StudentsList extends StatelessWidget {
                         backColor: const Color.fromARGB(255, 113, 65, 146),
                         style: TextStyle(
                             color: Colors.white, fontSize: width * 0.05),
-                        // textAlign: TextAlign.center,
-                        content: student[i]["name"]!);
-                  },
-                ),
-              ),
-            ),
+                        content: '${student.fName} ${student.lName}',
+                      );
+                    },
+                  ),
+                )),
             ButtonModel(
                 onTap: () {
                   Get.to(() => const WaitingList());
@@ -81,7 +84,7 @@ class StudentsList extends StatelessWidget {
                 rowMainAxisAlignment: MainAxisAlignment.center,
                 backColor: const Color.fromARGB(255, 113, 65, 146),
                 style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-                content: "قائمة الانتظار")
+                content: "قائمة الانتظار"),
           ],
         ),
       ),

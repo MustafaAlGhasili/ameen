@@ -1,3 +1,4 @@
+import 'package:ameen/model/student.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ import 'package:iconly/iconly.dart';
 import '../../widget/button_model.dart';
 
 class StudentDetails extends StatelessWidget {
-  final student;
+  final StudentModel  student;
 
   const StudentDetails({super.key, required this.student});
 
@@ -45,7 +46,7 @@ class StudentDetails extends StatelessWidget {
                               color: const Color.fromARGB(255, 113, 65, 146))),
                       child: Image(
                         width: width * 0.27,
-                        image: AssetImage(student['img']),
+                        image: AssetImage(student.imgUrl!),
                       ),
                     ),
                   ),
