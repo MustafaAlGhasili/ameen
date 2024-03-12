@@ -1,11 +1,102 @@
+import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:ameen/view/ui/widget/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class AddDriver extends StatelessWidget {
+import '../../../../controller/camera_controller.dart';
+import '../../widget/custem_dropdown_menu.dart';
+
+AdminController controller = Get.find();
+
+Future<void> _selectDate(BuildContext context) async {
+  final selected = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(1980, 1, 1),
+    lastDate: DateTime.now(),
+  );
+  if (selected != null && selected != DateTime.now()) {
+    // controller.selectedDate = selected;
+    controller.driverBDate.text =
+        "${selected.year}-${selected.month}-${selected.day}";
+    print(controller.driverBDate.text);
+  }
+}
+
+class AddDriver extends StatefulWidget {
   const AddDriver({super.key});
+
+  @override
+  State<AddDriver> createState() => _AddDriverState();
+}
+
+class _AddDriverState extends State<AddDriver> {
+
+  final CamController camController =
+  Get.find(); // Assuming GetX controller instance
+  String? _selectedImagePath; // Store the selected image path
+
+  Future<void> _handleCameraPick(
+      ImageSource imageSource, String fullName) async {
+    final response =
+    await camController.takePhotoFromCamera(imageSource, fullName);
+    setState(() {
+      _selectedImagePath = camController.picture.path;
+    });
+    if (response == 200) {
+      // Assuming success code is 200
+      setState(() {
+        _selectedImagePath = camController.picture.path;
+      });
+    }
+    // Handle other response codes
+  }
+
+  void _showImageOptionsDialog(BuildContext context) async {
+    final cameraStatus = await Permission.camera.request();
+    final storageStatus = await Permission.storage.request();
+
+    if (cameraStatus.isGranted && storageStatus.isGranted) {
+      final imagePicker = ImagePicker();
+
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            title: const Text('أختر طريقة أخذ الصورة'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min, // Don't let content overflow
+              children: [
+                ListTile(
+                  title: const Text('الكاميرا'),
+                  onTap: () => _handleCameraPick(ImageSource.camera,
+                      '${controller.driverBlood}_${controller.driverBDate.text}_1'),
+                ),
+                ListTile(
+                  title: const Text('معرض الصور'),
+                  onTap: () => _handleCameraPick(ImageSource.gallery,
+                      '${controller.driverBlood}_${controller.driverBDate.text}_1'),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } else {
+      // Handle permission denied case (e.g., show a message)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please grant camera and storage permissions'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +121,21 @@ class AddDriver extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: width * 0.03, vertical: height * 0.02),
-                child: TextFieldModel(
+                child: const TextFieldModel(
                   text: "الاسم الاول",
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: width * 0.03, vertical: height * 0.02),
-                child: TextFieldModel(
+                child: const TextFieldModel(
                   text: "الاسم الأخير",
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: width * 0.03, vertical: height * 0.02),
-                child: TextFieldModel(
+                child: const TextFieldModel(
                   text: "رقم الاحوال",
                 ),
               ),
@@ -52,30 +143,58 @@ class AddDriver extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                     horizontal: width * 0.03, vertical: height * 0.02),
                 child: TextFieldModel(
-                  sufIcon: Icon(IconlyLight.calendar),
+                  controller: controller.driverBDate,
+                  sufIcon: IconButton(
+                      onPressed: () => _selectDate(context),
+                      icon: Icon(
+                        IconlyLight.calendar,
+                        size: width * 0.055,
+                      )),
+                  keyboardType: TextInputType.datetime,
                   text: "تاريخ الميلاد",
+                  // vPadding: height * 0.035,
+                  obscureText: false,
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: width * 0.03, vertical: height * 0.02),
-                child: TextFieldModel(
-                  sufIcon: Icon(Icons.keyboard_arrow_down),
-                  text: "فصيلة الدم",
+                child: Obx(() => CustomDropdownButton2(
+                    icon: Icon(
+                      Icons.keyboard_arrow_down,
+                      size: width * 0.055,
+                    ),
+                    buttonHeight: height * 0.07,
+                    buttonWidth: width,
+                    // dropdownWidth: 20,
+                    hint: 'فصيلة الدم',
+                    value: controller.driverBlood.value.isEmpty
+                        ? null
+                        : controller.driverBlood.value,
+                    dropdownItems: controller.blood,
+                    onChanged: (val) {
+                      controller.driverBlood.value = val!;
+                    })),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: width * 0.03, vertical: height * 0.02),
+                child: GestureDetector(
+                  onTap: () => _showImageOptionsDialog(context),
+                  child: const TextFieldModel(
+                    isEnabled: false,
+                    sufIcon: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.black,
+                    ),
+                    text: "ادراج صورة من رخصة القيادة",
+                  ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: width * 0.03, vertical: height * 0.02),
-                child: TextFieldModel(
-                  sufIcon: Icon(Icons.keyboard_arrow_down),
-                  text: "ادراج صورة من رخصة القيادة",
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.03, vertical: height * 0.02),
-                child: TextFieldModel(
+                child: const TextFieldModel(
                   text: "رقم الباص ",
                 ),
               ),
@@ -85,7 +204,7 @@ class AddDriver extends StatelessWidget {
                 backColor: PRIMARY_COLOR,
                 height: height * 0.06,
                 hMargin: width * 0.07,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               )
             ],
           ),

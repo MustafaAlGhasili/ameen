@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 import 'package:ameen/view/ui/widget/custem_dropdown_menu.dart';
@@ -6,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
 import '../../widget/button_model.dart';
+
+AdminController controller = Get.find();
 
 class WaitingStudent extends StatelessWidget {
   final student;
@@ -83,6 +88,22 @@ class WaitingStudent extends StatelessWidget {
                     height: height * 0.025,
                   ),
                   Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("رقم الأحوال"),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(13),
+                    width: width,
+                    height: height * 0.06,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.black)),
+                    child: const Text("111679356"),
+                  ),
+                  SizedBox(
+                    height: height * 0.025,
+                  ),
+                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: const Text("رقم التواصل"),
                   ),
@@ -99,17 +120,21 @@ class WaitingStudent extends StatelessWidget {
                     height: height * 0.025,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text("رقم الأحوال"),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: const Text("موقع المنزل "),
                   ),
                   Container(
-                    padding: EdgeInsets.all(13),
+                    padding: const EdgeInsets.all(13),
                     width: width,
                     height: height * 0.06,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black)),
-                    child: const Text("111679356"),
+                    child: const Text(
+                      "https://maps.app.goo.gl/ZvmTDH31evSNsS6i8?g_st=ic",
+                      maxLines: 2,
+                      softWrap: true,
+                    ),
                   ),
                   SizedBox(
                     height: height * 0.025,
@@ -123,35 +148,44 @@ class WaitingStudent extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text("اختيار الباص المناسب"),
-                              GestureDetector(
-                                onTap: (){
-
-                                },
-                                child: Container(
-                                  height: height * 0.06,
-                                  width: width * 0.6,
-                                  decoration: BoxDecoration(
-                                      color: PRIMARY_COLOR,
-                                      borderRadius: BorderRadius.circular(30)),
-                                  child: Center(
-                                      child: Row(
-                                    // mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.keyboard_arrow_down_outlined,
-                                        color: Colors.white,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(left: width * 0.19),
-                                        child: const Text(
-                                          "الباصات",
-                                          style: TextStyle(color: Colors.white),
-                                          textAlign: TextAlign.center,
+                              Obx(
+                                () => GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
+                                    height: height * 0.06,
+                                    width: width * 0.6,
+                                    decoration: BoxDecoration(
+                                        color: PRIMARY_COLOR,
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    child: CustomDropdownButton2(
+                                        selectedItemColor: Colors.white,
+                                        dropdownDecoration: BoxDecoration(
+                                          color: PRIMARY_COLOR,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
-                                      ),
-                                    ],
-                                  )),
+                                        hintColor: Colors.white,
+                                        borderColor:
+                                            Colors.white.withOpacity(0),
+                                        iconEnabledColor: Colors.white,
+                                        icon: Icon(
+                                          Icons.keyboard_arrow_down,
+                                          size: width * 0.05,
+                                        ),
+                                        buttonHeight: height * 0.1,
+                                        // buttonWidth: width * 0.5,
+                                        // dropdownWidth: 20,
+                                        hint: 'الباصات',
+                                        value:
+                                            controller.selectedBus.value.isEmpty
+                                                ? null
+                                                : controller.selectedBus.value,
+                                        dropdownItems: controller.buses,
+                                        onChanged: (val) {
+                                          controller.selectedBus.value = val!;
+                                        }),
+                                  ),
                                 ),
                               )
                             ],

@@ -52,6 +52,8 @@ class StudentsList extends StatelessWidget {
                         Animation<double> animation, int index) {
                       StudentModel student =
                           StudentModel.fromSnapshot(snapshot);
+                      print(snapshot);
+                      print(snapshot.exists);
 
                       return ButtonModel(
                         onTap: () {

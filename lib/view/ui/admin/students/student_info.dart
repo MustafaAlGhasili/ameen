@@ -46,7 +46,7 @@ class StudentDetails extends StatelessWidget {
                               color: const Color.fromARGB(255, 113, 65, 146))),
                       child: Image(
                         width: width * 0.27,
-                        image: AssetImage(student.imgUrl!),
+                        image: AssetImage('img/img.png'),
                       ),
                     ),
                   ),
@@ -61,7 +61,7 @@ class StudentDetails extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black)),
-                    child: const Text("سعد"),
+                    child: Text(student.fName),
                   ),
                   SizedBox(
                     height: height * 0.025,
@@ -77,7 +77,7 @@ class StudentDetails extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black)),
-                    child: const Text("عبدالله"),
+                    child: Text(student.lName),
                   ),
                   SizedBox(
                     height: height * 0.025,
@@ -109,7 +109,7 @@ class StudentDetails extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black)),
-                    child: const Text("O+"),
+                    child: Text(student.blood),
                   ),
                   SizedBox(
                     height: height * 0.025,
@@ -125,7 +125,7 @@ class StudentDetails extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black)),
-                    child: const Text("0547897895"),
+                    child:  Text(student.parentId),
                   ),
                   SizedBox(
                     height: height * 0.025,

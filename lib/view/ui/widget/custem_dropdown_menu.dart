@@ -31,7 +31,11 @@ class CustomDropdownButton2 extends StatelessWidget {
     this.scrollbarAlwaysShow,
     this.offset = Offset.zero,
     super.key,
+    this.borderColor = Colors.black45,
+    this.hintColor = Colors.black,
+    this.selectedItemColor = Colors.black,
   });
+
   final String hint;
   final String? value;
   final List<String> dropdownItems;
@@ -57,6 +61,9 @@ class CustomDropdownButton2 extends StatelessWidget {
   final double? scrollbarThickness;
   final bool? scrollbarAlwaysShow;
   final Offset offset;
+  final Color borderColor;
+  final Color hintColor;
+  final Color selectedItemColor;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +79,7 @@ class CustomDropdownButton2 extends StatelessWidget {
             maxLines: 1,
             style: TextStyle(
               fontSize: 14,
-              color: Theme.of(context).hintColor,
+              color: hintColor,
             ),
           ),
         ),
@@ -86,7 +93,8 @@ class CustomDropdownButton2 extends StatelessWidget {
                       item,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: const TextStyle(
+                      style: TextStyle(
+                        color: selectedItemColor,
                         fontSize: 14,
                       ),
                     ),
@@ -103,7 +111,7 @@ class CustomDropdownButton2 extends StatelessWidget {
               BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
-                  color: Colors.black45,
+                  color: borderColor,
                 ),
               ),
           elevation: buttonElevation,

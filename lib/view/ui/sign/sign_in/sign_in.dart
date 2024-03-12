@@ -189,63 +189,63 @@ class SignIn extends StatelessWidget {
     );
   }
 
-  bool validateInputs(BuildContext context, double height, double width) {
-    if (controller.signInEmailCont.text.isEmpty) {
-      Get.showSnackbar(
-        GetSnackBar(
-          margin: EdgeInsets.symmetric(
-              horizontal: width * 0.045, vertical: height * 0.015),
-          icon: Icon(
-            IconlyLight.info_circle,
-            color: Colors.white,
-            size: width * 0.065,
-          ),
-          title: "Error",
-          message: "Please Enter the Email",
-          duration: const Duration(seconds: 2),
-          borderRadius: 20,
-          animationDuration: const Duration(milliseconds: 600),
-        ),
-      );
-      return false;
-    } else if (controller.signInPassCont.text.isEmpty) {
-      Get.showSnackbar(
-        GetSnackBar(
-          margin: EdgeInsets.symmetric(
-              horizontal: width * 0.045, vertical: height * 0.015),
-          icon: Icon(
-            IconlyLight.info_circle,
-            color: Colors.white,
-            size: width * 0.065,
-          ),
-          borderRadius: 20,
-          title: "Error",
-          message: "Please Enter the Password",
-          duration: const Duration(seconds: 2),
-          animationDuration: const Duration(milliseconds: 600),
-        ),
-      );
-      return false;
-    } else if (!controller.signInEmailCont.text.contains('@')) {
-      Get.showSnackbar(
-        GetSnackBar(
-          borderRadius: 20,
-          margin: EdgeInsets.symmetric(
-              horizontal: width * 0.045, vertical: height * 0.015),
-          icon: Icon(
-            IconlyLight.info_circle,
-            color: Colors.white,
-            size: width * 0.065,
-          ),
-          title: "Error",
-          message: "Invalid Email",
-          duration: const Duration(seconds: 2),
-          animationDuration: const Duration(milliseconds: 600),
-        ),
-      );
-
-      return false;
-    }
-    return true;
-  }
+//   bool validateInputs(BuildContext context, double height, double width) {
+//     if (controller.signInEmailCont.text.isEmpty) {
+//       Get.showSnackbar(
+//         GetSnackBar(
+//           margin: EdgeInsets.symmetric(
+//               horizontal: width * 0.045, vertical: height * 0.015),
+//           icon: Icon(
+//             IconlyLight.info_circle,
+//             color: Colors.white,
+//             size: width * 0.065,
+//           ),
+//           title: "Error",
+//           message: "Please Enter the Email",
+//           duration: const Duration(seconds: 2),
+//           borderRadius: 20,
+//           animationDuration: const Duration(milliseconds: 600),
+//         ),
+//       );
+//       return false;
+//     } else if (controller.signInPassCont.text.isEmpty) {
+//       Get.showSnackbar(
+//         GetSnackBar(
+//           margin: EdgeInsets.symmetric(
+//               horizontal: width * 0.045, vertical: height * 0.015),
+//           icon: Icon(
+//             IconlyLight.info_circle,
+//             color: Colors.white,
+//             size: width * 0.065,
+//           ),
+//           borderRadius: 20,
+//           title: "Error",
+//           message: "Please Enter the Password",
+//           duration: const Duration(seconds: 2),
+//           animationDuration: const Duration(milliseconds: 600),
+//         ),
+//       );
+//       return false;
+//     } else if (!controller.signInEmailCont.text.contains('@')) {
+//       Get.showSnackbar(
+//         GetSnackBar(
+//           borderRadius: 20,
+//           margin: EdgeInsets.symmetric(
+//               horizontal: width * 0.045, vertical: height * 0.015),
+//           icon: Icon(
+//             IconlyLight.info_circle,
+//             color: Colors.white,
+//             size: width * 0.065,
+//           ),
+//           title: "Error",
+//           message: "Invalid Email",
+//           duration: const Duration(seconds: 2),
+//           animationDuration: const Duration(milliseconds: 600),
+//         ),
+//       );
+//
+//       return false;
+//     }
+//     return true;
+//   }
 }

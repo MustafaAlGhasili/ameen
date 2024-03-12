@@ -1,3 +1,4 @@
+import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/view/ui/sign/splash_screen.dart';
 import 'package:ameen/view/ui/sign/start.dart';
@@ -17,6 +18,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Get.put(AdminController());
   Get.put(SignController());
   Get.put(HomeController());
   Get.put(CamController());
