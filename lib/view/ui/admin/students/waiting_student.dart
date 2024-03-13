@@ -147,7 +147,10 @@ class WaitingStudent extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text("اختيار الباص المناسب"),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("اختيار الباص المناسب"),
+                              ),
                               Obx(
                                 () => GestureDetector(
                                   onTap: () {},
@@ -187,7 +190,23 @@ class WaitingStudent extends StatelessWidget {
                                         }),
                                   ),
                                 ),
-                              )
+                              ),
+                              GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  margin: EdgeInsets.all(10),
+                                    height: height * 0.06,
+                                    width: width * 0.6,
+                                    decoration: BoxDecoration(
+                                        color: PRIMARY_COLOR,
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    child: Center(
+                                        child: Text(
+                                      "موافق",
+                                      style: TextStyle(color: Colors.white),
+                                    ))),
+                              ),
                             ],
                           ),
                         ),

@@ -59,6 +59,7 @@ class _TextFieldModelState extends State<TextFieldModel> {
         Padding(
       padding: EdgeInsets.only(top: widget.vPadding, left: widget.hPadding),
       child: TextFormField(
+
         enableInteractiveSelection: widget.isEnabled,
         enabled: widget.isEnabled,
         autovalidateMode: AutovalidateMode.onUserInteraction,

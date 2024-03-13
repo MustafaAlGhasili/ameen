@@ -4,13 +4,17 @@ import 'package:ameen/model/student.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import '../model/admin.dart';
+import '../model/driver.dart';
 import '../model/school.dart';
 import 'data_converter.dart';
 
 class DatabaseHelper {
   final DatabaseReference _rootRef = FirebaseDatabase.instance.ref();
+
   static final DatabaseReference studentsRef =
       FirebaseDatabase.instance.ref().child('students');
+  static final DatabaseReference driverRef =
+      FirebaseDatabase.instance.ref().child('drivers');
 
   Future<String?> save<T extends ToMapConvertible>(
       T model, String refName) async {

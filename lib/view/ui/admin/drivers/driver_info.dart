@@ -1,3 +1,4 @@
+import 'package:ameen/model/driver.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 
 import 'driver_presoanl_info.dart';
@@ -8,7 +9,7 @@ import 'package:get/get.dart';
 import '../../widget/button_model.dart';
 
 class DriverInfo extends StatelessWidget {
-  final driver;
+  final DriverModel driver;
 
   const DriverInfo({super.key, required this.driver});
 
@@ -42,14 +43,14 @@ class DriverInfo extends StatelessWidget {
                           color: const Color.fromARGB(255, 113, 65, 146))),
                   child: Image(
                     width: width * 0.27,
-                    image: AssetImage(driver['img']),
+                    image: AssetImage("img/driver.png"),
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  driver['name'],
+                  "${driver.fName} ${driver.lName}",
                   style: TextStyle(fontSize: width * 0.05),
                 ),
               ),
@@ -68,7 +69,9 @@ class DriverInfo extends StatelessWidget {
                   content: "قائمة الطلاب"),
               ButtonModel(
                   onTap: () {
-                    Get.to(() => const DriverPInfo());
+                    Get.to(() => DriverPInfo(
+                          driver: driver,
+                        ));
                   },
                   padding: 10,
                   hMargin: width * 0.05,
@@ -84,9 +87,8 @@ class DriverInfo extends StatelessWidget {
               ),
               ButtonModel(
                   onTap: () {
-                    Get.dialog(
-                      CustomDialog(buttonText: "نعم", content: "هل متأكد من حذف الحساب؟")
-                    );
+                    Get.dialog(CustomDialog(
+                        buttonText: "نعم", content: "هل متأكد من حذف الحساب؟"));
                   },
                   padding: 10,
                   hMargin: width * 0.05,

@@ -1,5 +1,8 @@
 import 'package:ameen/controller/admin_controller.dart';
+import 'package:ameen/model/driver.dart';
+import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
+import 'package:ameen/view/ui/admin/drivers/drivers_list.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:ameen/view/ui/widget/text_field.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +25,9 @@ Future<void> _selectDate(BuildContext context) async {
   );
   if (selected != null && selected != DateTime.now()) {
     // controller.selectedDate = selected;
-    controller.driverBDate.text =
+    controller.driverBDate.value =
         "${selected.year}-${selected.month}-${selected.day}";
-    print(controller.driverBDate.text);
+    print(controller.driverBDate.value);
   }
 }
 
@@ -36,15 +39,14 @@ class AddDriver extends StatefulWidget {
 }
 
 class _AddDriverState extends State<AddDriver> {
-
   final CamController camController =
-  Get.find(); // Assuming GetX controller instance
+      Get.find(); // Assuming GetX controller instance
   String? _selectedImagePath; // Store the selected image path
 
   Future<void> _handleCameraPick(
       ImageSource imageSource, String fullName) async {
     final response =
-    await camController.takePhotoFromCamera(imageSource, fullName);
+        await camController.takePhotoFromCamera(imageSource, fullName);
     setState(() {
       _selectedImagePath = camController.picture.path;
     });
@@ -76,12 +78,12 @@ class _AddDriverState extends State<AddDriver> {
                 ListTile(
                   title: const Text('الكاميرا'),
                   onTap: () => _handleCameraPick(ImageSource.camera,
-                      '${controller.driverBlood}_${controller.driverBDate.text}_1'),
+                      '${controller.driverBlood}_${controller.driverBDate}_1'),
                 ),
                 ListTile(
                   title: const Text('معرض الصور'),
                   onTap: () => _handleCameraPick(ImageSource.gallery,
-                      '${controller.driverBlood}_${controller.driverBDate.text}_1'),
+                      '${controller.driverBlood}_${controller.driverBDate}_1'),
                 ),
               ],
             ),
@@ -97,116 +99,169 @@ class _AddDriverState extends State<AddDriver> {
       );
     }
   }
+  final GlobalKey<FormState> key = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          foregroundColor: Colors.white,
-          backgroundColor: const Color.fromARGB(255, 113, 65, 146),
-          centerTitle: true,
-          title: const Text("اضافة سائق جديد"),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: height * 0.04,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.03, vertical: height * 0.02),
-                child: const TextFieldModel(
-                  text: "الاسم الاول",
+
+    return Form(
+      key: key,
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            foregroundColor: Colors.white,
+            backgroundColor: const Color.fromARGB(255, 113, 65, 146),
+            centerTitle: true,
+            title: const Text("اضافة سائق جديد"),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: height * 0.04,
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.03, vertical: height * 0.02),
-                child: const TextFieldModel(
-                  text: "الاسم الأخير",
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.03, vertical: height * 0.02),
-                child: const TextFieldModel(
-                  text: "رقم الاحوال",
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.03, vertical: height * 0.02),
-                child: TextFieldModel(
-                  controller: controller.driverBDate,
-                  sufIcon: IconButton(
-                      onPressed: () => _selectDate(context),
-                      icon: Icon(
-                        IconlyLight.calendar,
-                        size: width * 0.055,
-                      )),
-                  keyboardType: TextInputType.datetime,
-                  text: "تاريخ الميلاد",
-                  // vPadding: height * 0.035,
-                  obscureText: false,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.03, vertical: height * 0.02),
-                child: Obx(() => CustomDropdownButton2(
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      size: width * 0.055,
-                    ),
-                    buttonHeight: height * 0.07,
-                    buttonWidth: width,
-                    // dropdownWidth: 20,
-                    hint: 'فصيلة الدم',
-                    value: controller.driverBlood.value.isEmpty
-                        ? null
-                        : controller.driverBlood.value,
-                    dropdownItems: controller.blood,
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.02),
+                  child: TextFieldModel(
                     onChanged: (val) {
-                      controller.driverBlood.value = val!;
-                    })),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.03, vertical: height * 0.02),
-                child: GestureDetector(
-                  onTap: () => _showImageOptionsDialog(context),
-                  child: const TextFieldModel(
-                    isEnabled: false,
-                    sufIcon: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: Colors.black,
-                    ),
-                    text: "ادراج صورة من رخصة القيادة",
+                      controller.driverFName = val;
+                    },
+                    text: "الاسم الاول",
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.03, vertical: height * 0.02),
-                child: const TextFieldModel(
-                  text: "رقم الباص ",
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.02),
+                  child: TextFieldModel(
+                    onChanged: (val) {
+                      controller.driverLName = val;
+                    },
+                    text: "الاسم الأخير",
+                  ),
                 ),
-              ),
-              ButtonModel(
-                content: "حفط",
-                rowMainAxisAlignment: MainAxisAlignment.center,
-                backColor: PRIMARY_COLOR,
-                height: height * 0.06,
-                hMargin: width * 0.07,
-                style: const TextStyle(color: Colors.white),
-              )
-            ],
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.02),
+                  child: TextFieldModel(
+                    onChanged: (val) {
+                      controller.driverNationalID = val;
+                    },
+                    text: "رقم الاحوال",
+                  ),
+                ),
+                Obx(
+                  () => Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.03, vertical: height * 0.02),
+                    child: TextFieldModel(
+                      onChanged: (val) {
+                        controller.driverBDate.value = val;
+                      },
+                      sufIcon: IconButton(
+                          onPressed: () => _selectDate(context),
+                          icon: Icon(
+                            IconlyLight.calendar,
+                            size: width * 0.055,
+                          )),
+
+                      keyboardType: TextInputType.datetime,
+                      text: controller.driverBDate.value.isEmpty
+                          ? "تاريخ الميلاد"
+                          : controller.driverBDate.value,
+                      // vPadding: height * 0.035,
+                      obscureText: false,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.02),
+                  child: Obx(() => CustomDropdownButton2(
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: width * 0.055,
+                      ),
+                      buttonHeight: height * 0.07,
+                      buttonWidth: width,
+                      // dropdownWidth: 20,
+                      hint: 'فصيلة الدم',
+                      value: controller.driverBlood.value.isEmpty
+                          ? null
+                          : controller.driverBlood.value,
+                      dropdownItems: controller.blood,
+                      onChanged: (val) {
+                        controller.driverBlood.value = val!;
+                      })),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.02),
+                  child: GestureDetector(
+                    onTap: () => _showImageOptionsDialog(context),
+                    child: TextFieldModel(
+                      onChanged: (val) {
+                        controller.driverLicence = val;
+                      },
+                      isEnabled: false,
+                      sufIcon: const Icon(
+                        Icons.keyboard_arrow_down,
+                        color: Colors.black,
+                      ),
+                      text: "ادراج صورة من رخصة القيادة",
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.02),
+                  child: TextFieldModel(
+                    onChanged: (val) {
+                      controller.driverBussNo = val;
+                    },
+                    text: "رقم الباص ",
+                  ),
+                ),
+                ButtonModel(
+                  onTap: () {
+                    if(key.currentState!.validate()){
+                      DatabaseHelper dbHelper = DatabaseHelper();
+                      dbHelper.save(
+                          DriverModel(
+                            id: DatabaseHelper.driverRef.key!,
+                            fName: controller.driverFName,
+                            lName: controller.driverLName,
+                            phone: controller.driverPhone,
+                            nationalId: controller.driverNationalID,
+                            isEnabled: false,
+                            driverBDate: controller.driverBDate.value,
+                            blood: controller.driverBlood.value,
+                            driverLicence: controller.driverLicence,
+                            busNumber: controller.driverBussNo,
+                          ),
+                          'drivers');
+                      Get.back();
+                      controller.clearData();
+                    }
+                    else{
+                      print("error");
+                    }
+
+                  },
+                  content: "حفط",
+                  rowMainAxisAlignment: MainAxisAlignment.center,
+                  backColor: PRIMARY_COLOR,
+                  height: height * 0.06,
+                  hMargin: width * 0.07,
+                  style: const TextStyle(color: Colors.white),
+                )
+              ],
+            ),
           ),
         ),
       ),
