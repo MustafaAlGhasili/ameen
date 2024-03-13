@@ -173,6 +173,31 @@ class DatabaseHelper {
     }
   }
 
+  Future<int> updateParentStatusByStudentId(
+      String studentId, bool isEnabled) async {
+    try {
+      StudentModel studentModel;
+      DataSnapshot studentSnapshot =
+          await _rootRef.child('students').child(studentId).get();
+      if (studentSnapshot.exists) {
+        studentModel = StudentModel.fromSnapshot(studentSnapshot);
+
+        DatabaseReference parentRef =
+            _rootRef.child('parents').child(studentModel.parentId);
+
+        await parentRef.update({'isEnabled': isEnabled});
+
+        print('Parent  isEnabled updated to: $isEnabled');
+        return 200;
+      } else {
+        return 404;
+      }
+    } catch (error) {
+      print('Error updating parent isEnabled status: $error');
+      return 500;
+    }
+  }
+
   Future<void> updateField(
       String reference, String id, String fieldName, String value) async {
     try {
