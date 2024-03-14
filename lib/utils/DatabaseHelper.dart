@@ -1,6 +1,7 @@
 import 'package:ameen/model/location.dart';
 import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
+import 'package:ameen/model/token.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import '../model/admin.dart';
@@ -57,6 +58,18 @@ class DatabaseHelper {
       await newModelRef.set(driverLocationModel.toMap());
     } catch (error) {
       print('Error saving ${driverLocationModel.toString()}: $error');
+    }
+  }
+  Future<void> saveToken(
+      TokenModel tokenModel, String refName) async {
+    try {
+      print("Is being save");
+      print("Token  Id:${tokenModel.userId}");
+      DatabaseReference newModelRef =
+          _rootRef.child("tokens").child(refName).child(tokenModel.userId!);
+      await newModelRef.set(tokenModel.toMap());
+    } catch (error) {
+      print('Error saving ${tokenModel.toString()}: $error');
     }
   }
 
