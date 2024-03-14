@@ -1,6 +1,4 @@
 import 'package:ameen/model/student.dart';
-import 'package:ameen/utils/DatabaseHelper.dart';
-import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -134,7 +132,7 @@ class StudentDetails extends StatelessWidget {
                   ),
                   ButtonModel(
                     onTap: () =>
-                        _launchUrl(student.latitude, student.longitude),
+                        _launchMap(student.latitude!, student.longitude!),
                     style: TextStyle(
                       color: Colors.blue,
                       fontSize: width * 0.045,
@@ -145,9 +143,7 @@ class StudentDetails extends StatelessWidget {
                   ),
                   ButtonModel(
                     onTap: () {
-
                       Get.dialog(const CustomDialog(
-
                           buttonText: "نعم",
                           content: "هل متأكد من ازاله الطالب؟"));
                     },
@@ -172,12 +168,14 @@ class StudentDetails extends StatelessWidget {
   }
 }
 
-Future<void> _launchUrl(final latitude, final longitude) async {
-  final Uri _googleMapUrl =
-      Uri.parse("https://www.google.com/maps/@$latitude,$longitude,15z");
-  if (!await launchUrl(_googleMapUrl)) {
-    throw Exception('Could not launch $_googleMapUrl');
-  } else {
-    launchUrl(_googleMapUrl);
+Future<void> _launchMap(final double latitude, final double longitude) async {
+  final encodedLat = Uri.encodeComponent(latitude.toString());
+  final encodedLng = Uri.encodeComponent(longitude.toString());
+
+  final url =
+      'https://www.google.com/maps/search/?api=1&query=$encodedLat,$encodedLng&zoom=16';
+
+  if (!await launchUrl(Uri.parse(url))) {
+    throw Exception('Could not launch map with pin');
   }
 }

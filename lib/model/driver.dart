@@ -3,7 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import '../utils/data_converter.dart';
 
 class DriverModel implements ToMapConvertible {
-  final String id;
+  late String id;
   final String fName;
   final String lName;
   final String phone;
@@ -15,7 +15,7 @@ class DriverModel implements ToMapConvertible {
   final String busNumber;
 
   DriverModel({
-    required this.id,
+     this.id="",
     required this.fName,
     required this.lName,
     required this.phone,

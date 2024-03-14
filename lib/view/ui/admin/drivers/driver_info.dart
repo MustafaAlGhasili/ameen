@@ -1,12 +1,12 @@
 import 'package:ameen/model/driver.dart';
+import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
-
-import 'driver_presoanl_info.dart';
-import 'student_with_driver.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../widget/button_model.dart';
+import 'driver_presoanl_info.dart';
+import 'student_with_driver.dart';
 
 class DriverInfo extends StatelessWidget {
   final DriverModel driver;
@@ -15,6 +15,8 @@ class DriverInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DatabaseHelper _databaseHelper = DatabaseHelper();
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Directionality(
@@ -88,7 +90,17 @@ class DriverInfo extends StatelessWidget {
               ButtonModel(
                   onTap: () {
                     Get.dialog(CustomDialog(
-                        buttonText: "نعم", content: "هل متأكد من حذف الحساب؟"));
+                      buttonOnTap: () async {
+                        await _databaseHelper.deleteById(driver.id, "drivers");
+                        print("Clicked ${driver.id}");
+                        Get.back();
+                      },
+                      buttonText: "نعم",
+                      content: "هل متأكد من حذف الحساب؟",
+                      onClose: () {
+                        Get.back(); // Close the dialog
+                      },
+                    ));
                   },
                   padding: 10,
                   hMargin: width * 0.05,
