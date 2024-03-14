@@ -147,6 +147,7 @@ class Map extends StatelessWidget {
       height: height * 0.7,
       width: width,
       child: GoogleMap(
+        mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
           target: point1,
           zoom: 15.0, // Set the desired zoom level for the first point

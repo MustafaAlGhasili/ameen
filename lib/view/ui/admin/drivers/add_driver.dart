@@ -233,7 +233,6 @@ class _AddDriverState extends State<AddDriver> {
                       DatabaseHelper dbHelper = DatabaseHelper();
                       dbHelper.save(
                           DriverModel(
-                            id: DatabaseHelper.driverRef.key!,
                             fName: controller.driverFName,
                             lName: controller.driverLName,
                             phone: controller.driverPhone,

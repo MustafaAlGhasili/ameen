@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 late List<CameraDescription> cameras;
 
@@ -133,6 +134,11 @@ class CamController extends GetxController {
       debugPrint('Error occured while taking picture: $e');
       return null;
     }
+  }
+  Future<bool> requestPermission() async {
+    final status = await Permission.storage.request();
+    await Permission.camera.request();
+    return status == PermissionStatus.granted;
   }
 
   Future<int> onTakePhotoPressed() async {
