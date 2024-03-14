@@ -8,12 +8,15 @@ class CustomDialog extends StatelessWidget {
   final void Function()? buttonOnTap;
   final String buttonText;
   final String content;
+  final void Function()? onClose; // Callback for closing the dialog
 
-  const CustomDialog(
-      {super.key,
-      this.buttonOnTap,
-      required this.buttonText,
-      required this.content});
+  const CustomDialog({
+    Key? key,
+    this.buttonOnTap,
+    required this.buttonText,
+    required this.content,
+    this.onClose, // Added callback parameter
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,9 @@ class CustomDialog extends StatelessWidget {
       backgroundColor: Colors.white,
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(20)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
         padding: EdgeInsets.all(width * 0.02),
         height: height * 0.2,
         alignment: Alignment.center,
@@ -36,18 +41,24 @@ class CustomDialog extends StatelessWidget {
               GestureDetector(
                 child: const Icon(Icons.close),
                 onTap: () {
-
+                  // Call the onClose callback to close the dialog
+                  if (onClose != null) {
+                    onClose!();
+                  }
                 },
               ),
               SizedBox(
                 height: height * 0.025,
               ),
               Center(
-                  child: Text(
-                content,
-                style: TextStyle(
-                    fontSize: width * 0.04, fontWeight: FontWeight.w600),
-              )),
+                child: Text(
+                  content,
+                  style: TextStyle(
+                    fontSize: width * 0.04,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
               SizedBox(
                 height: height * 0.035,
               ),

@@ -26,6 +26,8 @@ class DatabaseHelper {
 
       if (model is StudentModel) {
         model.id = modelId!;
+      } else if (model is DriverModel) {
+        model.id = modelId!;
       }
       await newModelRef.set(model.toMap());
 
@@ -64,8 +66,8 @@ class DatabaseHelper {
       print('Error saving ${driverLocationModel.toString()}: $error');
     }
   }
-  Future<void> saveToken(
-      TokenModel tokenModel, String refName) async {
+
+  Future<void> saveToken(TokenModel tokenModel, String refName) async {
     try {
       print("Is being save");
       print("Token  Id:${tokenModel.userId}");
@@ -155,8 +157,15 @@ class DatabaseHelper {
   Future<void> deleteById(String id, String refName) async {
     try {
       DatabaseReference modelRef = _rootRef.child(refName).child(id);
+      DataSnapshot snapshot = await modelRef.get();
+      print('Full Path: ${modelRef.path}');
+      if (!snapshot.exists) {
+        print('Item with ID: $id does not exist in $refName');
+        return;
+      }
       await modelRef.remove();
       print('Item with ID: $id deleted from $refName');
+
     } catch (error) {
       print('Error deleting item with ID $id from $refName: $error');
     }
