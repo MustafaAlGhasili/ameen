@@ -1,14 +1,15 @@
 import 'package:ameen/model/student.dart';
+import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../widget/button_model.dart';
 
 class StudentDetails extends StatelessWidget {
-  final StudentModel  student;
+  final StudentModel student;
 
   const StudentDetails({super.key, required this.student});
 
@@ -16,6 +17,7 @@ class StudentDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -66,12 +68,12 @@ class StudentDetails extends StatelessWidget {
                   SizedBox(
                     height: height * 0.025,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("الاسم الاخير"),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("الاسم الاخير"),
                   ),
                   Container(
-                    padding: EdgeInsets.all(13),
+                    padding: const EdgeInsets.all(13),
                     width: width,
                     height: height * 0.06,
                     decoration: BoxDecoration(
@@ -82,9 +84,9 @@ class StudentDetails extends StatelessWidget {
                   SizedBox(
                     height: height * 0.025,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("الصف"),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("الصف"),
                   ),
                   Container(
                     padding: const EdgeInsets.all(13),
@@ -93,17 +95,17 @@ class StudentDetails extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black)),
-                    child: const Text("الثاني"),
+                    child: Text("${student.grade}"),
                   ),
                   SizedBox(
                     height: height * 0.025,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("فصيلة الدم "),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("فصيلة الدم"),
                   ),
                   Container(
-                    padding: EdgeInsets.all(13),
+                    padding: const EdgeInsets.all(13),
                     width: width,
                     height: height * 0.06,
                     decoration: BoxDecoration(
@@ -114,23 +116,25 @@ class StudentDetails extends StatelessWidget {
                   SizedBox(
                     height: height * 0.025,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("رقم ولي الامر"),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("رقم ولي الامر"),
                   ),
                   Container(
-                    padding: EdgeInsets.all(13),
+                    padding: const EdgeInsets.all(13),
                     width: width,
                     height: height * 0.06,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black)),
-                    child:  Text(student.parentId),
+                    child: Text(student.parentId),
                   ),
                   SizedBox(
                     height: height * 0.025,
                   ),
                   ButtonModel(
+                    onTap: () =>
+                        _launchUrl(student.latitude, student.longitude),
                     style: TextStyle(
                       color: Colors.blue,
                       fontSize: width * 0.045,
@@ -141,8 +145,9 @@ class StudentDetails extends StatelessWidget {
                   ),
                   ButtonModel(
                     onTap: () {
-                      Get.dialog(
-                          const CustomDialog(
+
+                      Get.dialog(const CustomDialog(
+
                           buttonText: "نعم",
                           content: "هل متأكد من ازاله الطالب؟"));
                     },
@@ -164,5 +169,15 @@ class StudentDetails extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Future<void> _launchUrl(final latitude, final longitude) async {
+  final Uri _googleMapUrl =
+      Uri.parse("https://www.google.com/maps/@$latitude,$longitude,15z");
+  if (!await launchUrl(_googleMapUrl)) {
+    throw Exception('Could not launch $_googleMapUrl');
+  } else {
+    launchUrl(_googleMapUrl);
   }
 }

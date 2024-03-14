@@ -1,7 +1,10 @@
+import 'package:ameen/model/driver.dart';
 import 'package:flutter/material.dart';
 
 class DriverPInfo extends StatelessWidget {
-  const DriverPInfo({super.key});
+  final DriverModel driver;
+
+  const DriverPInfo({super.key, required this.driver});
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +36,12 @@ class DriverPInfo extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(13),
-                  width: width ,
+                  width: width,
                   height: height * 0.06,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)
-                  ),
-                  child: const Text("سعد"),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.black)),
+                  child: Text(driver.fName),
                 ),
                 SizedBox(
                   height: height * 0.03,
@@ -50,14 +52,14 @@ class DriverPInfo extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(13),
-                  width: width ,
+                  width: width,
                   height: height * 0.06,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black)
-                  ),
-                  child: const Text("عبدالله"),
-                ),SizedBox(
+                      border: Border.all(color: Colors.black)),
+                  child: Text(driver.lName),
+                ),
+                SizedBox(
                   height: height * 0.03,
                 ),
                 Padding(
@@ -66,14 +68,14 @@ class DriverPInfo extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(13),
-                  width: width ,
+                  width: width,
                   height: height * 0.06,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black)
-                  ),
-                  child: const Text("111679356"),
-                ),SizedBox(
+                      border: Border.all(color: Colors.black)),
+                  child: Text(driver.nationalId),
+                ),
+                SizedBox(
                   height: height * 0.03,
                 ),
                 Padding(
@@ -82,14 +84,14 @@ class DriverPInfo extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(13),
-                  width: width ,
+                  width: width,
                   height: height * 0.06,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black)
-                  ),
-                  child: const Text("055535894"),
-                ),SizedBox(
+                      border: Border.all(color: Colors.black)),
+                  child:  Text(driver.phone),
+                ),
+                SizedBox(
                   height: height * 0.03,
                 ),
                 Padding(
@@ -98,14 +100,14 @@ class DriverPInfo extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(13),
-                  width: width ,
+                  width: width,
                   height: height * 0.06,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black)
-                  ),
-                  child: const Text("1988/4/23"),
-                ),SizedBox(
+                      border: Border.all(color: Colors.black)),
+                  child:  Text(driver.driverBDate),
+                ),
+                SizedBox(
                   height: height * 0.03,
                 ),
                 Padding(
@@ -114,13 +116,12 @@ class DriverPInfo extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(13),
-                  width: width ,
+                  width: width,
                   height: height * 0.06,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black)
-                  ),
-                  child: const Text("O+"),
+                      border: Border.all(color: Colors.black)),
+                  child:  Text(driver.blood),
                 ),
                 SizedBox(
                   height: height * 0.03,
@@ -131,13 +132,12 @@ class DriverPInfo extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(13),
-                  width: width ,
+                  width: width,
                   height: height * 0.06,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black)
-                  ),
-                  child: const Text("B1"),
+                      border: Border.all(color: Colors.black)),
+                  child: Text(driver.busNumber),
                 ),
               ],
             ),

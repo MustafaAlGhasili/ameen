@@ -62,7 +62,6 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 
 class ButtonModel extends StatelessWidget {
@@ -86,25 +85,31 @@ class ButtonModel extends StatelessWidget {
   final IconData? icon;
   final double? iconSize;
   final enableIcon;
+  final double contentPdding;
+
   const ButtonModel(
       {super.key,
-        this.width,
-        this.height,
-        required this.content,
-        this.style,
-        this.backColor,
-        this.onTap,
-        this.textAlign,
-        this.preIconSize,
-        this.vMargin = 0,
-        this.hMargin = 0,
-        this.textWidth,
-        this.rowMainAxisAlignment = MainAxisAlignment.start,
-        this.padding = 0.0,
-        this.sufIconSize,
-        this.imgPath = '',
-        this.busName = '',
-        this.bus = false, this.icon, this.iconSize, this.enableIcon = false});
+      this.width,
+      this.height,
+      required this.content,
+      this.style,
+      this.backColor,
+      this.onTap,
+      this.textAlign,
+      this.preIconSize,
+      this.vMargin = 0,
+      this.hMargin = 0,
+      this.textWidth,
+      this.rowMainAxisAlignment = MainAxisAlignment.start,
+      this.padding = 0.0,
+      this.sufIconSize,
+      this.imgPath = '',
+      this.busName = '',
+      this.bus = false,
+      this.icon,
+      this.iconSize,
+      this.enableIcon = false,
+      this.contentPdding = 0.0});
 
   @override
   Widget build(BuildContext context) {
@@ -125,23 +130,32 @@ class ButtonModel extends StatelessWidget {
                 imgPath.isEmpty
                     ? const Text('')
                     : CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.white,
-                    child: Image(image: AssetImage(imgPath))),
-                Text(
-                  textAlign: TextAlign.center,
-                  content,
-                  style: style,
+                        radius: 25,
+                        backgroundColor: Colors.white,
+                        child: Image(image: AssetImage(imgPath))),
+                Padding(
+                  padding: EdgeInsets.all(contentPdding),
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    content,
+                    style: style,
+                  ),
                 ),
                 Row(
                   children: [
-                    Text(busName, style: const TextStyle(color: Colors.white),),
-                    bus ? const Icon(
-                      Icons.directions_bus_rounded,
-                      color: Colors.white,
-                    ): const Text(''),
-                  enableIcon ?Icon(icon, color: Colors.white, size: iconSize): Text(''),
-
+                    Text(
+                      busName,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    bus
+                        ? const Icon(
+                            Icons.directions_bus_rounded,
+                            color: Colors.white,
+                          )
+                        : const Text(''),
+                    enableIcon
+                        ? Icon(icon, color: Colors.white, size: iconSize)
+                        : Text(''),
                   ],
                 )
               ],

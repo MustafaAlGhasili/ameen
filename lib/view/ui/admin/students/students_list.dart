@@ -44,7 +44,7 @@ class StudentsList extends StatelessWidget {
             SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 child: Container(
-                  height: height * 0.7,
+                  height: height * 0.75,
                   padding: EdgeInsets.only(top: height * 0.05),
                   child: FirebaseAnimatedList(
                     query: DatabaseHelper.studentsRef,
@@ -52,27 +52,29 @@ class StudentsList extends StatelessWidget {
                         Animation<double> animation, int index) {
                       StudentModel student =
                           StudentModel.fromSnapshot(snapshot);
-                      print(snapshot);
-                      print(snapshot.exists);
-
-                      return ButtonModel(
-                        onTap: () {
-                          Get.to(() => StudentDetails(student: student));
-                        },
-                        busName: student.busId ?? student.schoolId,
-                        bus: true,
-                        imgPath: "img/st1.png",
-                        padding: 10,
-                        hMargin: width * 0.05,
-                        vMargin: height * 0.02,
-                        height: height * 0.08,
-                        rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        backColor: const Color.fromARGB(255, 113, 65, 146),
-                        style: TextStyle(
-                            color: Colors.white, fontSize: width * 0.05),
-                        content: '${student.fName} ${student.lName}',
-                      );
+                      if (student.isEnabled == true) {
+                        return ButtonModel(
+                          onTap: () {
+                            Get.to(() => StudentDetails(student: student));
+                          },
+                          busName: student.busId ?? student.schoolId,
+                          bus: true,
+                          imgPath: "img/st1.png",
+                          padding: 10,
+                          hMargin: width * 0.05,
+                          vMargin: height * 0.02,
+                          height: height * 0.08,
+                          rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          backColor: const Color.fromARGB(255, 113, 65, 146),
+                          style: TextStyle(
+                              color: Colors.white, fontSize: width * 0.05),
+                          content: '${student.fName} ${student.lName}',
+                        );
+                      }
+                      return SizedBox();
                     },
+                    defaultChild:
+                        const Center(child: CircularProgressIndicator()),
                   ),
                 )),
             ButtonModel(

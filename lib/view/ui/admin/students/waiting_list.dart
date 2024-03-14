@@ -39,9 +39,10 @@ class WaitingList extends StatelessWidget {
                       padding: 10,
                       hMargin: width * 0.05,
                       vMargin: height * 0.02,
-                      height: height * 0.08,
+                      height: height * 0.085,
                       rowMainAxisAlignment: MainAxisAlignment.start,
                       backColor: const Color.fromARGB(255, 113, 65, 146),
+                      contentPdding: 10,
                       style: TextStyle(
                           color: Colors.white, fontSize: width * 0.05),
                       // textAlign: TextAlign.center,

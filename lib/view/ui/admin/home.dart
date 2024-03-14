@@ -1,5 +1,6 @@
 import 'package:ameen/view/ui/admin/drivers/drivers_list.dart';
 import 'package:ameen/view/ui/admin/students/students_list.dart';
+import 'package:ameen/view/ui/sign/start.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,16 +15,28 @@ class AdminHome extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 113, 65, 146),
       body: SingleChildScrollView(
         child: Stack(
           children: [
             Container(
-              margin: EdgeInsets.only(top: height * 0.035),
-              height: height * 0.35,
+              margin: const EdgeInsets.all(15),
+              child: IconButton(
+                onPressed: () {
+                  Get.offAll(const Start());
+                },
+                icon: Icon(
+                  Icons.arrow_back_outlined,
+                  size: width * 0.08,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: height * 0.08),
+              height: height * 0.3,
               width: width,
               decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 113, 65, 146),
+                // color: Color.fromARGB(255, 113, 65, 146),
                 image: DecorationImage(
                   fit: BoxFit.contain,
                   alignment: Alignment.center,
@@ -48,7 +61,7 @@ class AdminHome extends StatelessWidget {
                     ),
                     ButtonModel(
                       onTap: () {
-                        Get.to(()=> const DriversList());
+                        Get.to(() => const DriversList());
                       },
                       vMargin: height * 0.05,
                       width: width * 0.87,
@@ -62,7 +75,7 @@ class AdminHome extends StatelessWidget {
                     ),
                     ButtonModel(
                       onTap: () {
-                        Get.to(()=> const StudentsList());
+                        Get.to(() => const StudentsList());
                       },
                       width: width * 0.87,
                       height: height * 0.06,
@@ -75,7 +88,7 @@ class AdminHome extends StatelessWidget {
                     ),
                     ButtonModel(
                       onTap: () {
-                        Get.to(()=> const Notifications());
+                        Get.to(() => const Notifications());
                       },
                       vMargin: height * 0.05,
                       width: width * 0.87,

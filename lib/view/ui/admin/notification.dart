@@ -1,4 +1,6 @@
+import 'package:ameen/view/ui/admin/send_notification.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Notifications extends StatelessWidget {
   const Notifications({super.key});
@@ -13,6 +15,13 @@ class Notifications extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Get.to(() => const SendNotification());
+                },
+                icon: const Icon(Icons.notification_add_sharp))
+          ],
           foregroundColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 113, 65, 146),
           title: Text(
@@ -44,7 +53,7 @@ class Notifications extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text("اشعار بوجود حالة طوارئ"),
+                child: const Text("اشعار بوجود حالة طوارئ"),
               ),
             ],
           ),
