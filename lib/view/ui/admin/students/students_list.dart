@@ -63,7 +63,7 @@ class StudentsList extends StatelessWidget {
                                   ));
                             },
                             bus: true,
-                            imgPath: "img/st1.png",
+                            imgUrl: "img/st1.png",
                             padding: 10,
                             hMargin: width * 0.05,
                             vMargin: height * 0.02,

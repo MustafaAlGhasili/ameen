@@ -8,14 +8,14 @@ class CustomDialog extends StatelessWidget {
   final void Function()? buttonOnTap;
   final String buttonText;
   final String content;
-  // final void Function()? onClose; // Callback for closing the dialog
+  final void Function()? onClose; // Callback for closing the dialog
 
   const CustomDialog({
     Key? key,
     this.buttonOnTap,
     required this.buttonText,
     required this.content,
-    // this.onClose, // Added callback parameter
+    this.onClose, // Added callback parameter
   }) : super(key: key);
 
   @override
@@ -41,7 +41,10 @@ class CustomDialog extends StatelessWidget {
               GestureDetector(
                 child: const Icon(Icons.close),
                 onTap: () {
-                  navigator!.pop();
+                  // Call the onClose callback to close the dialog
+                  if (onClose != null) {
+                    onClose!();
+                  }
                 },
               ),
               SizedBox(

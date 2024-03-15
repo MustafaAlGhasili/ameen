@@ -15,6 +15,7 @@ class TestFirebase extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     HomeController controller = Get.find();
+    controller.testSharedPref();
 
     return Directionality(
       textDirection: TextDirection.rtl,

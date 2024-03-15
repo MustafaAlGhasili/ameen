@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../model/parent.dart';
+import '../services/LocalStorageService.dart';
+
 class HomeController extends GetxController {
   RxInt bottomIndex = 0.obs;
   RxBool map = false.obs;
@@ -22,4 +25,22 @@ class HomeController extends GetxController {
   RxBool isClose = false.obs;
   RxBool isArrived = false.obs;
   RxBool notificationOn = true.obs;
+
+  Future<void> testSharedPref() async {
+    final parent = ParentModel(
+      id: '1',
+      fName: 'John',
+      lName: 'Doe',
+      email: 'john.doe@example.com',
+      phone: '1234567890',
+      nationalId: '123456789',
+      isEnabled: true,
+    );
+    await LocalStorageService.saveParent(parent);
+
+    final retrievedParent = await LocalStorageService.getParent();
+    print(retrievedParent);
+    print(retrievedParent?.email);
+  }
+
 }

@@ -10,22 +10,21 @@ class LocalStorageService {
   static const String studentKey = 'student';
 
   static Future<void> saveParent(ParentModel parent) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(parentKey, parent.toMap().toString());
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final parentJson = json.encode(parent.toMap()); // Encode the map to JSON string
+    await prefs.setString(parentKey, parentJson);
+    print("Saved Parent:");
+    print(parentJson);
   }
 
   static Future<ParentModel?> getParent() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? parentString = prefs.getString(parentKey);
-    print('object $parentString');
-    if (parentString != null && parentString.isNotEmpty) {
-      Map<String, dynamic> parentMap =
-          Map.castFrom<dynamic, dynamic, String, dynamic>(
-              Map<String, dynamic>.from(json.decode(parentString)));
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final parentJson = prefs.getString(parentKey);
+    if (parentJson != null) {
+      final Map<String, dynamic> parentMap = json.decode(parentJson);
       return ParentModel.fromMap(parentMap);
-    } else {
-      return null;
     }
+    return null;
   }
 
   static Future<void> saveStudent(StudentModel student) async {
@@ -39,8 +38,8 @@ class LocalStorageService {
 
     if (studentString != null && studentString.isNotEmpty) {
       Map<String, dynamic> studentMap =
-      Map.castFrom<dynamic, dynamic, String, dynamic>(
-          Map<String, dynamic>.from(json.decode(studentString)));
+          Map.castFrom<dynamic, dynamic, String, dynamic>(
+              Map<String, dynamic>.from(json.decode(studentString)));
       return StudentModel.fromMap(studentMap);
     } else {
       return null;
@@ -56,5 +55,4 @@ class LocalStorageService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getInt('userType');
   }
-
 }
