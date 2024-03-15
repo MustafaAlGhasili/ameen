@@ -268,4 +268,39 @@ class DatabaseHelper {
 
     return studentsOfDisabledParents;
   }
+
+
+
+  Future<List<StudentModel>> getStudentsOfEnabledParents() async {
+    print("I'm Called ");
+    DatabaseReference studentsRef = _rootRef.child('students');
+    DatabaseReference parentsRef = _rootRef.child('parents');
+
+    final snapshot =
+    await parentsRef.orderByChild('isEnabled').equalTo(true).get();
+    List<ParentModel> parentList = snapshot.children
+        .map((child) => ParentModel.fromSnapshot(child))
+        .toList();
+
+    List<StudentModel> studentsOfDisabledParents = [];
+
+    for (ParentModel parent in parentList) {
+      final snapshot =
+      await studentsRef.orderByChild('parentId').equalTo(parent.id).get();
+
+      List<StudentModel> studentsOfCurrentParent = snapshot.children
+          .map((child) => StudentModel.fromSnapshot(child))
+          .toList();
+
+      if (studentsOfCurrentParent.isNotEmpty) {
+        studentsOfDisabledParents.add(studentsOfCurrentParent.first);
+      }
+    }
+    print("Disabled Data");
+    studentsOfDisabledParents.forEach((student) {
+      print('Student ID: ${student.id}, Parent ID: ${student.parentId}');
+    });
+
+    return studentsOfDisabledParents;
+  }
 }

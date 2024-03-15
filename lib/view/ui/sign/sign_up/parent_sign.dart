@@ -1,4 +1,7 @@
+import 'package:ameen/model/parent.dart';
+import 'package:ameen/utils/validation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../../../../utils/DatabaseHelper.dart';
 import '../../widget/button_model.dart';
@@ -13,6 +16,8 @@ class Parent extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     DatabaseHelper _databaseHelper = DatabaseHelper();
 
+    Validation validation = Validation();
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Form(
@@ -20,7 +25,7 @@ class Parent extends StatelessWidget {
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(
-              horizontal: width * 0.045, vertical: height * 0.04),
+              horizontal: width * 0.045, vertical: height * 0.02),
           child: Column(
             children: [
               Text("معلومات ولي الأمر",
@@ -29,8 +34,8 @@ class Parent extends StatelessWidget {
                 height: height * 0.035,
               ),
               TextFieldModel(
+                validator: (val) => validation.validator(val),
                 controller: controller.parentFName,
-                // vPadding: height * 0.035,
                 keyboardType: TextInputType.name,
                 text: "الاسم الاول",
               ),
@@ -38,8 +43,8 @@ class Parent extends StatelessWidget {
                 height: height * 0.035,
               ),
               TextFieldModel(
+                validator: (val) => validation.validator(val),
                 controller: controller.parentLName,
-                // vPadding: height * 0.035,
                 keyboardType: TextInputType.name,
                 text: "الاسم الأخير",
               ),
@@ -47,15 +52,23 @@ class Parent extends StatelessWidget {
                 height: height * 0.035,
               ),
               TextFieldModel(
+                validator: (val) => validation.validator(val),
                 controller: controller.parentNationalId,
-                // vPadding: height * 0.035,
                 keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
                 text: "رقم الاحوال",
               ),
               SizedBox(
                 height: height * 0.035,
               ),
               TextFieldModel(
+                validator: (val) => validation.phoneValidator(val),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                maxLength: 10,
                 controller: controller.parentPhone,
                 // vPadding: height * 0.035,
                 keyboardType: TextInputType.number,
@@ -65,6 +78,8 @@ class Parent extends StatelessWidget {
                 height: height * 0.035,
               ),
               TextFieldModel(
+                validator: (val) => validation.emailValidator(val),
+
                 controller: controller.parentEmail,
                 // vPadding: height * 0.035,
                 keyboardType: TextInputType.emailAddress,
@@ -74,7 +89,9 @@ class Parent extends StatelessWidget {
                 height: height * 0.035,
               ),
               Obx(() => TextFieldModel(
-                text: "ادخل كلمة المرور",
+                  validator: (val) => validation.passwordValidator(val),
+                  obscureText: !controller.visibility.value,
+                  text: "ادخل كلمة المرور",
                   sufIcon: controller.visibility.value
                       ? IconButton(
                           icon: const Icon(Icons.visibility_outlined),
@@ -91,6 +108,7 @@ class Parent extends StatelessWidget {
                 onTap: () {
                   if (formKey.currentState!.validate()) {
                     controller.step.value++;
+
                   }
                   // Get.to(() => const StudentInfo());
                 },

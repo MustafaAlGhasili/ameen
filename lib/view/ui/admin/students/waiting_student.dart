@@ -1,21 +1,18 @@
-import 'dart:ffi';
-
 import 'package:ameen/controller/admin_controller.dart';
+import 'package:ameen/model/student.dart';
 import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 import 'package:ameen/view/ui/widget/custem_dropdown_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 
 import '../../widget/button_model.dart';
 
 AdminController controller = Get.find();
 
 class WaitingStudent extends StatelessWidget {
-  final student;
+  StudentModel student;
 
-  const WaitingStudent({super.key, required this.student});
+  WaitingStudent({super.key, required this.student});
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +46,10 @@ class WaitingStudent extends StatelessWidget {
                           borderRadius: BorderRadius.circular(500),
                           border: Border.all(
                               color: const Color.fromARGB(255, 113, 65, 146))),
-                      child: Image(
-                        width: width * 0.27,
-                        image: AssetImage(student['img']),
-                      ),
+                      // child: Image(
+                      //   width: width * 0.27,
+                      //   image: AssetImage(student.im),
+                      // ),
                     ),
                   ),
                   Padding(
@@ -66,7 +63,7 @@ class WaitingStudent extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black)),
-                    child: const Text("هند"),
+                    child: Text(student.fName),
                   ),
                   SizedBox(
                     height: height * 0.025,
@@ -82,7 +79,7 @@ class WaitingStudent extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black)),
-                    child: const Text("محمد"),
+                    child: Text(student.lName),
                   ),
                   SizedBox(
                     height: height * 0.025,
@@ -98,7 +95,7 @@ class WaitingStudent extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black)),
-                    child: const Text("111679356"),
+                    child: Text(student.nationalId),
                   ),
                   SizedBox(
                     height: height * 0.025,
@@ -130,8 +127,8 @@ class WaitingStudent extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black)),
-                    child: const Text(
-                      "https://maps.app.goo.gl/ZvmTDH31evSNsS6i8?g_st=ic",
+                    child: Text(
+                      student.address,
                       maxLines: 2,
                       softWrap: true,
                     ),
@@ -194,7 +191,7 @@ class WaitingStudent extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {},
                                 child: Container(
-                                  margin: EdgeInsets.all(10),
+                                    margin: EdgeInsets.all(10),
                                     height: height * 0.06,
                                     width: width * 0.6,
                                     decoration: BoxDecoration(

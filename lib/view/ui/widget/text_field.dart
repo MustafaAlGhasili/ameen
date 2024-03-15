@@ -1,6 +1,5 @@
-import 'package:ameen/controller/sign_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 
 class TextFieldModel extends StatefulWidget {
   final String? hint;
@@ -14,6 +13,11 @@ class TextFieldModel extends StatefulWidget {
   final TextInputType? keyboardType;
   final TextStyle? style;
   final bool? isEnabled;
+  final bool readOnly;
+  final int? maxLength;
+  final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
+  final void Function()? onTap;
 
   // final String? Function(String?)? validator;
 
@@ -30,6 +34,10 @@ class TextFieldModel extends StatefulWidget {
     this.keyboardType,
     this.style,
     this.isEnabled = true,
+    this.readOnly = false,
+    this.maxLength,
+    this.validator,
+    this.inputFormatters, this.onTap,
     // this.validator,
   });
 
@@ -38,40 +46,26 @@ class TextFieldModel extends StatefulWidget {
 }
 
 class _TextFieldModelState extends State<TextFieldModel> {
-  SignController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return
-        //  Column(
-        // children: [
-        // widget.text == null
-        //     ? const Text("")
-        //     : Container(
-        //         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-        //         width: w,
-        //         child: Text(
-        //           "${widget.text}",
-        //           textAlign: TextAlign.start,
-        //           style: TextStyle(fontSize: w * 0.05, height: 1.5),
-        //         ),
-        //       ),
+
         Padding(
       padding: EdgeInsets.only(top: widget.vPadding, left: widget.hPadding),
       child: TextFormField(
-
+        onTap: widget.onTap,
+        maxLength: widget.maxLength,
+        inputFormatters: widget.inputFormatters,
+        readOnly: widget.readOnly,
         enableInteractiveSelection: widget.isEnabled,
         enabled: widget.isEnabled,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: widget.keyboardType,
         cursorRadius: const Radius.circular(10),
         controller: widget.controller,
-        validator: (value) {
-          if (value == null || value.isEmpty || value == 'null') {
-            return '*required';
-          }
-          return null;
-        },
+        validator: widget.validator,
+
         style: widget.style,
         onChanged: widget.onChanged,
         obscureText: widget.obscureText,

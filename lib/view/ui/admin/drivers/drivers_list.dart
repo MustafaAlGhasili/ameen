@@ -1,6 +1,5 @@
 import 'package:ameen/model/driver.dart';
 import 'package:ameen/view/ui/admin/drivers/add_driver.dart';
-import 'package:ameen/view/ui/admin/drivers/driver_presoanl_info.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -68,9 +69,20 @@ class _UploadImageState extends State<UploadImage> {
       );
     } else {
       // Handle permission denied case (e.g., show a message)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please grant camera and storage permissions'),
+      Get.showSnackbar(
+        GetSnackBar(
+          borderRadius: 20,
+          margin: EdgeInsets.symmetric(
+              horizontal: Get.width * 0.045, vertical: Get.height * 0.015),
+          icon: Icon(
+            IconlyLight.info_circle,
+            color: Colors.white,
+            size: Get.width * 0.065,
+          ),
+          title: "Error",
+          message: "Please grant camera and storage permissions",
+          duration: const Duration(seconds: 3),
+          animationDuration: const Duration(milliseconds: 600),
         ),
       );
     }
@@ -82,49 +94,53 @@ class _UploadImageState extends State<UploadImage> {
     double height = MediaQuery.of(context).size.height;
 
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Stack(
         children: [
-          // Display selected image if available
-          _selectedImagePath != null
-              ? Image.file(
-                  File(_selectedImagePath!),
-                  // Adjust width and height as needed
-                  width: width,
-                  height: height * 0.3, // Adjust height as needed
-                )
-              : const SizedBox.shrink(),
+           Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Display selected image if available
+                    _selectedImagePath != null
+                        ? Image.file(
+                            File(_selectedImagePath!),
+                            // Adjust width and height as needed
+                            width: width,
+                            height: height * 0.3, // Adjust height as needed
+                          )
+                        : const SizedBox.shrink(),
 
-          // Your image upload icon
-          IconButton(
-            onPressed: () {
-              _showImageOptionsDialog(context);
-            },
-            icon: Icon(
-              Icons.add_a_photo,
-              size: width * 0.3, // Adjust the size as needed
-              color: const Color.fromARGB(255, 113, 65, 146),
-            ),
-          ),
-          SizedBox(height: height * 0.02), // Adjust spacing as needed
+                    // Your image upload icon
+                    IconButton(
+                      onPressed: () {
+                        _showImageOptionsDialog(context);
+                      },
+                      icon: Icon(
+                        Icons.add_a_photo,
+                        size: width * 0.3, // Adjust the size as needed
+                        color: const Color.fromARGB(255, 113, 65, 146),
+                      ),
+                    ),
+                    SizedBox(height: height * 0.02), // Adjust spacing as needed
 
-          // Your next button
-          ButtonModel(
-            onTap: () {
-              controller.step.value++;
-              // Get.to(() => const StudentInfo());
-            },
-            width: width * 0.9,
-            height: height * 0.06,
-            content: 'التالي',
-            rowMainAxisAlignment: MainAxisAlignment.center,
-            textAlign: TextAlign.center,
-            backColor: const Color.fromARGB(255, 113, 65, 146),
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: width * 0.05,
-            ),
-          ),
+                    // Your next button
+                    ButtonModel(
+                      onTap: () {
+                        controller.step.value++;
+                        // Get.to(() => const StudentInfo());
+                      },
+                      width: width * 0.9,
+                      height: height * 0.06,
+                      content: 'التالي',
+                      rowMainAxisAlignment: MainAxisAlignment.center,
+                      textAlign: TextAlign.center,
+                      backColor: const Color.fromARGB(255, 113, 65, 146),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: width * 0.05,
+                      ),
+                    ),
+                  ],
+                ),
         ],
       ),
     );

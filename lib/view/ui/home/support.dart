@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_faq/flutter_faq.dart';
-
-List userGuiedd = [
-  ""
-];
+import 'package:get/get.dart';
 
 final String userGuied = "تصميم واجهة التطبيق أمين شريك طفلك بالرحلة المدرسية"
     "تم تصميم واجهة التطبيق أمين شريك طفلك بالرحلة المدرسية لتلبية احتياجات الأهل والسائقين والمشرفين. ستجد هنا وصفًا مفصلاً للواجهات المختلفة في التطبيق ووظائفها."
@@ -54,67 +51,71 @@ class Support extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          foregroundColor: Colors.white,
-          title: const Text("الدعم",
-              style: TextStyle(
-                color: Colors.white,
-              )),
-          centerTitle: true,
-          backgroundColor: const Color.fromARGB(255, 114, 64, 164),
-        ),
-        body: Column(
-          children: [
-            Faq(
-              question: "الأسئلة الأكثر شيوعا",
-              answer:
-                  "كيف يمكنني تحميل التطبيق؟ توضح هذه السؤال الخطوات الأساسية لتنزيل وتثبيت التطبيق من متجر التطبيقات المعني (Google Play Store للأندرويد، مثلًا).",
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            foregroundColor: Colors.white,
+            title: const Text("الدعم",
+                style: TextStyle(
+                  color: Colors.white,
+                )),
+            centerTitle: true,
+            backgroundColor: const Color.fromARGB(255, 114, 64, 164),
+          ),
+          body: SizedBox(
+            height: height,
+            child: ListView.builder(
+              itemCount: question.length,
+              itemBuilder: (context, i) {
+                return Faq(question: question[i], answer: answer[i]);
+              },
             ),
-            Faq(
-              question: "عن أمين",
-              answer:
-                  "أمين هو تطبيق يعتمد على تقنية الذكاء الاصطناعي للتعرف على وجوه الطلاب وضمان سلامتهم أثناء ركوبهم وخروجهم من الحافلة المدرسية، لمنع حالات الاختناق. و يستخدم أمين نظام تتبع على الخريطة لمراقبة مسار الحافلة المدرسية التي يستقلها الطلاب، مما يوفر لأولياء الأمور الراحة والطمأنينة أثناء رحلة أبنائهم إلى المدرسة.",
-            ),
-            Faq(
-              question: "الشكاوى و المقترحات",
-              answer:
-                  "تواصل عبر الايميل amin@gmail.com \nالرقم الموحد 05xxxxxxxxx",
-            ),
-            Faq(question: "دليل المستخدم", answer: userGuied),
-          ],
-        ),
-      ),
+          )),
     );
   }
 }
 
-const Map<String, String> userGuideMap = {
-  // Welcome Screen
-  'appTitle': "أمين شريك طفلك بالرحلة المدرسية",
-  'welcomeScreenTitle': "أمين",
-  'welcomeScreenSubtitle': "شريك طفلك بالرحلة المدرسية",
+// Column(
+// children: [
+// Faq(
+// question: "الأسئلة الأكثر شيوعا",
+// answer:
+// "كيف يمكنني تحميل التطبيق؟ توضح هذه السؤال الخطوات الأساسية لتنزيل وتثبيت التطبيق من متجر التطبيقات المعني (Google Play Store للأندرويد، مثلًا).",
+// ),
+// Faq(
+// question: "عن أمين",
+// answer:
+// "أمين هو تطبيق يعتمد على تقنية الذكاء الاصطناعي للتعرف على وجوه الطلاب وضمان سلامتهم أثناء ركوبهم وخروجهم من الحافلة المدرسية، لمنع حالات الاختناق. و يستخدم أمين نظام تتبع على الخريطة لمراقبة مسار الحافلة المدرسية التي يستقلها الطلاب، مما يوفر لأولياء الأمور الراحة والطمأنينة أثناء رحلة أبنائهم إلى المدرسة.",
+// ),
+// Faq(
+// question: "الشكاوى و المقترحات",
+// answer:
+// "تواصل عبر الايميل amin@gmail.com \nالرقم الموحد 05xxxxxxxxx",
+// ),
+// SizedBox(
+// height: height * 0.6,
+// child: SingleChildScrollView(
+// child: Faq(question: "دليل المستخدم", answer: userGuied),
+// ),
+// ),
+// ],
+// ),
+List question = [
+  "الأسئلة الأكثر شيوعا",
+  "عن أمين",
+  "الشكاوى و المقترحات",
+  "دليل المستخدم"
+];
 
-  // Choose Role Screen
-  'chooseRoleScreenTitle': "اختر دورك",
-
-  // Parent Login Screen
-  'parentLoginScreenTitle': "تسجيل الدخول (أولياء الأمور)",
-  'parentLoginEmailLabel': "البريد الإلكتروني",
-  'parentLoginPasswordLabel': "كلمة المرور",
-  'parentLoginForgotPasswordLabel': "نسيت كلمة المرور؟",
-
-  // ... (similar structure for other sections)
-
-  // Supervisor Add Driver Screen (example ending)
-  'supervisorDriverName': "اسم السائق",
-};
-
-// Accessing values:
-String? welcomeTitle = userGuideMap['welcomeScreenTitle'];
+List answer = [
+  "كيف يمكنني تحميل التطبيق؟ توضح هذه السؤال الخطوات الأساسية لتنزيل وتثبيت التطبيق من متجر التطبيقات المعني (Google Play Store للأندرويد، مثلًا).",
+  "أمين هو تطبيق يعتمد على تقنية الذكاء الاصطناعي للتعرف على وجوه الطلاب وضمان سلامتهم أثناء ركوبهم وخروجهم من الحافلة المدرسية، لمنع حالات الاختناق. و يستخدم أمين نظام تتبع على الخريطة لمراقبة مسار الحافلة المدرسية التي يستقلها الطلاب، مما يوفر لأولياء الأمور الراحة والطمأنينة أثناء رحلة أبنائهم إلى المدرسة.",
+      "تواصل عبر الايميل amin@gmail.com \nالرقم الموحد 05xxxxxxxxx",
+  userGuied,
+];
 
 class Faq extends StatelessWidget {
   final String question;

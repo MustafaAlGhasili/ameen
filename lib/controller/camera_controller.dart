@@ -18,6 +18,8 @@ class CamController extends GetxController {
   Uint8List? _imageBytes;
   final ImagePicker _imagePicker = ImagePicker();
   late String fullName;
+  double? imgUploaded = 0.0;
+
 
   bool _isLoading = false; // Add this variable
   bool get isLoading => _isLoading;
@@ -73,9 +75,13 @@ class CamController extends GetxController {
         'User-Agent': 'ClinicPlush'
       });
       final response = await Dio().put(url,
-          data: Stream.fromIterable(image.map((e) => [e])), options: options);
+        data: Stream.fromIterable(image.map((e) => [e])),
+        options: options,
+        onSendProgress: (count, total) {
+          imgUploaded = count / total;
+        },);
       print(response);
-      Get.back(closeOverlays: true);
+      navigator!.pop();
 
       if (response.statusCode == 200) {
         // Image uploaded successfully.
@@ -121,8 +127,8 @@ class CamController extends GetxController {
   Future<XFile?> capturePhoto() async {
     Get.dialog(const Center(
         child: CircularProgressIndicator(
-      color: Colors.white,
-    )));
+          color: Colors.white,
+        )));
     if (cameraController.value.isTakingPicture) {
       return null;
     }
@@ -135,6 +141,7 @@ class CamController extends GetxController {
       return null;
     }
   }
+
   Future<bool> requestPermission() async {
     final status = await Permission.storage.request();
     await Permission.camera.request();
@@ -156,8 +163,8 @@ class CamController extends GetxController {
     return 502;
   }
 
-  Future<int> takePhotoFromCamera(
-      ImageSource imageSource, String fullName) async {
+  Future<int> takePhotoFromCamera(ImageSource imageSource,
+      String fullName) async {
     setLoading(true); // Set loading state to true before processing
 
     print("Full Name");
