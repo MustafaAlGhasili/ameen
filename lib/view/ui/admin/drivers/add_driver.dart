@@ -25,7 +25,7 @@ Future<void> _selectDate(BuildContext context) async {
   );
   if (selected != null && selected != DateTime.now()) {
     // controller.selectedDate = selected;
-    controller.driverBDate.value =
+    controller.bDate.text =
         "${selected.year}-${selected.month}-${selected.day}";
     print(controller.driverBDate.value);
   }
@@ -99,8 +99,8 @@ class _AddDriverState extends State<AddDriver> {
       );
     }
   }
-  final GlobalKey<FormState> key = GlobalKey<FormState>();
 
+  final GlobalKey<FormState> key = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -155,28 +155,23 @@ class _AddDriverState extends State<AddDriver> {
                     text: "رقم الاحوال",
                   ),
                 ),
-                Obx(
-                  () => Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: width * 0.03, vertical: height * 0.02),
-                    child: TextFieldModel(
-                      onChanged: (val) {
-                        controller.driverBDate.value = val;
-                      },
-                      sufIcon: IconButton(
-                          onPressed: () => _selectDate(context),
-                          icon: Icon(
-                            IconlyLight.calendar,
-                            size: width * 0.055,
-                          )),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.02),
+                  child: TextFieldModel(
+                    controller: controller.bDate,
 
-                      keyboardType: TextInputType.datetime,
-                      text: controller.driverBDate.value.isEmpty
-                          ? "تاريخ الميلاد"
-                          : controller.driverBDate.value,
-                      // vPadding: height * 0.035,
-                      obscureText: false,
-                    ),
+                    sufIcon: IconButton(
+                        onPressed: () => _selectDate(context),
+                        icon: Icon(
+                          IconlyLight.calendar,
+                          size: width * 0.055,
+                        )),
+
+                    keyboardType: TextInputType.datetime,
+                    text: "تاريخ الميلاد",
+                    // vPadding: height * 0.035,
+                    obscureText: false,
                   ),
                 ),
                 Padding(
@@ -229,7 +224,7 @@ class _AddDriverState extends State<AddDriver> {
                 ),
                 ButtonModel(
                   onTap: () {
-                    if(key.currentState!.validate()){
+                    if (key.currentState!.validate()) {
                       DatabaseHelper dbHelper = DatabaseHelper();
                       dbHelper.save(
                           DriverModel(
@@ -246,11 +241,9 @@ class _AddDriverState extends State<AddDriver> {
                           'drivers');
                       Get.back();
                       controller.clearData();
-                    }
-                    else{
+                    } else {
                       print("error");
                     }
-
                   },
                   content: "حفط",
                   rowMainAxisAlignment: MainAxisAlignment.center,

@@ -1,6 +1,8 @@
+import 'package:ameen/controller/sign_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../controller/home_controller.dart';
 import 'home_widgets.dart';
 
@@ -10,6 +12,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeController controller = HomeController();
+    SignController signController = Get.find();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -37,7 +40,9 @@ class Home extends StatelessWidget {
               child: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
                 currentIndex: controller.bottomIndex.value,
-                onTap: (value) {
+                onTap: (value) async{
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  print(prefs.getString('parent'));
                   controller.bottomIndex.value = value;
                 },
                 items: const [

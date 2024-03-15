@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class AdminController extends GetxController {
@@ -14,6 +14,8 @@ class AdminController extends GetxController {
   RxString selectedBus = ''.obs;
   RxString driverBlood = ''.obs;
   RxString driverBDate = ''.obs;
+
+  TextEditingController bDate= TextEditingController();
 
   void clearData() {
     driverFName = '';

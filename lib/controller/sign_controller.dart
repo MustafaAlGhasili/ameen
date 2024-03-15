@@ -4,6 +4,7 @@ import 'package:ameen/model/parent.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_location_picker/google_map_location_picker.dart';
@@ -15,7 +16,8 @@ import '../services/LocalStorageService.dart';
 import '../utils/DatabaseHelper.dart';
 
 class SignController extends GetxController {
-  RxBool visibility = true.obs;
+  RxBool visibility = false.obs;
+
 
   final parentFName = TextEditingController();
   final address = TextEditingController();
@@ -104,26 +106,28 @@ class SignController extends GetxController {
     return status == PermissionStatus.granted;
   }
 
+  bool mapSelected = false;
+
   Future<void> getLocation(BuildContext context) async {
     if (await _requestPermission()) {
       LocationResult? result = await showLocationPicker(
-        context,
-        "AIzaSyBlHVCC3b6bsDxyJAPL7rsdkDarJYd-SeI",
-        initialCenter: const LatLng(40.7128, -74.0060),
-        layersButtonEnabled: true,
-        desiredAccuracy: LocationAccuracy.bestForNavigation,
-        language: 'ar',
-        countries: ['SA'],
-        requiredGPS: true,
-        searchBarBoxDecoration:
-            null, // Set searchBarBoxDecoration to null to hide the search bar
-      );
+          context, "AIzaSyBlHVCC3b6bsDxyJAPL7rsdkDarJYd-SeI",
+          initialCenter: const LatLng(40.7128, -74.0060),
+          layersButtonEnabled: true,
+          desiredAccuracy: LocationAccuracy.bestForNavigation,
+          language: 'ar',
+          countries: ['SA'],
+          requiredGPS: true,
+          searchBarBoxDecoration: null,
+          // Set searchBarBoxDecoration to null to hide the search bar
+          appBarColor: Colors.white);
 
       if (result != null) {
         print("Selected location:");
         print("Address: ${result.address}");
         print("LatLng: ${result.latLng.latitude}, ${result.latLng.longitude}");
-
+        mapSelected = true;
+        update();
         latitude.value = result.latLng.latitude;
         longitude.value = result.latLng.longitude;
       } else {

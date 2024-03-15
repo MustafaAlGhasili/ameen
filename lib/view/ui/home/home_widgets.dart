@@ -1,7 +1,9 @@
 import 'package:ameen/controller/home_controller.dart';
+import 'package:ameen/view/ui/admin/students/students_list.dart';
 import 'package:ameen/view/ui/home/settings.dart';
 import 'package:ameen/view/ui/home/student_info.dart';
 import 'package:ameen/view/ui/sign/start.dart';
+import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 import 'package:ameen/view/ui/widget/custom_divider.dart';
 import 'package:ameen/view/ui/widget/custom_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -379,7 +381,7 @@ class ProfilePage extends StatelessWidget {
                 width: width * 0.9,
                 height: height * 0.07,
                 onTap: () {
-                  Get.to(() => const StudentInfo());
+                  Get.to(() => StudentInfo());
                 },
                 backColor: const Color.fromARGB(255, 113, 65, 146),
                 content: "حسابي",
@@ -394,7 +396,11 @@ class ProfilePage extends StatelessWidget {
                 rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
                 width: width * 0.9,
                 height: height * 0.07,
-                onTap: () {},
+                onTap: () {
+                  Get.dialog(
+                    CustomDialog(buttonText: "buttonText", content: "content"),
+                  );
+                },
                 backColor: const Color.fromARGB(255, 113, 65, 146),
                 content: "اشعار غياب",
                 textAlign: TextAlign.start,
@@ -424,8 +430,14 @@ class ProfilePage extends StatelessWidget {
                 width: width * 0.9,
                 height: height * 0.07,
                 onTap: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Get.to(() => Start());
+                  Get.dialog(CustomDialog(
+                    buttonText: "حسنا",
+                    content: "هل تريد تسجيل الخروج",
+                    buttonOnTap: () async {
+                      await FirebaseAuth.instance.signOut();
+                      Get.offAll(() => const Start());
+                    },
+                  ));
                 },
                 backColor: Colors.red,
                 content: "تسجيل خروج",

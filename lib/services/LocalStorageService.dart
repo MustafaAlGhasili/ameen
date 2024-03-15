@@ -17,7 +17,7 @@ class LocalStorageService {
   static Future<ParentModel?> getParent() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? parentString = prefs.getString(parentKey);
-
+    print('object $parentString');
     if (parentString != null && parentString.isNotEmpty) {
       Map<String, dynamic> parentMap =
           Map.castFrom<dynamic, dynamic, String, dynamic>(

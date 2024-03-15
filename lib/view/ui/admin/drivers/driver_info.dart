@@ -100,9 +100,7 @@ class DriverInfo extends StatelessWidget {
                       },
                       buttonText: "نعم",
                       content: "هل متأكد من حذف الحساب؟",
-                      onClose: () {
-                        Get.back(); // Close the dialog
-                      },
+
                     ));
                   },
                   padding: 10,

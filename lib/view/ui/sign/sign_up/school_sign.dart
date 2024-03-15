@@ -1,8 +1,10 @@
+import 'package:ameen/controller/sign_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../../widget/button_model.dart';
 import '../../widget/text_field.dart';
 import 'sign_up.dart';
-
 
 class School extends StatelessWidget {
   const School({super.key});
@@ -33,8 +35,7 @@ class School extends StatelessWidget {
               height: height * 0.07,
               child: FittedBox(
                 fit: BoxFit.fill,
-                child:
-                DropdownMenu(
+                child: DropdownMenu(
                   inputDecorationTheme: InputDecorationTheme(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(13),
@@ -93,24 +94,50 @@ class School extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: height * 0.05,
+              height: height * 0.04,
             ),
-            ButtonModel(
-              onTap: () {
-                controller.getLocation(context);
-              },
-              icon: Icons.map,
-              width: width * 0.9,
-              height: height * 0.06,
-              content: 'اختر الموقع على الخريطة',
-              rowMainAxisAlignment: MainAxisAlignment.center,
-              textAlign: TextAlign.center,
-              backColor: const Color.fromARGB(255, 113, 65, 146),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: width * 0.05,
+             GetBuilder<SignController>(
+
+                builder: (controller) {
+                  controller.update();
+                  if (controller.mapSelected) {
+                    return ButtonModel(
+                      onTap: () {
+                        controller.getLocation(context);
+                      },
+                      icon: Icons.map,
+                      width: width * 0.9,
+                      height: height * 0.07,
+                      content: 'تعديل الموقع على الخريطة',
+                      rowMainAxisAlignment: MainAxisAlignment.center,
+                      textAlign: TextAlign.center,
+                      backColor: Colors.green,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: width * 0.05,
+                      ),
+                    );
+                  } else {
+                    return ButtonModel(
+                      onTap: () {
+                        controller.getLocation(context);
+                      },
+                      icon: Icons.map,
+                      width: width * 0.9,
+                      height: height * 0.07,
+                      content: 'اختر الموقع على الخريطة',
+                      rowMainAxisAlignment: MainAxisAlignment.center,
+                      textAlign: TextAlign.center,
+                      backColor: const Color.fromARGB(255, 113, 65, 146),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: width * 0.05,
+                      ),
+                    );
+                  }
+                },
               ),
-            ),
+
             TextFieldModel(
               controller: controller.address,
               style: TextStyle(height: height * 0.0027),

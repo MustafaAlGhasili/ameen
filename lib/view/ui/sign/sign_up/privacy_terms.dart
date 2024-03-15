@@ -1,5 +1,8 @@
+import 'package:ameen/controller/sign_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../model/parent.dart';
+import '../../../../services/LocalStorageService.dart';
 import '../../home/home.dart';
 import 'sign_up.dart';
 
@@ -10,6 +13,8 @@ class PrivacyTerms extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    SignController controller = Get.find();
+
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(width * 0.03),
@@ -66,11 +71,24 @@ class PrivacyTerms extends StatelessWidget {
                 onPressed: controller.isAccepted.value
                     ? () async {
                         final result = await controller.registerParent();
+                        final parent = ParentModel(
+                          id: '123',
+                          fName: controller.parentFName.text,
+                          lName: controller.parentLName.text,
+                          email: controller.parentEmail.text,
+                          isEnabled: false,
+                          nationalId: controller.parentNationalId.text,
+                          phone: controller.parentPhone.text,
+                        );
+                        LocalStorageService.saveParent(parent);
+                        print("object $parent");
+
 
                         print("result is $result");
-                        if (result) {
-                          Get.offAll(() => const Home());
-                        }
+                        // if (result) {
+
+                          Get.to(() => const Home());
+                        // }
                       }
                     : null,
                 // Set onPressed to null if checkbox is not checked
