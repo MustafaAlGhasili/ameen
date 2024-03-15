@@ -143,6 +143,11 @@ class SignController extends GetxController {
   //   update(); // Update UI when loading state changes
   // }
 
+  Future<void> testDBQuery() async {
+    print("testDBQuery Called");
+    await _databaseHelper.getStudentsOfDisabledParents();
+  }
+
   Future<bool> registerParent() async {
     _isLoading(true);
     try {

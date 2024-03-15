@@ -241,7 +241,7 @@ class _AddDriverState extends State<AddDriver> {
                             driverBDate: controller.driverBDate.value,
                             blood: controller.driverBlood.value,
                             driverLicence: controller.driverLicence,
-                            busNumber: controller.driverBussNo,
+                            busId: controller.driverBussNo,
                           ),
                           'drivers');
                       Get.back();

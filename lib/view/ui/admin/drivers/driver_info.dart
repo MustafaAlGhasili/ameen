@@ -58,7 +58,9 @@ class DriverInfo extends StatelessWidget {
               ),
               ButtonModel(
                   onTap: () {
-                    Get.to(() => const StudentWithBusName());
+                    Get.to(() => StudentWithBusName(
+                          busId: driver.busId,
+                        ));
                   },
                   padding: 10,
                   hMargin: width * 0.05,
@@ -88,7 +90,8 @@ class DriverInfo extends StatelessWidget {
                 height: height * 0.04,
               ),
               ButtonModel(
-                  onTap: () {
+                  onTap: () async {
+                    await _databaseHelper.testRef();
                     Get.dialog(CustomDialog(
                       buttonOnTap: () async {
                         await _databaseHelper.deleteById(driver.id, "drivers");

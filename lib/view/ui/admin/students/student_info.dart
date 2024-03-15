@@ -143,7 +143,10 @@ class StudentDetails extends StatelessWidget {
                   ),
                   ButtonModel(
                     onTap: () {
-                      Get.dialog(const CustomDialog(
+                      Get.dialog(CustomDialog(
+                          onClose: () {
+                            Get.back();
+                          },
                           buttonText: "نعم",
                           content: "هل متأكد من ازاله الطالب؟"));
                     },

@@ -154,6 +154,25 @@ class DatabaseHelper {
     }
   }
 
+  Future<void> testRef() async {
+    try {
+
+      DataSnapshot snapshot =
+          await studentsRef.orderByChild('busId').equalTo('W11').get();
+      print("Student Data Try:");
+
+      if (snapshot.exists) {
+        print("Data:");
+      } else {
+        print("No Data");
+        return null;
+      }
+    } catch (error) {
+      print('Error getting student by parent ID: $error');
+      return null;
+    }
+  }
+
   Future<void> deleteById(String id, String refName) async {
     try {
       DatabaseReference modelRef = _rootRef.child(refName).child(id);
@@ -165,7 +184,6 @@ class DatabaseHelper {
       }
       await modelRef.remove();
       print('Item with ID: $id deleted from $refName');
-
     } catch (error) {
       print('Error deleting item with ID $id from $refName: $error');
     }
@@ -178,6 +196,7 @@ class DatabaseHelper {
           .orderByChild('busId')
           .equalTo(busId)
           .get();
+
       return snapshot.children
           .map((child) => StudentModel.fromSnapshot(child))
           .toList();

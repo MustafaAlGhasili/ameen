@@ -137,7 +137,7 @@ class DriverPInfo extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: Colors.black)),
-                  child: Text(driver.busNumber),
+                  child: Text(driver.busId),
                 ),
               ],
             ),

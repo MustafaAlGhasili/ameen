@@ -12,7 +12,7 @@ class DriverModel implements ToMapConvertible {
   final String driverBDate;
   final String blood;
   final String driverLicence;
-  final String busNumber;
+  final String busId;
 
   DriverModel({
      this.id="",
@@ -24,7 +24,7 @@ class DriverModel implements ToMapConvertible {
     required this.driverBDate,
     required this.blood,
     required this.driverLicence,
-    required this.busNumber,
+    required this.busId,
   });
 
   @override
@@ -39,7 +39,7 @@ class DriverModel implements ToMapConvertible {
       'driverBDate': driverBDate,
       'blood': blood,
       'driverLicence': driverLicence,
-      'busNumber': busNumber,
+      'busId': busId,
     };
   }
 
@@ -55,7 +55,7 @@ class DriverModel implements ToMapConvertible {
       driverBDate: data['driverBDate'] as String,
       blood: data['blood'] as String,
       driverLicence: data['driverLicence'] as String,
-      busNumber: data['busNumber'] as String,
+      busId: data['busId'] as String,
     );
   }
 
@@ -70,7 +70,7 @@ class DriverModel implements ToMapConvertible {
       driverBDate: map['driverBDate'] as String,
       blood: map['blood'] as String,
       driverLicence: map['driverLicence'] as String,
-      busNumber: map['busNumber'] as String,
+      busId: map['busId'] as String,
     );
   }
 }

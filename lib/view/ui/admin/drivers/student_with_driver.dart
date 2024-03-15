@@ -1,9 +1,17 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../../../model/student.dart';
+import '../../../../utils/DatabaseHelper.dart';
 import '../../widget/button_model.dart';
+import '../students/student_info.dart';
 
 class StudentWithBusName extends StatelessWidget {
-  const StudentWithBusName({super.key});
+  final String busId;
+
+  const StudentWithBusName({Key? key, required this.busId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +26,7 @@ class StudentWithBusName extends StatelessWidget {
           backgroundColor: const Color.fromARGB(255, 113, 65, 146),
           foregroundColor: Colors.white,
           centerTitle: true,
-          title: const Text("B1"),
+          title:  Text(busId),
         ),
         body: Column(
           children: [
@@ -27,16 +35,20 @@ class StudentWithBusName extends StatelessWidget {
               child: Container(
                 height: height * 0.7,
                 padding: EdgeInsets.only(top: height * 0.05),
-                child: ListView.builder(
-                  itemCount: drivers.length,
-                  itemBuilder: (context, i) {
-                    return ButtonModel(
+                child: FirebaseAnimatedList(
+                  query: DatabaseHelper.studentsRef.orderByChild('busId').equalTo(busId),
+                  itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                      Animation<double> animation, int index) {
+                    StudentModel student =
+                    StudentModel.fromSnapshot(snapshot);
+
+                      return ButtonModel(
                         onTap: () {
-                          // Get.to(() => DriverInfo(driver: drivers[i]));
+                          Get.to(() => StudentDetails(student: student));
                         },
-                        busName: drivers[i]["busName"]!,
+                        busName: student.busId ?? student.schoolId,
                         bus: true,
-                        imgPath: drivers[i]['img']!,
+                        imgPath: "img/st1.png",
                         padding: 10,
                         hMargin: width * 0.05,
                         vMargin: height * 0.02,
@@ -45,9 +57,12 @@ class StudentWithBusName extends StatelessWidget {
                         backColor: const Color.fromARGB(255, 113, 65, 146),
                         style: TextStyle(
                             color: Colors.white, fontSize: width * 0.05),
-                        // textAlign: TextAlign.center,
-                        content: drivers[i]["name"]!);
+                        content: '${student.fName} ${student.lName}',
+                      );
+                    return SizedBox();
                   },
+                  defaultChild:
+                  const Center(child: CircularProgressIndicator()),
                 ),
               ),
             ),
