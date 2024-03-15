@@ -62,6 +62,7 @@
 //   }
 // }
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ButtonModel extends StatelessWidget {
@@ -72,7 +73,7 @@ class ButtonModel extends StatelessWidget {
   final Color? backColor;
   final void Function()? onTap;
   final TextAlign? textAlign;
-  final String imgPath;
+  final String imgUrl;
   final double? preIconSize;
   final double? sufIconSize;
   final double vMargin;
@@ -103,7 +104,7 @@ class ButtonModel extends StatelessWidget {
       this.rowMainAxisAlignment = MainAxisAlignment.start,
       this.padding = 0.0,
       this.sufIconSize,
-      this.imgPath = '',
+      this.imgUrl = '',
       this.busName = '',
       this.bus = false,
       this.icon,
@@ -127,12 +128,26 @@ class ButtonModel extends StatelessWidget {
             child: Row(
               mainAxisAlignment: rowMainAxisAlignment,
               children: [
-                imgPath.isEmpty
+                imgUrl.isEmpty
                     ? const Text('')
-                    : CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.white,
-                        child: Image(image: AssetImage(imgPath))),
+                :CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.white,
+                  child: CachedNetworkImage(
+                    imageUrl: imgUrl,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const Image(image: AssetImage("img/st1.png")),
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.all(contentPdding),
                   child: Text(

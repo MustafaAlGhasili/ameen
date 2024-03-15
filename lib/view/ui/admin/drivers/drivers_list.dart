@@ -62,7 +62,7 @@ class DriversList extends StatelessWidget {
                           Get.to(() => DriverInfo(driver: driver));
                         },
                         bus: true,
-                        imgPath: "img/st1.png",
+                        imgUrl: "img/st1.png",
                         padding: 10,
                         hMargin: width * 0.05,
                         vMargin: height * 0.02,
@@ -92,7 +92,7 @@ class DriversList extends StatelessWidget {
             //             },
             //             busName: drivers[i]["busName"]!,
             //             bus: true,
-            //             imgPath: drivers[i]['img']!,
+            //             imgUrl: drivers[i]['img']!,
             //             padding: 10,
             //             hMargin: width * 0.05,
             //             vMargin: height * 0.02,

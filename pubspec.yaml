@@ -61,6 +61,7 @@ dependencies:
   http: ^0.13.6
 
   url_launcher: ^6.2.5
+  cached_network_image: ^3.3.1
 
 
 dev_dependencies:

@@ -12,6 +12,7 @@ class Parent extends StatelessWidget {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     DatabaseHelper _databaseHelper = DatabaseHelper();
+    controller.testDBQuery();
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;

@@ -8,7 +8,7 @@ class DriverButtonModel extends StatelessWidget {
   final Color? backColor;
   final void Function()? onTap;
   final TextAlign? textAlign;
-  final String imgPath;
+  final String imgUrl;
   final double? preIconSize;
   final double? sufIconSize;
   final double vMargin;
@@ -35,7 +35,7 @@ class DriverButtonModel extends StatelessWidget {
       this.rowMainAxisAlignment = MainAxisAlignment.start,
       this.padding = 0.0,
       this.sufIconSize,
-      this.imgPath = '',
+      this.imgUrl = '',
       this.busName = '',
       this.bus = false});
 
@@ -55,12 +55,12 @@ class DriverButtonModel extends StatelessWidget {
             child: Row(
               mainAxisAlignment: rowMainAxisAlignment,
               children: [
-                imgPath.isEmpty
+                imgUrl.isEmpty
                     ? const Text('')
                     : CircleAvatar(
                         radius: 25,
                         backgroundColor: Colors.white,
-                        child: Image(image: AssetImage(imgPath))),
+                        child: Image(image: AssetImage(imgUrl))),
                 Text(
                   textAlign: TextAlign.center,
                   content,

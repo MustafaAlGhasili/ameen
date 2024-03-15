@@ -48,7 +48,7 @@ class StudentWithBusName extends StatelessWidget {
                         },
                         busName: student.busId ?? student.schoolId,
                         bus: true,
-                        imgPath: "img/st1.png",
+                        imgUrl: student.imgUrl ?? " ",
                         padding: 10,
                         hMargin: width * 0.05,
                         vMargin: height * 0.02,
