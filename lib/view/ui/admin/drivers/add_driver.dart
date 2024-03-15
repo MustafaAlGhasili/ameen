@@ -46,7 +46,7 @@ class _AddDriverState extends State<AddDriver> {
   Future<void> _handleCameraPick(
       ImageSource imageSource, String fullName) async {
     final response =
-        await camController.takePhotoFromCamera(imageSource, fullName);
+        await camController.takeDriverPhotoFromCamera(imageSource);
     setState(() {
       _selectedImagePath = camController.picture.path;
     });

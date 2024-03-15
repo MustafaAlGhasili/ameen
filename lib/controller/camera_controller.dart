@@ -118,6 +118,52 @@ class CamController extends GetxController {
     }
   }
 
+  Future<int> uploadGeneralPhoto({required File file}) async {
+    String fileExtension = extension(file.path);
+
+    String fileName =
+        "driver_photo_${DateTime.now().millisecondsSinceEpoch}$fileExtension";
+    print('File Name: $fileName');
+
+    final String url =
+        'https://wyr5ba7f7h.execute-api.us-east-1.amazonaws.com/dev/general-upload/$fileName';
+
+    try {
+      Uint8List image = File(file.path).readAsBytesSync();
+
+      Options options = Options(contentType: 'image/jpg', headers: {
+        'Accept': "*/*",
+        'Content-Length': image.length,
+        'Connection': 'keep-alive',
+        'User-Agent': 'ClinicPlush'
+      });
+      final response = await Dio().put(url,
+          data: Stream.fromIterable(image.map((e) => [e])), options: options);
+      print(response);
+
+      if (response.statusCode == 200) {
+        print('Image uploaded successfully!');
+        return 200;
+      } else {
+        print('Failed to upload image: ${response.statusMessage}');
+      }
+      return 500;
+    } on DioException catch (error) {
+      print("object ${error.message}");
+      if (error.message!
+          .contains("The connection errored: Failed host lookup:")) {
+        Get.snackbar('Error', "pleas connect to the internet",
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+            animationDuration: const Duration(milliseconds: 700),
+            backgroundColor: Colors.black);
+      }
+      rethrow;
+    } catch (e) {
+      throw 'error is ${e.toString()}';
+    }
+  }
+
   Future<XFile?> capturePhoto() async {
     Get.dialog(const Center(
         child: CircularProgressIndicator(
@@ -135,21 +181,23 @@ class CamController extends GetxController {
       return null;
     }
   }
+
   Future<bool> requestPermission() async {
     final status = await Permission.storage.request();
     await Permission.camera.request();
     return status == PermissionStatus.granted;
   }
 
-  Future<int> onTakePhotoPressed() async {
+  Future<int> onTakePhotoPressed(int? type) async {
     final xFile = await capturePhoto();
     if (xFile != null) {
       if (xFile.path.isNotEmpty) {
         picture = xFile;
         File file = File(picture.path);
+        if (type != null && type == 2) {
+          return uploadGeneralPhoto(file: file);
+        }
         return registerStudentFace(file: file);
-
-        print("pathh =========${picture.path}");
       }
       return 501;
     }
@@ -178,6 +226,30 @@ class CamController extends GetxController {
           return registerStudentFace(file: file);
         }
         print("pathh =========${picture.path}");
+      }
+      return 505;
+    } catch (e) {
+      print("Error while picking image from camera: $e");
+      return 504; // Return null in case of errors
+    } finally {
+      setLoading(false); // Set loading state to false after processing
+    }
+  }
+
+  Future<int> takeDriverPhotoFromCamera(ImageSource imageSource) async {
+    setLoading(true);
+
+    try {
+      final xFile = await _imagePicker.pickImage(
+        source: imageSource,
+      );
+
+      if (xFile != null) {
+        if (xFile.path.isNotEmpty) {
+          picture = xFile;
+          File file = File(picture.path);
+          return uploadGeneralPhoto(file: file);
+        }
       }
       return 505;
     } catch (e) {
