@@ -90,6 +90,7 @@ class Parent extends StatelessWidget {
                 height: height * 0.035,
               ),
               Obx(() => TextFieldModel(
+                controller: controller.parenPassword,
                   validator: (val) => validation.passwordValidator(val),
                   obscureText: !controller.visibility.value,
                   text: "ادخل كلمة المرور",

@@ -162,6 +162,8 @@ class SignController extends GetxController {
     try {
       print(parentFName.text);
       print(parentLName.text);
+      print(parentEmail.text);
+      print(parenPassword.text);
       String? parentId = await createUserWithEmailAndPassword(
           parentEmail.text, parenPassword.text);
       final parent = ParentModel(
