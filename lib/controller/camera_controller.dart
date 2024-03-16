@@ -20,6 +20,10 @@ class CamController extends GetxController {
   late String fullName;
   double? imgUploaded = 0.0;
 
+  RxString fileNameValue = ''.obs;
+  String get fileName => fileNameValue.value;
+
+
 
   bool _isLoading = false; // Add this variable
   bool get isLoading => _isLoading;
@@ -56,6 +60,7 @@ class CamController extends GetxController {
     String fileName = "test${Random().nextInt(1000)}$fileExtension";
     fileName = '${this.fullName}$fileExtension';
     print('File Name: $fileName');
+    fileNameValue.value = fileName;
 
     String studentName = "Moha_Hasan_2444";
     final String url =
@@ -130,6 +135,7 @@ class CamController extends GetxController {
     String fileName =
         "driver_photo_${DateTime.now().millisecondsSinceEpoch}$fileExtension";
     print('File Name: $fileName');
+    fileNameValue.value = fileName;
 
     final String url =
         'https://wyr5ba7f7h.execute-api.us-east-1.amazonaws.com/dev/general-upload/$fileName';

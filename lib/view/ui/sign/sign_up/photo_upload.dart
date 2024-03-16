@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../../controller/camera_controller.dart';
-import '../../../../utils/constants.dart';
 import '../../widget/button_model.dart';
 import 'sign_up.dart';
 import 'dart:io';
@@ -34,7 +33,7 @@ class _UploadImageState extends State<UploadImage> {
     });
 
     final response =
-        await camController.takePhotoFromCamera(imageSource, fullName);
+    await camController.takePhotoFromCamera(imageSource, fullName);
     setState(() {
       _selectedImagePath = camController.picture.path;
       _isLoading = false;
@@ -113,35 +112,23 @@ class _UploadImageState extends State<UploadImage> {
     return Center(
       child: Stack(
         children: [
-          _isLoading
-              ? Container(
-                  height: height,
-                  color: Colors.black54,
-                )
-              : const SizedBox(),
-          _isLoading
-              ? const LinearProgressIndicator(
-                  backgroundColor:Colors.white,
-                  minHeight: 6,
-                  color:  PRIMARY_COLOR,
-                )
-              : SizedBox(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _selectedImagePath != null
                   ? Image.file(
-                      File(_selectedImagePath!),
-                      width: width,
-                      height: height * 0.3,
-                    )
+                File(_selectedImagePath!),
+                width: width,
+                height: height * 0.3,
+              )
                   : const SizedBox.shrink(),
+
               IconButton(
                 onPressed: _isLoading
                     ? null
                     : () {
-                        _showImageOptionsDialog(context);
-                      },
+                  _showImageOptionsDialog(context);
+                },
                 icon: Icon(
                   Icons.add_a_photo,
                   size: width * 0.3,
@@ -149,13 +136,14 @@ class _UploadImageState extends State<UploadImage> {
                 ),
               ),
               SizedBox(height: height * 0.02),
+
+              _isLoading
+                  ? CircularProgressIndicator()
+                  : SizedBox.shrink(),
+
               ButtonModel(
                 onTap: () {
                   // Handle next button tap
-                  if(_selectedImagePath != null){
-                    controller.step.value++;
-
-                  }
                 },
                 width: width * 0.9,
                 height: height * 0.06,

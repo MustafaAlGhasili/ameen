@@ -1,8 +1,8 @@
 // import 'package:camera/camera.dart';
 import 'package:ameen/model/admin.dart';
 import 'package:ameen/model/parent.dart';
+import 'package:ameen/utils/constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,10 +14,10 @@ import '../model/school.dart';
 import '../model/student.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/DatabaseHelper.dart';
+import 'camera_controller.dart';
 
 class SignController extends GetxController {
   RxBool visibility = false.obs;
-
 
   final parentFName = TextEditingController();
   final address = TextEditingController();
@@ -82,6 +82,11 @@ class SignController extends GetxController {
   RxBool isAccepted = false.obs;
   late DatabaseHelper _databaseHelper;
 
+  RxString fileNameValue = ''.obs;
+  String get fileName => fileNameValue.value;
+
+
+
   late FirebaseAuth _auth;
 
   changeVisibility() {
@@ -98,7 +103,7 @@ class SignController extends GetxController {
       };
     // errorController = StreamController<ErrorAnimationType>();
     super.onInit();
-    //addSchoolsToMenu();
+    addSchoolsToMenu();
   }
 
   Future<bool> _requestPermission() async {
@@ -172,6 +177,9 @@ class SignController extends GetxController {
 
       await _databaseHelper.saveParent(parent, "parents");
 
+
+      String imgUrl = Constants.STUDENT_IMAGES_URL + fileNameValue.value;
+
       final student = StudentModel(
         fName: studentFName.text,
         lName: studentLName.text,
@@ -186,10 +194,11 @@ class SignController extends GetxController {
         latitude: latitude.value,
         longitude: longitude.value,
         address: address.text,
+        imgUrl: imgUrl,
       );
 
       print("Student");
-      print("Student school:" + student.schoolId);
+      print("Student school:" + student.imgUrl!);
       print(student.grade);
       print(student.toMap());
 
@@ -301,6 +310,7 @@ class SignController extends GetxController {
 
   Future<String?> createUserWithEmailAndPassword(
       String email, String password) async {
+    print("Started Creating New User ");
     try {
       final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
