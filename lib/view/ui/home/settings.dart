@@ -1,4 +1,5 @@
 import 'package:ameen/controller/home_controller.dart';
+import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/home/support.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +20,12 @@ class Settings extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          backgroundColor: PRIMARY_COLOR,
           shadowColor: Colors.black,
           elevation: 2,
+          foregroundColor: Colors.white,
           centerTitle: true,
-          title: Text("الإعدادات", style: TextStyle(fontSize: width * 0.05)),
+          title: Text("الإعدادات", style: TextStyle(fontSize: width * 0.05, color: Colors.white)),
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: height * 0.05),

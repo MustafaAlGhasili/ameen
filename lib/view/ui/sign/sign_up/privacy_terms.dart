@@ -86,7 +86,7 @@ class PrivacyTerms extends StatelessWidget {
 
                         print("result is $result");
                         // if (result) {
-
+                        controller.createUserWithEmailAndPassword("mustakafa.733@gmail.com", '123456');
                           Get.to(() => const Home());
                         // }
                       }

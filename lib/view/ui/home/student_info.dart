@@ -1,11 +1,5 @@
-import 'dart:convert';
-
-import 'package:ameen/model/driver.dart';
-import 'package:ameen/model/student.dart';
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../model/parent.dart';
 
 class StudentInfo extends StatelessWidget {
@@ -17,7 +11,6 @@ class StudentInfo extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     final getParent = LocalStorageService.getParent();
-
     ParentModel? parentModel;
 
     return Directionality(
@@ -39,7 +32,9 @@ class StudentInfo extends StatelessWidget {
                 builder: (context, snapshot) {
                   parentModel = snapshot.data;
                   print("parent $parentModel");
-                  if (snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasData) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -158,15 +153,7 @@ class StudentInfo extends StatelessWidget {
                       ],
                     );
                   } else {
-                    return Container(
-                      height: 300,
-                      color: Colors.red,
-                      child: Text(
-                        "$parentModel",
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    );
+                    return Container();
                   }
                 }),
           ),

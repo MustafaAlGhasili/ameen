@@ -39,12 +39,9 @@ class CustomDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
-                child: const Icon(Icons.close),
+                child:  Icon(Icons.close, size: width * 0.065,),
                 onTap: () {
-                  // Call the onClose callback to close the dialog
-                  if (onClose != null) {
-                    onClose!();
-                  }
+                 navigator!.pop();
                 },
               ),
               SizedBox(

@@ -60,12 +60,10 @@ dependencies:
   firebase_messaging: ^14.7.19
   http: ^0.13.6
   dob_input_field: ^2.0.0
-  json_annotation: ^4.4.0
 
 
   url_launcher: ^6.2.5
   cached_network_image: ^3.3.1
-  json_serializable: ^6.7.1
 
 
 dev_dependencies:

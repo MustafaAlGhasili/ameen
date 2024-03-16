@@ -12,7 +12,6 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeController controller = HomeController();
-    SignController signController = Get.find();
 
     return Scaffold(
       backgroundColor: Colors.white,

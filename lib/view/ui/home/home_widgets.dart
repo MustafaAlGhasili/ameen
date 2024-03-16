@@ -21,8 +21,14 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -58,69 +64,70 @@ class HomePage extends StatelessWidget {
                       topLeft: Radius.circular(50),
                     )),
                 child: Obx(
-                  () => Column(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Colors.black45,
-                            ),
-                          ),
-                        ),
-                        height: height * 0.09,
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                controller.map.value = false;
-                              },
-                              child: Container(
-                                decoration: const BoxDecoration(),
-                                alignment: Alignment.center,
-                                height: height * 0.09,
-                                width: width * 0.5,
-                                child: Text(
-                                  "الحالة ",
-                                  textAlign: TextAlign.center,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    fontSize: width * 0.05,
-                                  ),
+                      () =>
+                      Column(
+                        children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.black45,
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                controller.map.value = true;
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: height * 0.09,
-                                width: width * 0.5,
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: Colors.black45,
+                            height: height * 0.09,
+                            child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    controller.map.value = false;
+                                  },
+                                  child: Container(
+                                    decoration: const BoxDecoration(),
+                                    alignment: Alignment.center,
+                                    height: height * 0.09,
+                                    width: width * 0.5,
+                                    child: Text(
+                                      "الحالة ",
+                                      textAlign: TextAlign.center,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        fontSize: width * 0.05,
+                                      ),
                                     ),
                                   ),
                                 ),
-                                child: Text(
-                                  "الخريطه ",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: width * 0.05,
-                                    color: Colors.black,
+                                GestureDetector(
+                                  onTap: () {
+                                    controller.map.value = true;
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: height * 0.09,
+                                    width: width * 0.5,
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        right: BorderSide(
+                                          color: Colors.black45,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "الخريطه ",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: width * 0.05,
+                                        color: Colors.black,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          controller.map.value ? const Map() : const State(),
+                        ],
                       ),
-                      controller.map.value ? const Map() : const State(),
-                    ],
-                  ),
                 ),
               ),
             )
@@ -136,8 +143,14 @@ class Map extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     // Define a single point on the map
     LatLng point1 = const LatLng(24.6583445, 46.6917818);
@@ -195,8 +208,14 @@ class State extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     return Positioned(
       top: height * 0.35,
@@ -205,7 +224,8 @@ class State extends StatelessWidget {
           SizedBox(
             height: height * 0.05,
           ),
-          Obx(() => CustomState(
+          Obx(() =>
+              CustomState(
                 state: controller.isInTheWay.value,
                 childText: "1",
                 text: "في الطريق",
@@ -214,7 +234,8 @@ class State extends StatelessWidget {
             height: height * 0.05,
             rightMargin: width * 0.132,
           ),
-          Obx(() => CustomState(
+          Obx(() =>
+              CustomState(
                 state: controller.isClose.value,
                 childText: "2",
                 text: "على وشك الوصول",
@@ -223,7 +244,8 @@ class State extends StatelessWidget {
             height: height * 0.05,
             rightMargin: width * 0.132,
           ),
-          Obx(() => CustomState(
+          Obx(() =>
+              CustomState(
                 state: controller.isArrived.value,
                 childText: "3",
                 text: "وصلت الحافلة",
@@ -239,8 +261,14 @@ class NotificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -343,8 +371,14 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -398,7 +432,10 @@ class ProfilePage extends StatelessWidget {
                 height: height * 0.07,
                 onTap: () {
                   Get.dialog(
-                    CustomDialog(buttonText: "buttonText", content: "content"),
+                    const CustomDialog(
+                        buttonText: "نعم",
+                        content: "هل انت متاكد من اشعار الغياب",
+                    ),
                   );
                 },
                 backColor: const Color.fromARGB(255, 113, 65, 146),

@@ -58,4 +58,27 @@ class ParentModel implements ToMapConvertible {
       isEnabled: map['isEnabled'] as bool,
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'firstName': fName,
+      'lastName': lName,
+      'email': email,
+      'phone': phone,
+      'nationalId': nationalId,
+      'isEnabled': isEnabled,
+    };
+  }
+
+  factory ParentModel.fromJson(Map<String, dynamic> json) {
+    return ParentModel(
+      id: json['id'] as String,
+      fName: json['firstName'] as String,
+      lName: json['lastName'] as String,
+      email: json['email'] as String,
+      phone: json['phone'] as String,
+      nationalId: json['nationalId'] as String,
+      isEnabled: json['isEnabled'] as bool,
+    );
+  }
 }
