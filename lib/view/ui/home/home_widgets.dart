@@ -1,11 +1,14 @@
 import 'package:ameen/controller/home_controller.dart';
-import 'package:ameen/view/ui/admin/students/students_list.dart';
+import 'package:ameen/model/student.dart';
+import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/view/ui/home/settings.dart';
 import 'package:ameen/view/ui/home/student_info.dart';
 import 'package:ameen/view/ui/sign/start.dart';
+import 'package:ameen/view/ui/test/test_map.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 import 'package:ameen/view/ui/widget/custom_divider.dart';
 import 'package:ameen/view/ui/widget/custom_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -92,7 +95,9 @@ class HomePage extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                controller.map.value = true;
+                                Get.to(() =>  TestMap());
+
+                                //controller.map.value = true;
                               },
                               child: Container(
                                 alignment: Alignment.center,
@@ -339,7 +344,7 @@ class NotificationPage extends StatelessWidget {
 }
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -352,100 +357,136 @@ class ProfilePage extends StatelessWidget {
         width: width,
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: height * 0.05),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("الملف الشخصي",
-                  style: TextStyle(
-                    fontSize: width * 0.07,
-                  )),
-              SizedBox(height: height * 0.015),
-              CircleAvatar(
-                radius: width * 0.22,
-                backgroundColor: Colors.white,
-                // backgroundImage: AssetImage("img/profile.png"),
-                foregroundImage: const AssetImage("img/profile.png"),
-              ),
-              Text(
-                "سارة عبدالعزيز",
-                style: TextStyle(
-                  fontSize: width * 0.06,
-                ),
-              ),
-              SizedBox(
-                height: height * 0.05,
-              ),
-              ButtonModel(
-                padding: width * 0.03,
-                rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
-                width: width * 0.9,
-                height: height * 0.07,
-                onTap: () {
-                  Get.to(() => StudentInfo());
-                },
-                backColor: const Color.fromARGB(255, 113, 65, 146),
-                content: "حسابي",
-                textAlign: TextAlign.start,
-                style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-                icon: IconlyLight.profile,
-                iconSize: width * 0.06,
-                vMargin: height * 0.01,
-              ),
-              ButtonModel(
-                padding: width * 0.03,
-                rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
-                width: width * 0.9,
-                height: height * 0.07,
-                onTap: () {
-                  Get.dialog(
-                    CustomDialog(buttonText: "buttonText", content: "content"),
+          child: FutureBuilder<StudentModel?>(
+            future: LocalStorageService.getStudent(),
+            builder:
+                (BuildContext context, AsyncSnapshot<StudentModel?> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  final student = snapshot.data!;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "الملف الشخصي",
+                        style: TextStyle(
+                          fontSize: width * 0.07,
+                        ),
+                      ),
+                      SizedBox(height: height * 0.015),
+                      CircleAvatar(
+                        radius: width * 0.18,
+                        backgroundColor: Colors.white,
+                        child: CachedNetworkImage(
+                          imageUrl: student.imgUrl ?? '',
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Image(image: AssetImage("img/st1.png")),
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "${student.fName} ${student.lName}",
+                        style: TextStyle(
+                          fontSize: width * 0.06,
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 0.05,
+                      ),
+                      ButtonModel(
+                        padding: width * 0.03,
+                        rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        width: width * 0.9,
+                        height: height * 0.07,
+                        onTap: () {
+                          Get.to(() => StudentInfo());
+                        },
+                        backColor: const Color.fromARGB(255, 113, 65, 146),
+                        content: "حسابي",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: Colors.white, fontSize: width * 0.05),
+                        icon: IconlyLight.profile,
+                        iconSize: width * 0.06,
+                        vMargin: height * 0.01,
+                      ),
+                      ButtonModel(
+                        padding: width * 0.03,
+                        rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        width: width * 0.9,
+                        height: height * 0.07,
+                        onTap: () {
+                          Get.dialog(
+                            CustomDialog(
+                                buttonText: "buttonText", content: "content"),
+                          );
+                        },
+                        backColor: const Color.fromARGB(255, 113, 65, 146),
+                        content: "اشعار غياب",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: Colors.white, fontSize: width * 0.05),
+                        icon: Icons.inbox_outlined,
+                        iconSize: width * 0.06,
+                        vMargin: height * 0.01,
+                      ),
+                      ButtonModel(
+                        padding: width * 0.03,
+                        rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        width: width * 0.9,
+                        height: height * 0.07,
+                        onTap: () {
+                          Get.to(() => const Settings());
+                        },
+                        backColor: const Color.fromARGB(255, 113, 65, 146),
+                        content: "الإعدادات",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: Colors.white, fontSize: width * 0.05),
+                        icon: IconlyLight.setting,
+                        iconSize: width * 0.06,
+                        vMargin: height * 0.01,
+                      ),
+                      ButtonModel(
+                        rowMainAxisAlignment: MainAxisAlignment.center,
+                        width: width * 0.9,
+                        height: height * 0.07,
+                        onTap: () async {
+                          Get.dialog(CustomDialog(
+                            buttonText: "حسنا",
+                            content: "هل تريد تسجيل الخروج",
+                            buttonOnTap: () async {
+                              await FirebaseAuth.instance.signOut();
+                              Get.offAll(() => const Start());
+                            },
+                          ));
+                        },
+                        backColor: Colors.red,
+                        content: "تسجيل خروج",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.white, fontSize: width * 0.05),
+                        vMargin: height * 0.04,
+                      ),
+                    ],
                   );
-                },
-                backColor: const Color.fromARGB(255, 113, 65, 146),
-                content: "اشعار غياب",
-                textAlign: TextAlign.start,
-                style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-                icon: Icons.inbox_outlined,
-                iconSize: width * 0.06,
-                vMargin: height * 0.01,
-              ),
-              ButtonModel(
-                padding: width * 0.03,
-                rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
-                width: width * 0.9,
-                height: height * 0.07,
-                onTap: () {
-                  Get.to(() => const Settings());
-                },
-                backColor: const Color.fromARGB(255, 113, 65, 146),
-                content: "الإعدادات",
-                textAlign: TextAlign.start,
-                style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-                icon: IconlyLight.setting,
-                iconSize: width * 0.06,
-                vMargin: height * 0.01,
-              ),
-              ButtonModel(
-                rowMainAxisAlignment: MainAxisAlignment.center,
-                width: width * 0.9,
-                height: height * 0.07,
-                onTap: () async {
-                  Get.dialog(CustomDialog(
-                    buttonText: "حسنا",
-                    content: "هل تريد تسجيل الخروج",
-                    buttonOnTap: () async {
-                      await FirebaseAuth.instance.signOut();
-                      Get.offAll(() => const Start());
-                    },
-                  ));
-                },
-                backColor: Colors.red,
-                content: "تسجيل خروج",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-                vMargin: height * 0.04,
-              ),
-            ],
+                }
+              }
+            },
           ),
         ),
       ),
