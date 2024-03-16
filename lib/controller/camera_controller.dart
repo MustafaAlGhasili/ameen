@@ -81,7 +81,7 @@ class CamController extends GetxController {
           imgUploaded = count / total;
         },);
       print(response);
-      navigator!.pop();
+     // navigator!.pop();
 
       if (response.statusCode == 200) {
         // Image uploaded successfully.
