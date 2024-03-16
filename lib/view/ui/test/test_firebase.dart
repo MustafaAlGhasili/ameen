@@ -1,4 +1,5 @@
 import 'package:ameen/controller/home_controller.dart';
+import 'package:ameen/controller/sign_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,8 @@ class TestFirebase extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     HomeController controller = Get.find();
-    controller.testSharedPref();
+    SignController signController = Get.find<SignController>();
+    signController.createUserWithEmailAndPassword("mood11qq@gmail.com", "password");
 
     return Directionality(
       textDirection: TextDirection.rtl,
