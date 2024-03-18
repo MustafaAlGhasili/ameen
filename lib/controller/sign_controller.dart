@@ -199,17 +199,19 @@ class SignController extends GetxController {
         longitude: longitude.value,
         address: address.text,
         imgUrl: imgUrl,
-        email: studentEmail.text
+        email: studentEmail.text,
+        phone: studentPhone.text,
+
       );
 
       print("Student");
       print("Student school:" + student.imgUrl!);
-      print(student.grade);
-      print(student.toMap());
 
       String? studentId =
           await _databaseHelper.save<StudentModel>(student, "students");
-
+      student.id = studentId!;
+      await LocalStorageService.saveParent(parent);
+      await LocalStorageService.saveStudent(student);
       _isLoading(false);
       return true;
     } catch (e) {

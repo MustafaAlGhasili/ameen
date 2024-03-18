@@ -18,9 +18,8 @@ class _TestMapState extends State<TestMap> {
   LatLng point1 = const LatLng(24.7407256, 46.6498323);
   LatLng point2 = const LatLng(24.744671, 46.655624);
   List<LatLng> polylinePoints = [];
-  late Uint8List customMarker, busMarker;
+  late Uint8List? customMarker, busMarker= null;
   late Completer<GoogleMapController> _mapController = Completer();
-
 
   final busIcon = const Icon(
     Icons.bus_alert_sharp, // Choose your desired built-in icon
@@ -50,10 +49,10 @@ class _TestMapState extends State<TestMap> {
       //  return; // Exit the function early in case of error
     }
 
-    // Log the number of points retrieved
+// Log the number of points retrieved
     print("Fetched ${result.points.length} points.");
 
-    // Update the state with decoded points
+// Update the state with decoded points
     if (result.points.isNotEmpty) {
       setState(() {
         this.polylinePoints = result.points
@@ -108,33 +107,34 @@ class _TestMapState extends State<TestMap> {
         .asUint8List();
   }
 
-  loadMarkers() async {
-    busMarker = await getImages("img/camera.png", 150);
-  }
-
   @override
   void initState() {
     super.initState();
     loadMarkers();
   }
 
+  loadMarkers() async {
+    busMarker = await getImages("img/camera.png", 150);
+    setState(() {}); // Trigger a rebuild after the marker is loaded
 
+  }
 
   @override
   Widget build(BuildContext context) {
-    // loadMarkers();
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Route Line Example'),
-          centerTitle: true,
-        ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Stack(
-            children: [
+    loadMarkers();
+    fetchRoute();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Route Line Example'),
+        centerTitle: true,
+      ),
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(
+          children: [
+            if (busMarker != null) // Check if busMarker is not null
               GoogleMap(
                   initialCameraPosition: CameraPosition(
                     target: point1,
@@ -153,7 +153,7 @@ class _TestMapState extends State<TestMap> {
                     Marker(
                       markerId: const MarkerId('markerId2'),
                       position: point2,
-                      icon: BitmapDescriptor.fromBytes(busMarker), //
+                      icon:  BitmapDescriptor.fromBytes(busMarker!), //
                       infoWindow: const InfoWindow(
                         title: 'Marker 2',
                         snippet: 'Point 2',
@@ -184,22 +184,15 @@ class _TestMapState extends State<TestMap> {
 
                     // Create CameraUpdate with animation
                     final CameraUpdate cameraUpdate =
-                        CameraUpdate.newLatLngBounds(
-                            bounds, 100); // Add optional padding
+                    CameraUpdate.newLatLngBounds(
+                        bounds, 100); // Add optional padding
 
                     // Animate the camera to the target bounds
                     await controller.animateCamera(cameraUpdate);
-                    fetchRoute();
                   }),
-              /*  Align(
-                alignment: Alignment.bottomRight,
-                child: FloatingActionButton(
-                  onPressed: fetchRoute,
-                  child: const Icon(Icons.directions_car),
-                ),
-              ),*/
-            ],
-          ),
+            if (busMarker == null) // Show a loading indicator if busMarker is null
+              Center(child: CircularProgressIndicator()),
+          ],
         ),
       ),
     );

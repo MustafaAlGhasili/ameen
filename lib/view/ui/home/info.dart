@@ -339,7 +339,7 @@ class ParentInfo extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(parentModel!.fName),
+                child: Text(parentModel!.phone),
               ),
               SizedBox(
                 height: height * 0.03,

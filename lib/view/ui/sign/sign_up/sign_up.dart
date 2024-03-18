@@ -37,7 +37,7 @@ class SignUp extends StatelessWidget {
                         activeStepTextColor: Colors.black87,
                         finishedStepTextColor: Colors.black87,
                         internalPadding: 0,
-                        // showLoadingAnimation: false,
+                        showLoadingAnimation: true,
                         stepRadius: width * 0.05,
                         showStepBorder: false,
                         stepBorderRadius: 0,
@@ -109,10 +109,13 @@ class SignUp extends StatelessWidget {
                                     : Colors.grey,
                               ),
                             ),
-                            // title: 'الشروط والاحكام',
                           ),
                         ],
-                        onStepReached: (index) => controller.step.value = index,
+                        onStepReached: (index) {
+                          if(controller.step.value > index){
+                            controller.step.value = index;
+                          }
+                        },
                       ),
                     ),
                   ),

@@ -73,9 +73,10 @@ class Student extends StatelessWidget {
                   obscureText: false,
                 ),
                 TextFieldModel(
+                  maxLength: 10,
                   keyboardType: TextInputType.number,
                   controller: controller.studentPhone,
-                  validator: (val) => validation.validator(val),
+                  validator: (val) => validation.phoneValidator(val),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
                   ],
@@ -84,25 +85,22 @@ class Student extends StatelessWidget {
                   obscureText: false,
                 ),
                 TextFieldModel(
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.emailAddress,
                   controller: controller.studentEmail,
-                  validator: (val) => validation.validator(val),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
+                  validator: (val) => validation.emailValidator(val),
                   text: "البريد الالكتروني",
                   vPadding: height * 0.03,
                   obscureText: false,
                 ),
                 TextFieldModel(
-                  onTap: ()=> _selectDate(context),
+                  onTap: () => _selectDate(context),
                   validator: (val) => validation.validator(val),
                   readOnly: true,
                   controller: controller.studentBDate,
-                  sufIcon:  Icon(
-                        IconlyLight.calendar,
-                        size: width * 0.055,
-                      ),
+                  sufIcon: Icon(
+                    IconlyLight.calendar,
+                    size: width * 0.055,
+                  ),
                   keyboardType: TextInputType.datetime,
                   text: "تاريخ الميلاد",
                   vPadding: height * 0.03,
@@ -176,7 +174,8 @@ class Student extends StatelessWidget {
                 // SizedBox(
                 //   height: height * 0.025,
                 // ),
-                ButtonModel(vMargin: height * 0.02,
+                ButtonModel(
+                  vMargin: height * 0.02,
                   onTap: () {
                     print("Clicked");
 

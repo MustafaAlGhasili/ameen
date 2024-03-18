@@ -69,7 +69,8 @@ class HomeController extends GetxController {
       longitude: 12,
       latitude: 13,
       address: '55',
-      email: controller.studentEmail.text
+      email: controller.studentEmail.text,
+       phone: controller.studentPhone.text,
     );
     await LocalStorageService.saveStudent(student);
     final getStudent = await  LocalStorageService.getStudent();

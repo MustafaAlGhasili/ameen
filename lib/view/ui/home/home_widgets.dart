@@ -1,19 +1,21 @@
 import 'package:ameen/controller/home_controller.dart';
-import 'package:ameen/view/ui/admin/students/students_list.dart';
+import 'package:ameen/model/student.dart';
+import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/view/ui/home/settings.dart';
-import 'package:ameen/view/ui/home/info.dart';
 import 'package:ameen/view/ui/sign/start.dart';
+import 'package:ameen/view/ui/test/test_map.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 import 'package:ameen/view/ui/widget/custom_divider.dart';
 import 'package:ameen/view/ui/widget/custom_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iconly/iconly.dart';
 
-import '../test/test_map.dart';
 import '../widget/button_model.dart';
+import 'info.dart';
 
 HomeController controller = Get.find();
 
@@ -93,7 +95,9 @@ class HomePage extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(()=> TestMap());
+                                Get.to(() => TestMap());
+
+                                //controller.map.value = true;
                               },
                               child: Container(
                                 alignment: Alignment.center,
@@ -199,35 +203,38 @@ class State extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return Column(
-      children: [
-        SizedBox(
-          height: height * 0.05,
-        ),
-        Obx(() => CustomState(
-              state: controller.isInTheWay.value,
-              childText: "1",
-              text: "في الطريق",
-            )),
-        CustomDivider(
-          height: height * 0.05,
-          rightMargin: width * 0.132,
-        ),
-        Obx(() => CustomState(
-              state: controller.isClose.value,
-              childText: "2",
-              text: "على وشك الوصول",
-            )),
-        CustomDivider(
-          height: height * 0.05,
-          rightMargin: width * 0.132,
-        ),
-        Obx(() => CustomState(
-              state: controller.isArrived.value,
-              childText: "3",
-              text: "وصلت الحافلة",
-            )),
-      ],
+    return Positioned(
+      top: height * 0.35,
+      child: Column(
+        children: [
+          SizedBox(
+            height: height * 0.05,
+          ),
+          Obx(() => CustomState(
+                state: controller.isInTheWay.value,
+                childText: "1",
+                text: "في الطريق",
+              )),
+          CustomDivider(
+            height: height * 0.05,
+            rightMargin: width * 0.132,
+          ),
+          Obx(() => CustomState(
+                state: controller.isClose.value,
+                childText: "2",
+                text: "على وشك الوصول",
+              )),
+          CustomDivider(
+            height: height * 0.05,
+            rightMargin: width * 0.132,
+          ),
+          Obx(() => CustomState(
+                state: controller.isArrived.value,
+                childText: "3",
+                text: "وصلت الحافلة",
+              )),
+        ],
+      ),
     );
   }
 }
@@ -337,7 +344,7 @@ class NotificationPage extends StatelessWidget {
 }
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -350,103 +357,140 @@ class ProfilePage extends StatelessWidget {
         width: width,
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: height * 0.05),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("الملف الشخصي",
-                  style: TextStyle(
-                    fontSize: width * 0.07,
-                  )),
-              SizedBox(height: height * 0.015),
-              CircleAvatar(
-                radius: width * 0.22,
-                backgroundColor: Colors.white,
-                // backgroundImage: AssetImage("img/profile.png"),
-                foregroundImage: const AssetImage("img/profile.png"),
-              ),
-              Text(
-                "سارة عبدالعزيز",
-                style: TextStyle(
-                  fontSize: width * 0.06,
-                ),
-              ),
-              SizedBox(
-                height: height * 0.05,
-              ),
-              ButtonModel(
-                padding: width * 0.03,
-                rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
-                width: width * 0.9,
-                height: height * 0.07,
-                onTap: () {
-                  Get.to(() => About());
-                },
-                backColor: const Color.fromARGB(255, 113, 65, 146),
-                content: "حسابي",
-                textAlign: TextAlign.start,
-                style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-                icon: IconlyLight.profile,
-                iconSize: width * 0.06,
-                vMargin: height * 0.01,
-              ),
-              ButtonModel(
-                padding: width * 0.03,
-                rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
-                width: width * 0.9,
-                height: height * 0.07,
-                onTap: () {
-                  Get.dialog(
-                    const CustomDialog(
-                      buttonText: "نعم",
-                      content: "هل انت متاكد من اشعار الغياب",
-                    ),
+          child: FutureBuilder<StudentModel?>(
+            future: LocalStorageService.getStudent(),
+            builder:
+                (BuildContext context, AsyncSnapshot<StudentModel?> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  final student = snapshot.data!;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "الملف الشخصي",
+                        style: TextStyle(
+                          fontSize: width * 0.07,
+                        ),
+                      ),
+                      SizedBox(height: height * 0.015),
+                      CircleAvatar(
+                        radius: width * 0.18,
+                        backgroundColor: Colors.white,
+                        child: CachedNetworkImage(
+                          imageUrl: student.imgUrl ?? '',
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Image(image: AssetImage("img/st1.png")),
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "${student.fName} ${student.lName}",
+                        style: TextStyle(
+                          fontSize: width * 0.06,
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 0.05,
+                      ),
+                      ButtonModel(
+                        padding: width * 0.03,
+                        rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        width: width * 0.9,
+                        height: height * 0.07,
+                        onTap: () {
+                          Get.to(() => About());
+                        },
+                        backColor: const Color.fromARGB(255, 113, 65, 146),
+                        content: "حسابي",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: Colors.white, fontSize: width * 0.05),
+                        icon: IconlyLight.profile,
+                        iconSize: width * 0.06,
+                        vMargin: height * 0.01,
+                      ),
+                      ButtonModel(
+                        padding: width * 0.03,
+                        rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        width: width * 0.9,
+                        height: height * 0.07,
+                        onTap: () {
+                          Get.dialog(
+                            CustomDialog(
+                              buttonOnTap: () {
+                                // absent notification
+                              },
+                                buttonText: "نعم",
+                                content: "هل انت متاكد من اشعار الغياب؟"),
+                          );
+                        },
+                        backColor: const Color.fromARGB(255, 113, 65, 146),
+                        content: "اشعار غياب",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: Colors.white, fontSize: width * 0.05),
+                        icon: Icons.inbox_outlined,
+                        iconSize: width * 0.06,
+                        vMargin: height * 0.01,
+                      ),
+                      ButtonModel(
+                        padding: width * 0.03,
+                        rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        width: width * 0.9,
+                        height: height * 0.07,
+                        onTap: () {
+                          Get.to(() => const Settings());
+                        },
+                        backColor: const Color.fromARGB(255, 113, 65, 146),
+                        content: "الإعدادات",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: Colors.white, fontSize: width * 0.05),
+                        icon: IconlyLight.setting,
+                        iconSize: width * 0.06,
+                        vMargin: height * 0.01,
+                      ),
+                      ButtonModel(
+                        rowMainAxisAlignment: MainAxisAlignment.center,
+                        width: width * 0.9,
+                        height: height * 0.07,
+                        onTap: () async {
+                          Get.dialog(CustomDialog(
+                            buttonText: "حسنا",
+                            content: "هل تريد تسجيل الخروج؟",
+                            buttonOnTap: () async {
+                              await FirebaseAuth.instance.signOut();
+                              Get.offAll(() => const Start());
+                            },
+                          ));
+                        },
+                        backColor: Colors.red,
+                        content: "تسجيل خروج",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.white, fontSize: width * 0.05),
+                        vMargin: height * 0.04,
+                      ),
+                    ],
                   );
-                },
-                backColor: const Color.fromARGB(255, 113, 65, 146),
-                content: "اشعار غياب",
-                textAlign: TextAlign.start,
-                style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-                icon: Icons.inbox_outlined,
-                iconSize: width * 0.06,
-                vMargin: height * 0.01,
-              ),
-              ButtonModel(
-                padding: width * 0.03,
-                rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
-                width: width * 0.9,
-                height: height * 0.07,
-                onTap: () {
-                  Get.to(() => const Settings());
-                },
-                backColor: const Color.fromARGB(255, 113, 65, 146),
-                content: "الإعدادات",
-                textAlign: TextAlign.start,
-                style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-                icon: IconlyLight.setting,
-                iconSize: width * 0.06,
-                vMargin: height * 0.01,
-              ),
-              ButtonModel(
-                rowMainAxisAlignment: MainAxisAlignment.center,
-                width: width * 0.9,
-                height: height * 0.07,
-                onTap: () async {
-                  Get.dialog(CustomDialog(
-                    buttonText: "حسنا",
-                    content: "هل تريد تسجيل الخروج",
-                    buttonOnTap: () async {
-                      await FirebaseAuth.instance.signOut();
-                      Get.offAll(() => const Start());
-                    },
-                  ));
-                },
-                backColor: Colors.red,
-                content: "تسجيل خروج",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-                vMargin: height * 0.04,
-              ),
-            ],
+                }
+              }
+            },
           ),
         ),
       ),

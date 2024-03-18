@@ -80,7 +80,6 @@ class Parent extends StatelessWidget {
               ),
               TextFieldModel(
                 validator: (val) => validation.emailValidator(val),
-
                 controller: controller.parentEmail,
                 // vPadding: height * 0.035,
                 keyboardType: TextInputType.emailAddress,
