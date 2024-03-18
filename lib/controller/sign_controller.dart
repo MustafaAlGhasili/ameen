@@ -31,8 +31,10 @@ class SignController extends GetxController {
   final studentLName = TextEditingController();
   final studentNationalId = TextEditingController();
   final studentBDate = TextEditingController();
-  final studentBlood = TextEditingController();
-  final studentGender = TextEditingController();
+  final studentPhone = TextEditingController();
+  final studentEmail = TextEditingController();
+
+
 
   final signInEmailCont = TextEditingController();
   final signInPassCont = TextEditingController();
@@ -181,7 +183,7 @@ class SignController extends GetxController {
 
 
       String imgUrl = Constants.STUDENT_IMAGES_URL + fileNameValue.value;
-
+      //
       final student = StudentModel(
         fName: studentFName.text,
         lName: studentLName.text,
@@ -197,6 +199,7 @@ class SignController extends GetxController {
         longitude: longitude.value,
         address: address.text,
         imgUrl: imgUrl,
+        email: studentEmail.text
       );
 
       print("Student");

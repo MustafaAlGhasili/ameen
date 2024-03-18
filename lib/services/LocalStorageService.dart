@@ -28,18 +28,19 @@ class LocalStorageService {
   }
 
   static Future<void> saveStudent(StudentModel student) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(studentKey, student.toMap().toString());
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final studentJson = json.encode(student.toMap()); // Encode the map to JSON string
+    await prefs.setString(studentKey, studentJson);
+    print("Saved student:");
+    print(studentJson);
   }
 
   static Future<StudentModel?> getStudent() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? studentString = prefs.getString(studentKey);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final studentJson = prefs.getString(studentKey);
 
-    if (studentString != null && studentString.isNotEmpty) {
-      Map<String, dynamic> studentMap =
-          Map.castFrom<dynamic, dynamic, String, dynamic>(
-              Map<String, dynamic>.from(json.decode(studentString)));
+    if (studentJson != null) {
+      final Map<String, dynamic> studentMap = json.decode(studentJson);
       return StudentModel.fromMap(studentMap);
     } else {
       return null;

@@ -19,6 +19,7 @@ class StudentModel implements ToMapConvertible {
   final int grade;
   final double? latitude;
   final double? longitude;
+  final String email;
 
   StudentModel({
     this.id = "",
@@ -36,7 +37,8 @@ class StudentModel implements ToMapConvertible {
     required this.latitude,
     required this.address,
     this.busId, // Optional busId
-    this.imgUrl, // Optional busId
+    this.imgUrl,
+    required this.email, // Optional busId
   });
 
   factory StudentModel.fromSnapshot(DataSnapshot snapshot) {
@@ -58,6 +60,7 @@ class StudentModel implements ToMapConvertible {
       address: data['address'] as String,
       busId: data['busId'] as String?,
       imgUrl: data['imgUrl'] as String?,
+      email: data['email'] as String,
     );
   }
 
@@ -77,8 +80,11 @@ class StudentModel implements ToMapConvertible {
       longitude: map['longitude'] as double,
       latitude: map['latitude'] as double,
       address: map['address'] as String,
-      busId: map['busId'] as String?, // Use null-aware operator
-      imgUrl: map['imgUrl'] as String?, // Use null-aware operator
+      busId: map['busId'] as String?,
+      // Use null-aware operator
+      imgUrl: map['imgUrl'] as String?,
+      // Use null-aware operator
+      email: map['email'] as String,
     );
   }
 
@@ -101,6 +107,7 @@ class StudentModel implements ToMapConvertible {
       'address': address,
       'busId': busId,
       'imgUrl': imgUrl,
+      'email': email,
     };
   }
 }

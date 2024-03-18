@@ -1,6 +1,6 @@
 import 'package:ameen/view/ui/admin/students/student_info.dart';
 import 'package:ameen/view/ui/admin/students/waiting_list.dart';
-import 'package:ameen/view/ui/home/student_info.dart';
+import 'package:ameen/view/ui/home/info.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +58,7 @@ class StudentsList extends StatelessWidget {
                         itemBuilder: (context, i) {
                           return ButtonModel(
                             onTap: () {
-                              Get.to(() => StudentInfo(
+                              Get.to(() => StudentDetails(student: student[i],
 
                                   ));
                             },

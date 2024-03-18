@@ -17,7 +17,7 @@ class TestFirebase extends StatelessWidget {
 
     HomeController controller = Get.find();
     SignController signController = Get.find<SignController>();
-    signController.createUserWithEmailAndPassword("mood11qq@gmail.com", "password");
+    signController.createUserWithEmailAndPassword("mood1qq@gmail.com", "password");
 
     return Directionality(
       textDirection: TextDirection.rtl,

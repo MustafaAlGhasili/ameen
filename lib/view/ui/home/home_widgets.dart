@@ -1,7 +1,7 @@
 import 'package:ameen/controller/home_controller.dart';
 import 'package:ameen/view/ui/admin/students/students_list.dart';
 import 'package:ameen/view/ui/home/settings.dart';
-import 'package:ameen/view/ui/home/student_info.dart';
+import 'package:ameen/view/ui/home/info.dart';
 import 'package:ameen/view/ui/sign/start.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 import 'package:ameen/view/ui/widget/custom_divider.dart';
@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iconly/iconly.dart';
 
+import '../test/test_map.dart';
 import '../widget/button_model.dart';
 
 HomeController controller = Get.find();
@@ -21,14 +22,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -64,70 +59,69 @@ class HomePage extends StatelessWidget {
                       topLeft: Radius.circular(50),
                     )),
                 child: Obx(
-                      () =>
-                      Column(
-                        children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.black45,
+                  () => Column(
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.black45,
+                            ),
+                          ),
+                        ),
+                        height: height * 0.09,
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                controller.map.value = false;
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(),
+                                alignment: Alignment.center,
+                                height: height * 0.09,
+                                width: width * 0.5,
+                                child: Text(
+                                  "الحالة ",
+                                  textAlign: TextAlign.center,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                    fontSize: width * 0.05,
+                                  ),
                                 ),
                               ),
                             ),
-                            height: height * 0.09,
-                            child: Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    controller.map.value = false;
-                                  },
-                                  child: Container(
-                                    decoration: const BoxDecoration(),
-                                    alignment: Alignment.center,
-                                    height: height * 0.09,
-                                    width: width * 0.5,
-                                    child: Text(
-                                      "الحالة ",
-                                      textAlign: TextAlign.center,
-                                      softWrap: true,
-                                      style: TextStyle(
-                                        fontSize: width * 0.05,
-                                      ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(()=> TestMap());
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: height * 0.09,
+                                width: width * 0.5,
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    right: BorderSide(
+                                      color: Colors.black45,
                                     ),
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    controller.map.value = true;
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    height: height * 0.09,
-                                    width: width * 0.5,
-                                    decoration: const BoxDecoration(
-                                      border: Border(
-                                        right: BorderSide(
-                                          color: Colors.black45,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "الخريطه ",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: width * 0.05,
-                                        color: Colors.black,
-                                      ),
-                                    ),
+                                child: Text(
+                                  "الخريطه ",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: width * 0.05,
+                                    color: Colors.black,
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                          controller.map.value ? const Map() : const State(),
-                        ],
+                          ],
+                        ),
                       ),
+                      controller.map.value ? const Map() : const State(),
+                    ],
+                  ),
                 ),
               ),
             )
@@ -143,14 +137,8 @@ class Map extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     // Define a single point on the map
     LatLng point1 = const LatLng(24.6583445, 46.6917818);
@@ -208,50 +196,38 @@ class State extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
-    return Positioned(
-      top: height * 0.35,
-      child: Column(
-        children: [
-          SizedBox(
-            height: height * 0.05,
-          ),
-          Obx(() =>
-              CustomState(
-                state: controller.isInTheWay.value,
-                childText: "1",
-                text: "في الطريق",
-              )),
-          CustomDivider(
-            height: height * 0.05,
-            rightMargin: width * 0.132,
-          ),
-          Obx(() =>
-              CustomState(
-                state: controller.isClose.value,
-                childText: "2",
-                text: "على وشك الوصول",
-              )),
-          CustomDivider(
-            height: height * 0.05,
-            rightMargin: width * 0.132,
-          ),
-          Obx(() =>
-              CustomState(
-                state: controller.isArrived.value,
-                childText: "3",
-                text: "وصلت الحافلة",
-              )),
-        ],
-      ),
+    return Column(
+      children: [
+        SizedBox(
+          height: height * 0.05,
+        ),
+        Obx(() => CustomState(
+              state: controller.isInTheWay.value,
+              childText: "1",
+              text: "في الطريق",
+            )),
+        CustomDivider(
+          height: height * 0.05,
+          rightMargin: width * 0.132,
+        ),
+        Obx(() => CustomState(
+              state: controller.isClose.value,
+              childText: "2",
+              text: "على وشك الوصول",
+            )),
+        CustomDivider(
+          height: height * 0.05,
+          rightMargin: width * 0.132,
+        ),
+        Obx(() => CustomState(
+              state: controller.isArrived.value,
+              childText: "3",
+              text: "وصلت الحافلة",
+            )),
+      ],
     );
   }
 }
@@ -261,14 +237,8 @@ class NotificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -371,14 +341,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -415,7 +379,7 @@ class ProfilePage extends StatelessWidget {
                 width: width * 0.9,
                 height: height * 0.07,
                 onTap: () {
-                  Get.to(() => StudentInfo());
+                  Get.to(() => About());
                 },
                 backColor: const Color.fromARGB(255, 113, 65, 146),
                 content: "حسابي",
@@ -433,8 +397,8 @@ class ProfilePage extends StatelessWidget {
                 onTap: () {
                   Get.dialog(
                     const CustomDialog(
-                        buttonText: "نعم",
-                        content: "هل انت متاكد من اشعار الغياب",
+                      buttonText: "نعم",
+                      content: "هل انت متاكد من اشعار الغياب",
                     ),
                   );
                 },

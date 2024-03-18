@@ -1,4 +1,5 @@
 import 'package:ameen/controller/sign_controller.dart';
+import 'package:ameen/model/student.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../model/parent.dart';
@@ -71,23 +72,14 @@ class PrivacyTerms extends StatelessWidget {
                 onPressed: controller.isAccepted.value
                     ? () async {
                         final result = await controller.registerParent();
-                        final parent = ParentModel(
-                          id: '123',
-                          fName: controller.parentFName.text,
-                          lName: controller.parentLName.text,
-                          email: controller.parentEmail.text,
-                          isEnabled: false,
-                          nationalId: controller.parentNationalId.text,
-                          phone: controller.parentPhone.text,
-                        );
-                        LocalStorageService.saveParent(parent);
-                        print("object $parent");
 
 
                         print("result is $result");
                         // if (result) {
-                        controller.createUserWithEmailAndPassword("mustakafa.733@gmail.com", '123456');
-                          Get.to(() => const Home());
+                          controller.createUserWithEmailAndPassword(
+                              controller.parentEmail.text,
+                              controller.parenPassword.text);
+                          Get.offAll(() => const Home());
                         // }
                       }
                     : null,
@@ -98,7 +90,7 @@ class PrivacyTerms extends StatelessWidget {
                 ),
                 child: Visibility(
                   visible: !controller.isLoading.value,
-                  replacement: SizedBox(
+                  replacement: const SizedBox(
                     height: 20,
                     width: 20,
                     child: CircularProgressIndicator(

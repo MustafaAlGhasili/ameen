@@ -21,6 +21,7 @@ class _TestMapState extends State<TestMap> {
   late Uint8List customMarker, busMarker;
   late Completer<GoogleMapController> _mapController = Completer();
 
+
   final busIcon = const Icon(
     Icons.bus_alert_sharp, // Choose your desired built-in icon
     color: Colors.blue, // Set color (optional)
@@ -107,93 +108,98 @@ class _TestMapState extends State<TestMap> {
         .asUint8List();
   }
 
+  loadMarkers() async {
+    busMarker = await getImages("img/camera.png", 150);
+  }
+
   @override
   void initState() {
     super.initState();
     loadMarkers();
   }
 
-  loadMarkers() async {
-    busMarker = await getImages("img/camera.png", 150);
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    loadMarkers();
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Route Line Example'),
-        centerTitle: true,
-      ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(
-          children: [
-            GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: point1,
-                  zoom: 15.0,
+    // loadMarkers();
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Route Line Example'),
+          centerTitle: true,
+        ),
+        body: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Stack(
+            children: [
+              GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: point1,
+                    zoom: 15.0,
+                  ),
+                  myLocationEnabled: true,
+                  markers: {
+                    Marker(
+                      markerId: const MarkerId('markerId1'),
+                      position: point1,
+                      infoWindow: const InfoWindow(
+                        title: 'Marker 1',
+                        snippet: 'Point 1',
+                      ),
+                    ),
+                    Marker(
+                      markerId: const MarkerId('markerId2'),
+                      position: point2,
+                      icon: BitmapDescriptor.fromBytes(busMarker), //
+                      infoWindow: const InfoWindow(
+                        title: 'Marker 2',
+                        snippet: 'Point 2',
+                      ),
+                    ),
+                  },
+                  polylines: {
+                    if (polylinePoints.isNotEmpty)
+                      Polyline(
+                        polylineId: const PolylineId('routeLine'),
+                        color: const Color.fromARGB(255, 113, 65, 146),
+                        width: 5,
+                        points: polylinePoints,
+                      ),
+                  },
+                  padding: const EdgeInsets.all(20.0),
+                  onMapCreated: (GoogleMapController controller) async {
+                    LatLngBounds bounds = LatLngBounds(
+                      southwest: LatLng(
+                        polylinePoints.first.latitude,
+                        polylinePoints.first.longitude,
+                      ),
+                      northeast: LatLng(
+                        polylinePoints.last.latitude,
+                        polylinePoints.last.longitude,
+                      ),
+                    );
+
+                    // Create CameraUpdate with animation
+                    final CameraUpdate cameraUpdate =
+                        CameraUpdate.newLatLngBounds(
+                            bounds, 100); // Add optional padding
+
+                    // Animate the camera to the target bounds
+                    await controller.animateCamera(cameraUpdate);
+                    fetchRoute();
+                  }),
+              /*  Align(
+                alignment: Alignment.bottomRight,
+                child: FloatingActionButton(
+                  onPressed: fetchRoute,
+                  child: const Icon(Icons.directions_car),
                 ),
-                myLocationEnabled: true,
-                markers: {
-                  Marker(
-                    markerId: const MarkerId('markerId1'),
-                    position: point1,
-                    infoWindow: const InfoWindow(
-                      title: 'Marker 1',
-                      snippet: 'Point 1',
-                    ),
-                  ),
-                  Marker(
-                    markerId: const MarkerId('markerId2'),
-                    position: point2,
-                    icon: BitmapDescriptor.fromBytes(busMarker), //
-                    infoWindow: const InfoWindow(
-                      title: 'Marker 2',
-                      snippet: 'Point 2',
-                    ),
-                  ),
-                },
-                polylines: {
-                  if (polylinePoints.isNotEmpty)
-                    Polyline(
-                      polylineId: const PolylineId('routeLine'),
-                      color: const Color.fromARGB(255, 113, 65, 146),
-                      width: 5,
-                      points: polylinePoints,
-                    ),
-                },
-                padding: const EdgeInsets.all(20.0),
-                onMapCreated: (GoogleMapController controller) async {
-                  LatLngBounds bounds = LatLngBounds(
-                    southwest: LatLng(
-                      polylinePoints.first.latitude,
-                      polylinePoints.first.longitude,
-                    ),
-                    northeast: LatLng(
-                      polylinePoints.last.latitude,
-                      polylinePoints.last.longitude,
-                    ),
-                  );
-
-                  // Create CameraUpdate with animation
-                  final CameraUpdate cameraUpdate =
-                      CameraUpdate.newLatLngBounds(
-                          bounds, 100); // Add optional padding
-
-                  // Animate the camera to the target bounds
-                  await controller.animateCamera(cameraUpdate);
-                  fetchRoute();
-                }),
-            /*  Align(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton(
-                onPressed: fetchRoute,
-                child: const Icon(Icons.directions_car),
-              ),
-            ),*/
-          ],
+              ),*/
+            ],
+          ),
         ),
       ),
     );

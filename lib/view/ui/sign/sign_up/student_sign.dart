@@ -42,7 +42,7 @@ class Student extends StatelessWidget {
           textDirection: TextDirection.rtl,
           child: Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: width * 0.045, vertical: height * 0.03),
+                horizontal: width * 0.045, vertical: height * 0.02),
             child: Column(
               children: [
                 Text("معلومات الطالب",
@@ -51,14 +51,14 @@ class Student extends StatelessWidget {
                   validator: (val) => validation.validator(val),
                   controller: controller.studentFName,
                   text: "الاسم الاول",
-                  vPadding: height * 0.035,
+                  vPadding: height * 0.03,
                   obscureText: false,
                 ),
                 TextFieldModel(
                   controller: controller.studentLName,
                   validator: (val) => validation.validator(val),
                   text: "الاسم الأخير",
-                  vPadding: height * 0.035,
+                  vPadding: height * 0.03,
                   obscureText: false,
                 ),
                 TextFieldModel(
@@ -69,7 +69,29 @@ class Student extends StatelessWidget {
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   text: "رقم الاحوال",
-                  vPadding: height * 0.035,
+                  vPadding: height * 0.03,
+                  obscureText: false,
+                ),
+                TextFieldModel(
+                  keyboardType: TextInputType.number,
+                  controller: controller.studentPhone,
+                  validator: (val) => validation.validator(val),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  text: "رقم الهاتف",
+                  vPadding: height * 0.03,
+                  obscureText: false,
+                ),
+                TextFieldModel(
+                  keyboardType: TextInputType.number,
+                  controller: controller.studentEmail,
+                  validator: (val) => validation.validator(val),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  text: "البريد الالكتروني",
+                  vPadding: height * 0.03,
                   obscureText: false,
                 ),
                 TextFieldModel(
@@ -83,7 +105,7 @@ class Student extends StatelessWidget {
                       ),
                   keyboardType: TextInputType.datetime,
                   text: "تاريخ الميلاد",
-                  vPadding: height * 0.035,
+                  vPadding: height * 0.03,
                   obscureText: false,
                 ),
                 Padding(
@@ -151,10 +173,10 @@ class Student extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: height * 0.08,
-                ),
-                ButtonModel(
+                // SizedBox(
+                //   height: height * 0.025,
+                // ),
+                ButtonModel(vMargin: height * 0.02,
                   onTap: () {
                     print("Clicked");
 
