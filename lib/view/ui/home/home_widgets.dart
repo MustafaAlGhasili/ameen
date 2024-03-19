@@ -203,38 +203,35 @@ class State extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return Positioned(
-      top: height * 0.35,
-      child: Column(
-        children: [
-          SizedBox(
-            height: height * 0.05,
-          ),
-          Obx(() => CustomState(
-                state: controller.isInTheWay.value,
-                childText: "1",
-                text: "في الطريق",
-              )),
-          CustomDivider(
-            height: height * 0.05,
-            rightMargin: width * 0.132,
-          ),
-          Obx(() => CustomState(
-                state: controller.isClose.value,
-                childText: "2",
-                text: "على وشك الوصول",
-              )),
-          CustomDivider(
-            height: height * 0.05,
-            rightMargin: width * 0.132,
-          ),
-          Obx(() => CustomState(
-                state: controller.isArrived.value,
-                childText: "3",
-                text: "وصلت الحافلة",
-              )),
-        ],
-      ),
+    return Column(
+      children: [
+        SizedBox(
+          height: height * 0.05,
+        ),
+        Obx(() => CustomState(
+              state: controller.isInTheWay.value,
+              childText: "1",
+              text: "في الطريق",
+            )),
+        CustomDivider(
+          height: height * 0.05,
+          rightMargin: width * 0.132,
+        ),
+        Obx(() => CustomState(
+              state: controller.isClose.value,
+              childText: "2",
+              text: "على وشك الوصول",
+            )),
+        CustomDivider(
+          height: height * 0.05,
+          rightMargin: width * 0.132,
+        ),
+        Obx(() => CustomState(
+              state: controller.isArrived.value,
+              childText: "3",
+              text: "وصلت الحافلة",
+            )),
+      ],
     );
   }
 }
@@ -358,15 +355,16 @@ class ProfilePage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: height * 0.05),
           child: FutureBuilder<StudentModel?>(
-            future: LocalStorageService.getStudent(),
+            future: controller.studentShared(),
             builder:
                 (BuildContext context, AsyncSnapshot<StudentModel?> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else {
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else {
+                  print(snapshot.data);
                   final student = snapshot.data!;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -377,14 +375,14 @@ class ProfilePage extends StatelessWidget {
                           fontSize: width * 0.07,
                         ),
                       ),
-                      SizedBox(height: height * 0.015),
+                      SizedBox(height: height * 0.03),
                       CircleAvatar(
                         radius: width * 0.18,
                         backgroundColor: Colors.white,
                         child: CachedNetworkImage(
                           imageUrl: student.imgUrl ?? '',
                           placeholder: (context, url) =>
-                              CircularProgressIndicator(),
+                              const CircularProgressIndicator(),
                           errorWidget: (context, url, error) =>
                               const Image(image: AssetImage("img/st1.png")),
                           imageBuilder: (context, imageProvider) => Container(

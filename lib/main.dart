@@ -40,7 +40,7 @@ void main() async {
     useInheritedMediaQuery: true,
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: const SignUp(),
+    home: SplashScreen(),
   ));
 }
 
