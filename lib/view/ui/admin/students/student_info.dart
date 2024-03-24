@@ -8,8 +8,9 @@ import '../../widget/button_model.dart';
 
 class StudentDetails extends StatelessWidget {
   final StudentModel student;
+  final int no;
 
-  const StudentDetails({super.key, required this.student});
+  const StudentDetails( {super.key, required this.student, required this.no,});
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +142,7 @@ class StudentDetails extends StatelessWidget {
                     textAlign: TextAlign.center,
                     rowMainAxisAlignment: MainAxisAlignment.center,
                   ),
-                  ButtonModel(
+                  no == 0? ButtonModel(
                     onTap: () {
                       Get.dialog(CustomDialog(
                           onClose: () {
@@ -160,7 +161,7 @@ class StudentDetails extends StatelessWidget {
                     content: "إزاله الطالب",
                     textAlign: TextAlign.center,
                     rowMainAxisAlignment: MainAxisAlignment.center,
-                  ),
+                  ): const SizedBox(),
                 ],
               ),
             ),

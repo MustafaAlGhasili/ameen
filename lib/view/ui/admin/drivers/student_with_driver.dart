@@ -26,7 +26,7 @@ class StudentWithBusName extends StatelessWidget {
           backgroundColor: const Color.fromARGB(255, 113, 65, 146),
           foregroundColor: Colors.white,
           centerTitle: true,
-          title:  Text(busId),
+          title: Text(busId),
         ),
         body: Column(
           children: [
@@ -36,33 +36,34 @@ class StudentWithBusName extends StatelessWidget {
                 height: height * 0.7,
                 padding: EdgeInsets.only(top: height * 0.05),
                 child: FirebaseAnimatedList(
-                  query: DatabaseHelper.studentsRef.orderByChild('busId').equalTo(busId),
+                  query: DatabaseHelper.studentsRef
+                      .orderByChild('busId')
+                      .equalTo(busId),
                   itemBuilder: (BuildContext context, DataSnapshot snapshot,
                       Animation<double> animation, int index) {
-                    StudentModel student =
-                    StudentModel.fromSnapshot(snapshot);
+                    StudentModel student = StudentModel.fromSnapshot(snapshot);
 
-                      return ButtonModel(
-                        onTap: () {
-                          Get.to(() => StudentDetails(student: student));
-                        },
-                        busName: student.busId ?? student.schoolId,
-                        bus: true,
-                        imgUrl: student.imgUrl ?? " ",
-                        padding: 10,
-                        hMargin: width * 0.05,
-                        vMargin: height * 0.02,
-                        height: height * 0.08,
-                        rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        backColor: const Color.fromARGB(255, 113, 65, 146),
-                        style: TextStyle(
-                            color: Colors.white, fontSize: width * 0.05),
-                        content: '${student.fName} ${student.lName}',
-                      );
+                    return ButtonModel(
+                      onTap: () {
+                        Get.to(() => StudentDetails(student: student, no: 0));
+                      },
+                      busName: student.busId ?? student.schoolId,
+                      bus: true,
+                      imgUrl: student.imgUrl ?? " ",
+                      padding: 10,
+                      hMargin: width * 0.05,
+                      vMargin: height * 0.02,
+                      height: height * 0.08,
+                      rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      backColor: const Color.fromARGB(255, 113, 65, 146),
+                      style: TextStyle(
+                          color: Colors.white, fontSize: width * 0.05),
+                      content: '${student.fName} ${student.lName}',
+                    );
                     return SizedBox();
                   },
                   defaultChild:
-                  const Center(child: CircularProgressIndicator()),
+                      const Center(child: CircularProgressIndicator()),
                 ),
               ),
             ),
