@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:ui' as ui;
-import 'dart:ui';
 
+import 'package:ameen/model/location.dart';
+import 'package:ameen/utils/DatabaseHelper.dart';
+import 'package:ameen/utils/constant.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBlHVCC3b6bsDxyJAPL7rsdkDarJYd-SeI';
 
 class TestMap extends StatefulWidget {
   @override
@@ -17,51 +18,93 @@ class TestMap extends StatefulWidget {
 class _TestMapState extends State<TestMap> {
   LatLng point1 = const LatLng(24.7407256, 46.6498323);
   LatLng point2 = const LatLng(24.744671, 46.655624);
+  LatLng? currentLocation;
   List<LatLng> polylinePoints = [];
-  late Uint8List? customMarker, busMarker= null;
+  Uint8List? busMarker;
   late Completer<GoogleMapController> _mapController = Completer();
+  late Timer _locationUpdateTimer;
+  final _databaseHelper = DatabaseHelper();
 
-  final busIcon = const Icon(
-    Icons.bus_alert_sharp, // Choose your desired built-in icon
-    color: Colors.blue, // Set color (optional)
-    size: 48, // Set size (optional)
-  );
+  @override
+  void initState() {
+    super.initState();
+    loadMarkers();
+    //fetchRoute(point1);
+    getLocation();
+    // Simulate the change of user's location every 5 seconds
+    // Replace this with your actual method to get the user's location
+  }
 
-  Future<void> fetchRoute() async {
-    final polylinePoints = PolylinePoints();
-
-    final result = await polylinePoints.getRouteBetweenCoordinates(
-      GOOGLE_MAPS_API_KEY,
-      PointLatLng(point1.latitude, point1.longitude),
-      PointLatLng(point2.latitude, point2.longitude),
-    );
-
-    // Log information about the request
-    print("Fetching route from Point 1:");
-    print(PointLatLng(point1.latitude, point1.longitude));
-    print("to Point 2:");
-    print(PointLatLng(point2.latitude, point2.longitude));
-
-    if (result.errorMessage != null) {
-      // Log any error message
-      print("Error fetching route message: ${result.errorMessage}");
-      print("Error fetching route: ${result.points}");
-      //  return; // Exit the function early in case of error
-    }
-
-// Log the number of points retrieved
-    print("Fetched ${result.points.length} points.");
-
-// Update the state with decoded points
-    if (result.points.isNotEmpty) {
+  void simulateLocation() {
+    _locationUpdateTimer = Timer.periodic(Duration(seconds: 3), (timer) {
+      // Here, update currentLocation with the user's new location
       setState(() {
-        this.polylinePoints = result.points
-            .map((point) => LatLng(point.latitude, point.longitude))
-            .toList();
+        print("Updating Location11");
+        currentLocation = LatLng(
+          point2.latitude + 0.0001 * timer.tick,
+          point2.longitude + 0.0001 * timer.tick,
+        );
       });
-      moveCameraToCoverPoints();
-    } else {
-      print('No points found in the route result.');
+      fetchRoute(currentLocation);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void getLocation() {
+    DatabaseReference databaseReference =
+        FirebaseDatabase.instance.ref().child('tracking').child('driverId');
+
+    databaseReference.onValue.listen((event) {
+      DataSnapshot dataSnapshot = event.snapshot;
+      //   dataSnapshot = dataSnapshot.value as DataSnapshot;
+      print("data");
+      print(dataSnapshot);
+      DriverLocationModel? driverLocationModel =
+          DriverLocationModel.fromSnapshot(dataSnapshot);
+      print('data updated');
+      print(driverLocationModel.latitude);
+      if (driverLocationModel != null) {
+        setState(() {
+          print("Updating Location");
+          currentLocation = LatLng(
+            driverLocationModel.latitude,
+            driverLocationModel.longitude,
+          );
+        });
+        fetchRoute(currentLocation);
+      }
+    });
+  }
+
+  Future<void> fetchRoute(LatLng? currentLocation) async {
+    if (currentLocation != null) {
+      print("Fetch route");
+      try {
+        final polylinePoints = PolylinePoints();
+
+        final result = await polylinePoints.getRouteBetweenCoordinates(
+          Constants.GOOGLE_MAPS_API_KEY,
+          PointLatLng(point1.latitude, point1.longitude),
+          PointLatLng(currentLocation.latitude, currentLocation.longitude),
+        );
+
+        if (result.points.isNotEmpty) {
+          setState(() {
+            this.polylinePoints = result.points
+                .map((point) => LatLng(point.latitude, point.longitude))
+                .toList();
+          });
+          moveCameraToCoverPoints();
+        } else {
+          print('Fetching route: No points found in the route result.');
+        }
+      } catch (error) {
+        print("Error fetching route: $error");
+      }
     }
   }
 
@@ -97,33 +140,15 @@ class _TestMapState extends State<TestMap> {
         .asUint8List();
   }
 
-  Future<Uint8List> getImages(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetHeight: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-        .buffer
-        .asUint8List();
-  }
 
-  @override
-  void initState() {
-    super.initState();
-    loadMarkers();
-  }
 
   loadMarkers() async {
-    busMarker = await getImages("img/camera.png", 150);
+    busMarker = await getBytesFromAsset("img/camera.png", 150);
     setState(() {}); // Trigger a rebuild after the marker is loaded
-
   }
 
   @override
   Widget build(BuildContext context) {
-    loadMarkers();
-    fetchRoute();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Route Line Example'),
@@ -134,64 +159,63 @@ class _TestMapState extends State<TestMap> {
         width: MediaQuery.of(context).size.width,
         child: Stack(
           children: [
-            if (busMarker != null) // Check if busMarker is not null
+            if(busMarker!=null)
               GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                    target: point1,
-                    zoom: 15.0,
+              initialCameraPosition: CameraPosition(
+                target: point1,
+                zoom: 15.0,
+              ),
+              myLocationEnabled: true,
+              markers: {
+                Marker(
+                  markerId: const MarkerId('markerId1'),
+                  position: point1,
+                  icon: BitmapDescriptor.defaultMarker,
+                  infoWindow: const InfoWindow(
+                    title: 'Marker 1',
+                    snippet: 'Point 1',
                   ),
-                  myLocationEnabled: true,
-                  markers: {
-                    Marker(
-                      markerId: const MarkerId('markerId1'),
-                      position: point1,
-                      infoWindow: const InfoWindow(
-                        title: 'Marker 1',
-                        snippet: 'Point 1',
-                      ),
-                    ),
-                    Marker(
-                      markerId: const MarkerId('markerId2'),
-                      position: point2,
-                      icon:  BitmapDescriptor.fromBytes(busMarker!), //
-                      infoWindow: const InfoWindow(
-                        title: 'Marker 2',
-                        snippet: 'Point 2',
-                      ),
-                    ),
-                  },
-                  polylines: {
-                    if (polylinePoints.isNotEmpty)
-                      Polyline(
-                        polylineId: const PolylineId('routeLine'),
-                        color: const Color.fromARGB(255, 113, 65, 146),
-                        width: 5,
-                        points: polylinePoints,
-                      ),
-                  },
-                  padding: const EdgeInsets.all(20.0),
-                  onMapCreated: (GoogleMapController controller) async {
-                    LatLngBounds bounds = LatLngBounds(
-                      southwest: LatLng(
-                        polylinePoints.first.latitude,
-                        polylinePoints.first.longitude,
-                      ),
-                      northeast: LatLng(
-                        polylinePoints.last.latitude,
-                        polylinePoints.last.longitude,
-                      ),
-                    );
+                ),
+                if (polylinePoints.isNotEmpty)
+                  Marker(
+                    markerId: const MarkerId('markerId2'),
+                    position: currentLocation ?? point2,
 
-                    // Create CameraUpdate with animation
-                    final CameraUpdate cameraUpdate =
-                    CameraUpdate.newLatLngBounds(
-                        bounds, 100); // Add optional padding
+                    icon:  BitmapDescriptor.fromBytes(busMarker!), //
+                    infoWindow: const InfoWindow(
+                      title: 'Marker 2',
+                      snippet: 'Point 2',
+                    ),
+                  ),
+              },
+              polylines: {
+                if (polylinePoints.isNotEmpty)
+                  Polyline(
+                    polylineId: const PolylineId('routeLine'),
+                    color: const Color.fromARGB(255, 113, 65, 146),
+                    width: 5,
+                    points: polylinePoints,
+                  ),
+              },
+              padding: const EdgeInsets.all(20.0),
+              onMapCreated: (GoogleMapController controller) async {
+                LatLngBounds bounds = LatLngBounds(
+                  southwest: LatLng(
+                    polylinePoints.first.latitude,
+                    polylinePoints.first.longitude,
+                  ),
+                  northeast: LatLng(
+                    polylinePoints.last.latitude,
+                    polylinePoints.last.longitude,
+                  ),
+                );
 
-                    // Animate the camera to the target bounds
-                    await controller.animateCamera(cameraUpdate);
-                  }),
-            if (busMarker == null) // Show a loading indicator if busMarker is null
-              Center(child: CircularProgressIndicator()),
+                final CameraUpdate cameraUpdate =
+                    CameraUpdate.newLatLngBounds(bounds, 100);
+
+                await controller.animateCamera(cameraUpdate);
+              },
+            ),
           ],
         ),
       ),
