@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ameen/model/driver.dart';
 import 'package:ameen/model/student.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,6 +9,7 @@ import '../model/parent.dart';
 class LocalStorageService {
   static const String parentKey = 'parent';
   static const String studentKey = 'student';
+  static const String driverKey = 'driver';
 
   static Future<void> saveParent(ParentModel parent) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -18,6 +20,15 @@ class LocalStorageService {
     print(parentJson);
   }
 
+  static Future<void> saveDriver(DriverModel driver) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final parentJson =
+        json.encode(driver.toMap()); // Encode the map to JSON string
+    await prefs.setString(driverKey, parentJson);
+    print("Saved Driver to Local:");
+    print(parentJson);
+  }
+
   static Future<void> saveStudent(StudentModel student) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final studentJson = json.encode(student.toMap());
@@ -25,6 +36,7 @@ class LocalStorageService {
     print("Saved Student:");
     print(studentJson);
   }
+
   static Future<ParentModel?> getParent() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final parentJson = prefs.getString(parentKey);
@@ -35,7 +47,15 @@ class LocalStorageService {
     return null;
   }
 
-
+  static Future<DriverModel?> getDriver() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final driverJson = prefs.getString(driverKey);
+    if (driverJson != null) {
+      final Map<String, dynamic> driverMap = json.decode(driverJson);
+      return DriverModel.fromMap(driverMap);
+    }
+    return null;
+  }
 
   static Future<StudentModel?> getStudent() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

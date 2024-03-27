@@ -57,6 +57,7 @@ class AdminController extends GetxController {
         busId: driverBussNo,
       );
       await dbHelper.saveDriver(driver, 'drivers');
+      await authService.resetPassword(driverEmail);
       _isLoading(false);
       return true;
     } catch (e) {

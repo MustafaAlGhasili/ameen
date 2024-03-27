@@ -116,7 +116,7 @@ class DatabaseHelper {
         DataSnapshot driverSnapshot =
             await _rootRef.child('drivers').child(userId).get();
         if (driverSnapshot.exists) {
-          // return DriverModel.fromSnapshot(driverSnapshot) as T?;
+           return DriverModel.fromSnapshot(driverSnapshot) as T?;
         }
       } else {
         DataSnapshot adminSnapshot =

@@ -1,4 +1,5 @@
 import 'package:ameen/view/ui/admin/home.dart';
+import 'package:ameen/view/ui/driver/driver_home.dart';
 import 'package:ameen/view/ui/sign/sign_in/forget_password.dart';
 import 'package:ameen/view/ui/sign/sign_up/sign_up.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
@@ -101,7 +102,7 @@ class SignIn extends StatelessWidget {
                                         Get.offAll(() => const Home());
                                         break;
                                       case 1:
-                                        //TODO Driver Home Page
+                                        Get.offAll(() => const DriverHome());
                                         break;
                                       case 2:
                                         Get.offAll(() => const AdminHome());

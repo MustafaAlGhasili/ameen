@@ -1,6 +1,7 @@
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/admin/home.dart';
+import 'package:ameen/view/ui/driver/driver_home.dart';
 import 'package:ameen/view/ui/home/home.dart';
 import 'package:ameen/view/ui/sign/start.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
@@ -30,6 +31,8 @@ class _SplashScreenState extends State<SplashScreen> {
       switch (userType) {
         case 0: // Parent
           return const Home();
+        case 1: // Admin
+          return const DriverHome();
         case 2: // Admin
           return const AdminHome();
         default:

@@ -1,5 +1,6 @@
 // import 'package:camera/camera.dart';
 import 'package:ameen/model/admin.dart';
+import 'package:ameen/model/driver.dart';
 import 'package:ameen/model/parent.dart';
 import 'package:ameen/utils/constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +15,6 @@ import '../model/school.dart';
 import '../model/student.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/DatabaseHelper.dart';
-import 'camera_controller.dart';
 
 class SignController extends GetxController {
   RxBool visibility = false.obs;
@@ -33,8 +33,6 @@ class SignController extends GetxController {
   final studentBDate = TextEditingController();
   final studentPhone = TextEditingController();
   final studentEmail = TextEditingController();
-
-
 
   final signInEmailCont = TextEditingController();
   final signInPassCont = TextEditingController();
@@ -85,9 +83,8 @@ class SignController extends GetxController {
   late DatabaseHelper _databaseHelper;
 
   RxString fileNameValue = ''.obs;
+
   String get fileName => fileNameValue.value;
-
-
 
   late FirebaseAuth _auth;
 
@@ -181,7 +178,6 @@ class SignController extends GetxController {
 
       await _databaseHelper.saveParent(parent, "parents");
 
-
       String imgUrl = Constants.STUDENT_IMAGES_URL + fileNameValue.value;
       //
       final student = StudentModel(
@@ -201,7 +197,6 @@ class SignController extends GetxController {
         imgUrl: imgUrl,
         email: studentEmail.text,
         phone: studentPhone.text,
-
       );
 
       print("Student");
@@ -282,8 +277,23 @@ class SignController extends GetxController {
           return true;
         }
       } else if (loginType == 1) {
-        //TODO driver Login
-        return true;
+        DriverModel? driver =
+            await _databaseHelper.getUserById<DriverModel>(userId, loginType);
+        print("Found Driver");
+        print(driver);
+        if (driver != null) {
+          if (!driver.isEnabled) {
+            _isLoading(false);
+            loginErrorValue.value = "في إنتظار تفعيل حسابك";
+            return false;
+          }
+          await LocalStorageService.saveDriver(driver);
+          _isLoading(false);
+          return true;
+        } else {
+          print("No Data for driver");
+          return false;
+        }
       } else {
         AdminModel? admin =
             await _databaseHelper.getUserById<AdminModel>(userId, loginType);

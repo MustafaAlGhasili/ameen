@@ -3,13 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-
   Future<String?> createUserWithEmailAndPassword(
       String email, String password) async {
     print("Started Creating New User ");
     try {
       final UserCredential userCredential =
-      await _auth.createUserWithEmailAndPassword(
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -46,9 +45,34 @@ class AuthService {
       if (e.code == "network-request-failed") {
       } else if (e.code == 'user-not-found' ||
           e.code == 'wrong-password' ||
-          e.code == 'invalid-credential') {
+          e.code == 'invalid-credential') {}
+    }
+  }
 
+  Future<bool> resetPassword(String email) async {
+    print("Email is $email");
+
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      // Password reset email sent successfully
+      print("Password reset email sent successfully");
+      return true;
+    } on FirebaseAuthException catch (e) {
+      // Handle FirebaseAuthException errors
+      print("FirebaseAuthException - Code: ${e.code}, Message: ${e.message}");
+      if (e.code == 'user-not-found') {
+        // Handle user not found error
+        print('User not found. Please check the email address.');
+      } else {
+        // Handle other errors as needed
+        print('Error sending password reset email: $e');
       }
+
+      return false;
+    } catch (e) {
+      // Handle other exceptions
+      print('Error sending password reset email: $e');
+      return false;
     }
   }
 }
