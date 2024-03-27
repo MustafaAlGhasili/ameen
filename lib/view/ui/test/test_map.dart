@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:ameen/model/location.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constant.dart';
+import 'package:ameen/utils/map_helper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,8 +20,10 @@ class _TestMapState extends State<TestMap> {
   LatLng point1 = const LatLng(24.7407256, 46.6498323);
   LatLng point2 = const LatLng(24.744671, 46.655624);
   LatLng? currentLocation;
+  String? busId;
   List<LatLng> polylinePoints = [];
   Uint8List? busMarker;
+  BitmapDescriptor? busMarker2;
   late Completer<GoogleMapController> _mapController = Completer();
   late Timer _locationUpdateTimer;
   final _databaseHelper = DatabaseHelper();
@@ -70,6 +73,7 @@ class _TestMapState extends State<TestMap> {
       if (driverLocationModel != null) {
         setState(() {
           print("Updating Location");
+          busId = driverLocationModel.busId;
           currentLocation = LatLng(
             driverLocationModel.latitude,
             driverLocationModel.longitude,
@@ -140,10 +144,10 @@ class _TestMapState extends State<TestMap> {
         .asUint8List();
   }
 
-
-
   loadMarkers() async {
-    busMarker = await getBytesFromAsset("img/camera.png", 150);
+    busMarker = await getBytesFromAsset("img/bus.png", 150);
+    busMarker2 =
+        await MapHelper.bitmapDescriptorFromSvgAsset("img/bus.svg", size: 35);
     setState(() {}); // Trigger a rebuild after the marker is loaded
   }
 
@@ -159,63 +163,63 @@ class _TestMapState extends State<TestMap> {
         width: MediaQuery.of(context).size.width,
         child: Stack(
           children: [
-            if(busMarker!=null)
+            if (busMarker2 != null)
               GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: point1,
-                zoom: 15.0,
-              ),
-              myLocationEnabled: true,
-              markers: {
-                Marker(
-                  markerId: const MarkerId('markerId1'),
-                  position: point1,
-                  icon: BitmapDescriptor.defaultMarker,
-                  infoWindow: const InfoWindow(
-                    title: 'Marker 1',
-                    snippet: 'Point 1',
-                  ),
+                initialCameraPosition: CameraPosition(
+                  target: point1,
+                  zoom: 15.0,
                 ),
-                if (polylinePoints.isNotEmpty)
+                myLocationEnabled: true,
+                markers: {
                   Marker(
-                    markerId: const MarkerId('markerId2'),
-                    position: currentLocation ?? point2,
-
-                    icon:  BitmapDescriptor.fromBytes(busMarker!), //
+                    markerId: const MarkerId('markerId1'),
+                    position: point1,
+                    icon: BitmapDescriptor.defaultMarker,
                     infoWindow: const InfoWindow(
-                      title: 'Marker 2',
-                      snippet: 'Point 2',
+                      title: 'Marker 1',
+                      snippet: 'Point 1',
                     ),
                   ),
-              },
-              polylines: {
-                if (polylinePoints.isNotEmpty)
-                  Polyline(
-                    polylineId: const PolylineId('routeLine'),
-                    color: const Color.fromARGB(255, 113, 65, 146),
-                    width: 5,
-                    points: polylinePoints,
-                  ),
-              },
-              padding: const EdgeInsets.all(20.0),
-              onMapCreated: (GoogleMapController controller) async {
-                LatLngBounds bounds = LatLngBounds(
-                  southwest: LatLng(
-                    polylinePoints.first.latitude,
-                    polylinePoints.first.longitude,
-                  ),
-                  northeast: LatLng(
-                    polylinePoints.last.latitude,
-                    polylinePoints.last.longitude,
-                  ),
-                );
+                  if (polylinePoints.isNotEmpty)
+                    Marker(
+                      markerId: const MarkerId('markerId2'),
+                      position: currentLocation ?? point2,
 
-                final CameraUpdate cameraUpdate =
-                    CameraUpdate.newLatLngBounds(bounds, 100);
+                      icon: busMarker2!, //
+                      infoWindow: InfoWindow(
+                        title: 'Bus',
+                        snippet: busId ?? 'Point 2',
+                      ),
+                    ),
+                },
+                polylines: {
+                  if (polylinePoints.isNotEmpty)
+                    Polyline(
+                      polylineId: const PolylineId('routeLine'),
+                      color: const Color.fromARGB(255, 113, 65, 146),
+                      width: 5,
+                      points: polylinePoints,
+                    ),
+                },
+                padding: const EdgeInsets.all(20.0),
+                onMapCreated: (GoogleMapController controller) async {
+                  LatLngBounds bounds = LatLngBounds(
+                    southwest: LatLng(
+                      polylinePoints.first.latitude,
+                      polylinePoints.first.longitude,
+                    ),
+                    northeast: LatLng(
+                      polylinePoints.last.latitude,
+                      polylinePoints.last.longitude,
+                    ),
+                  );
 
-                await controller.animateCamera(cameraUpdate);
-              },
-            ),
+                  final CameraUpdate cameraUpdate =
+                      CameraUpdate.newLatLngBounds(bounds, 100);
+
+                  await controller.animateCamera(cameraUpdate);
+                },
+              ),
           ],
         ),
       ),

@@ -156,7 +156,6 @@ class DatabaseHelper {
 
   Future<void> testRef() async {
     try {
-
       DataSnapshot snapshot =
           await studentsRef.orderByChild('busId').equalTo('W11').get();
       print("Student Data Try:");
@@ -288,15 +287,13 @@ class DatabaseHelper {
     return studentsOfDisabledParents;
   }
 
-
-
   Future<List<StudentModel>> getStudentsOfEnabledParents() async {
     print("I'm Called ");
     DatabaseReference studentsRef = _rootRef.child('students');
     DatabaseReference parentsRef = _rootRef.child('parents');
 
     final snapshot =
-    await parentsRef.orderByChild('isEnabled').equalTo(true).get();
+        await parentsRef.orderByChild('isEnabled').equalTo(true).get();
     List<ParentModel> parentList = snapshot.children
         .map((child) => ParentModel.fromSnapshot(child))
         .toList();
@@ -305,7 +302,7 @@ class DatabaseHelper {
 
     for (ParentModel parent in parentList) {
       final snapshot =
-      await studentsRef.orderByChild('parentId').equalTo(parent.id).get();
+          await studentsRef.orderByChild('parentId').equalTo(parent.id).get();
 
       List<StudentModel> studentsOfCurrentParent = snapshot.children
           .map((child) => StudentModel.fromSnapshot(child))
@@ -321,5 +318,15 @@ class DatabaseHelper {
     });
 
     return studentsOfDisabledParents;
+  }
+
+  Future<DriverLocationModel?> getDriverLocation() async {
+    try {
+      final snapshot = await _rootRef.child('tracking').child('driverId').get();
+      return DriverLocationModel.fromSnapshot(snapshot);
+    } catch (error) {
+      print('Error getting driver: $error');
+      return null;
+    }
   }
 }
