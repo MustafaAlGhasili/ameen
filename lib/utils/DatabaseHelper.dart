@@ -2,6 +2,7 @@ import 'package:ameen/model/location.dart';
 import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
 import 'package:ameen/model/token.dart';
+import 'package:ameen/model/trip.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import '../model/admin.dart';
@@ -51,6 +52,7 @@ class DatabaseHelper {
       return null;
     }
   }
+
   Future<String?> saveDriver(DriverModel driverModel, String refName) async {
     try {
       print("Is being save");
@@ -116,7 +118,7 @@ class DatabaseHelper {
         DataSnapshot driverSnapshot =
             await _rootRef.child('drivers').child(userId).get();
         if (driverSnapshot.exists) {
-           return DriverModel.fromSnapshot(driverSnapshot) as T?;
+          return DriverModel.fromSnapshot(driverSnapshot) as T?;
         }
       } else {
         DataSnapshot adminSnapshot =
@@ -342,4 +344,67 @@ class DatabaseHelper {
       return null;
     }
   }
+
+  Future<String?> saveTrip(TripModel trip) async {
+    String refName = "trips";
+    String tripId = _rootRef.push().key ?? '';
+    print("Is being save");
+    print("Trip Id:${tripId}");
+    DatabaseReference tripRef = _rootRef.child(refName).child(tripId);
+    trip.id = tripId;
+    tripRef.set(trip.toMap()).then((_) {
+      print('Trip created successfully');
+    }).catchError((error) {
+      print('Failed to create trip: $error');
+    });
+
+    return tripId;
+  }
+
+  Future<List<StudentModel>> getStudentsOnBus1WithStatus(String busId) async {
+    print("Getting Students on Bus 1 with Status");
+
+    // 1. Get Trip for Bus 1
+    final tripSnapshot = await _rootRef.child('trips')
+        .orderByChild('busId')
+        .equalTo(busId)
+        .get();
+
+    if (tripSnapshot.children.isEmpty) {
+      print("No Trip Found for Bus 1");
+      return []; // Return empty list if no trip exists
+    }
+
+    final tripData = TripModel.fromSnapshot(tripSnapshot.children.first);
+
+    // 2. Filter Students with Status based on tripData.studentTripStatus
+    final studentsWithStatus1 = tripData.studentTripStatus?.entries
+        .where((entry) => entry.value.status == 1)
+        .map((entry) => entry.key) // Get student IDs
+        .toList();
+
+
+    // Check if any student has status 1
+    if (studentsWithStatus1?.isEmpty ?? true) {
+      print("No Students with Status 1 on Bus 1 Trip");
+      return []; // Return empty list if no students with status 1
+    }
+
+    // 3. Get Student Details based on student IDs
+    final studentList = <StudentModel>[];
+    for (String studentId in studentsWithStatus1!) {
+      final studentSnapshot = await DatabaseHelper.studentsRef.child(studentId).get();
+      if (studentSnapshot.exists) {
+        studentList.add(StudentModel.fromSnapshot(studentSnapshot));
+      }
+    }
+
+    print("Students on Bus 1 with Status 1:");
+    studentList.forEach((student) {
+      print('Student ID: ${student.id}, Status: ${tripData.studentTripStatus![student.id!.toString()]!.status}');
+    });
+
+    return studentList;
+  }
+
 }

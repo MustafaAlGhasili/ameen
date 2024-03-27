@@ -3,7 +3,7 @@ import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/driver/student/student_list.dart';
-import 'package:ameen/view/ui/driver/trip.dart';
+import 'package:ameen/view/ui/driver/student_trip.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 import 'package:flutter/material.dart';

@@ -2,25 +2,31 @@ import 'dart:async';
 import 'dart:math' show cos, sqrt, asin;
 
 import 'package:ameen/utils/constant.dart';
-import 'package:ameen/view/ui/test/test_map_uber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:location/location.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class NavigationScreenTest extends StatefulWidget {
+import '../../../model/location.dart';
+import '../../../utils/DatabaseHelper.dart';
+
+class NavigationScreen extends StatefulWidget {
   final double lat;
   final double lng;
+  final String? studentName;
+  final String? addressDescription;
 
-  NavigationScreenTest(this.lat, this.lng);
+  NavigationScreen(this.lat, this.lng,
+      {this.studentName, this.addressDescription});
 
   @override
-  State<NavigationScreenTest> createState() => _NavigationScreenTestState();
+  State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
-class _NavigationScreenTestState extends State<NavigationScreenTest> {
+class _NavigationScreenState extends State<NavigationScreen> {
   final Completer<GoogleMapController?> _controller = Completer();
   Map<PolylineId, Polyline> polylines = {};
   PolylinePoints polylinePoints = PolylinePoints();
@@ -29,6 +35,7 @@ class _NavigationScreenTestState extends State<NavigationScreenTest> {
   loc.LocationData? _currentPosition;
   LatLng curLocation = LatLng(15.3546934, 44.163375);
   StreamSubscription<loc.LocationData>? locationSubscription;
+  final DatabaseHelper _databaseHelper = DatabaseHelper();
 
   @override
   void initState() {
@@ -43,6 +50,7 @@ class _NavigationScreenTestState extends State<NavigationScreenTest> {
     super.dispose();
   }
 
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,35 +80,66 @@ class _NavigationScreenTestState extends State<NavigationScreenTest> {
                   left: 15,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => TestMapUber()),
-                          (route) => false);
+                      Get.back();
                     },
                     child: Icon(Icons.arrow_back),
                   ),
                 ),
                 Positioned(
-                    bottom: 10,
-                    right: 10,
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.blue),
-                      child: Center(
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.navigation_outlined,
-                            color: Colors.white,
+                  bottom: 10,
+                  left: 10,
+                  right: 10,
+                  child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Student ${widget.studentName}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
-                          onPressed: () async {
-                            await launchUrl(Uri.parse(
-                                'google.navigation:q=${widget.lat}, ${widget.lng}&key=${Constants.GOOGLE_MAPS_API_KEY}'));
-                          },
-                        ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Address: ${widget.addressDescription}',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ],
                       ),
-                    ))
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  right: 10,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.blue,
+                    ),
+                    child: Center(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.navigation_outlined,
+                          color: Colors.white,
+                        ),
+                        onPressed: () async {
+                          await launchUrl(Uri.parse(
+                              'google.navigation:q=${widget.lat}, ${widget.lng}&key=${Constants.GOOGLE_MAPS_API_KEY}'));
+                        },
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
     );
@@ -137,22 +176,43 @@ class _NavigationScreenTestState extends State<NavigationScreenTest> {
 
     if (_permissionGranted == loc.PermissionStatus.granted) {
       _currentPosition = _locationData;
-      curLocation = LatLng(_currentPosition!.latitude!, _currentPosition!.longitude!);
-      locationSubscription = location.onLocationChanged.listen((LocationData currentLocation) {
+      curLocation =
+          LatLng(_currentPosition!.latitude!, _currentPosition!.longitude!);
+      locationSubscription =
+          location.onLocationChanged.listen((LocationData currentLocation) {
+        if (currentLocation.longitude != null) {
+          final timestamp = DateTime.now().toIso8601String();
+          final driverLocation = DriverLocationModel(
+              driverId: "driverId",
+              busId: "B1",
+              latitude: currentLocation.latitude!,
+              longitude: currentLocation.longitude!,
+              timestamp: timestamp);
+
+          _databaseHelper.saveDriverLocation(driverLocation, "tracking");
+          print(
+              'Current location: ${currentLocation.latitude}, ${currentLocation.longitude}');
+        }
         controller?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
           target: LatLng(currentLocation.latitude!, currentLocation.longitude!),
           zoom: 16,
         )));
         if (mounted) {
-          controller?.showMarkerInfoWindow(MarkerId(sourcePosition!.markerId.value));
+          controller
+              ?.showMarkerInfoWindow(MarkerId(sourcePosition!.markerId.value));
           setState(() {
-            curLocation = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+            curLocation =
+                LatLng(currentLocation.latitude!, currentLocation.longitude!);
             sourcePosition = Marker(
-              markerId: MarkerId('source'), // Use a fixed ID for source marker
-              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-              position: LatLng(currentLocation.latitude!, currentLocation.longitude!),
+              markerId: MarkerId('source'),
+              // Use a fixed ID for source marker
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueBlue),
+              position:
+                  LatLng(currentLocation.latitude!, currentLocation.longitude!),
               infoWindow: InfoWindow(
-                title: '${double.parse((getDistance(LatLng(widget.lat, widget.lng)).toStringAsFixed(2)))} km',
+                title:
+                    '${double.parse((getDistance(LatLng(widget.lat, widget.lng)).toStringAsFixed(2)))} km',
               ),
               onTap: () {
                 print('market tapped');
@@ -170,7 +230,7 @@ class _NavigationScreenTestState extends State<NavigationScreenTest> {
     List<LatLng> polylineCoordinates = [];
     List<dynamic> points = [];
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-       Constants.GOOGLE_MAPS_API_KEY,
+        Constants.GOOGLE_MAPS_API_KEY,
         PointLatLng(curLocation.latitude, curLocation.longitude),
         PointLatLng(dst.latitude, dst.longitude),
         travelMode: TravelMode.driving);

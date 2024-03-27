@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../model/school.dart';
+import '../../../model/trip.dart';
 import '../../../utils/DatabaseHelper.dart';
 
 class TestFirebase extends StatelessWidget {
@@ -17,7 +18,25 @@ class TestFirebase extends StatelessWidget {
 
     HomeController controller = Get.find();
     SignController signController = Get.find<SignController>();
-    signController.createUserWithEmailAndPassword("mood1qq@gmail.com", "password");
+
+    Map<String, StudentTripStatus> studentTripStatus = {
+      'student1': StudentTripStatus(id: 'student1', status: 0),
+      'student2': StudentTripStatus(id: 'student2', status: 1),
+      'student3': StudentTripStatus(id: 'student3', status: 2),
+    };
+
+    // Create a sample trip
+    TripModel trip = TripModel(
+      id: '', // Will be generated automatically
+      type: 1,
+      driverId: 'driver1',
+      busId: 'B11',
+      createdAt: DateTime.now(),
+      studentTripStatus: studentTripStatus,
+    );
+
+    final databaseHelper = DatabaseHelper();
+    databaseHelper.saveTrip(trip);
 
     return Directionality(
       textDirection: TextDirection.rtl,
