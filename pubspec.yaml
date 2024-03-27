@@ -66,6 +66,8 @@ dependencies:
   cached_network_image: ^3.3.1
   flutter_svg: ^2.0.9
   location: ^5.0.3
+  background_locator_2: ^2.0.6
+  location_permissions: ^4.0.1
 
 
 dev_dependencies:

@@ -136,7 +136,7 @@ class _TestMapTrackingState extends State<TestMapTracking> {
         final timestamp = DateTime.now().toIso8601String();
         final driverLocation = DriverLocationModel(
             driverId: "driverId",
-            busId: "B1",
+            busId: "B1AA",
             latitude: currentLocation!.latitude,
             longitude: currentLocation!.longitude,
             timestamp: timestamp);

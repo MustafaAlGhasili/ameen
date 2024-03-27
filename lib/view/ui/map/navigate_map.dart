@@ -1,17 +1,29 @@
 import 'dart:async';
+import 'dart:isolate';
 import 'dart:math' show cos, sqrt, asin;
+import 'dart:ui';
 
 import 'package:ameen/utils/constant.dart';
+import 'package:background_locator_2/background_locator.dart';
+import 'package:background_locator_2/location_dto.dart';
+import 'package:background_locator_2/settings/ios_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:location/location.dart';
+import 'package:location_permissions/location_permissions.dart' as loc2;
 import 'package:url_launcher/url_launcher.dart';
+
+import 'package:background_locator_2/settings/android_settings.dart';
+import 'package:background_locator_2/settings/locator_settings.dart' as settings;
 
 import '../../../model/location.dart';
 import '../../../utils/DatabaseHelper.dart';
+import 'file_manager.dart';
+import 'location_handler.dart';
+import 'location_service_repository.dart';
 
 class NavigationScreen extends StatefulWidget {
   final double lat;
@@ -37,11 +49,44 @@ class _NavigationScreenState extends State<NavigationScreen> {
   StreamSubscription<loc.LocationData>? locationSubscription;
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
+  ReceivePort port = ReceivePort();
+
+  String logStr = '';
+  bool? isRunning;
+  LocationDto? lastLocation;
+
+
   @override
   void initState() {
     super.initState();
+
+    if (IsolateNameServer.lookupPortByName(
+        LocationServiceRepository.isolateName) !=
+        null) {
+      IsolateNameServer.removePortNameMapping(
+          LocationServiceRepository.isolateName);
+    }
+
+    IsolateNameServer.registerPortWithName(
+        port.sendPort, LocationServiceRepository.isolateName);
+
+    port.listen(
+          (dynamic data) async {
+        await updateUI(data);
+      },
+    );
+    initPlatformState();
     getNavigation();
     addMarker();
+
+  }
+
+  void onStop() async {
+    await BackgroundLocator.unRegisterLocationUpdate();
+    final _isRunning = await BackgroundLocator.isServiceRunning();
+    setState(() {
+      isRunning = _isRunning;
+    });
   }
 
   @override
@@ -50,7 +95,131 @@ class _NavigationScreenState extends State<NavigationScreen> {
     super.dispose();
   }
 
-  @override
+  Future<void> updateUI(dynamic data) async {
+    //final log = await FileManager.readLogFile();
+
+    LocationDto? locationDto =
+    (data != null) ? LocationDto.fromJson(data) : null;
+    await _updateNotificationText(locationDto!);
+    print("Tracking ");
+    print(locationDto);
+
+    final timestamp = DateTime.now().toIso8601String();
+    final driverLocation = DriverLocationModel(
+        driverId: "driverId",
+        busId: "B2",
+        latitude: locationDto.latitude,
+        longitude: locationDto.longitude,
+        timestamp: timestamp);
+
+    _databaseHelper.saveDriverLocation(driverLocation, "tracking");
+
+    setState(() {
+      if (data != null) {
+        lastLocation = locationDto;
+      }
+     // logStr = log;
+    });
+  }
+
+  Future<void> _updateNotificationText(LocationDto data) async {
+    // ignore: unnecessary_null_comparison
+    if (data == null) {
+      return;
+    }
+
+    await BackgroundLocator.updateNotificationText(
+        title: "new location received",
+        msg: "${DateTime.now()}",
+        bigMsg: "${data.latitude}, ${data.longitude}");
+  }
+
+  Future<void> initPlatformState() async {
+    print('Initializing...');
+    await BackgroundLocator.initialize();
+    logStr = await FileManager.readLogFile();
+    print('Initialization done');
+    final _isRunning = await BackgroundLocator.isServiceRunning();
+    setState(() {
+      isRunning = _isRunning;
+    });
+    print('Running ${isRunning.toString()}');
+  }
+
+  void _onStart() async {
+    print("Starting BackService");
+    if (await _checkLocationPermission()) {
+      await _startLocator();
+      final _isRunning = await BackgroundLocator.isServiceRunning();
+
+
+      setState(() {
+        isRunning = _isRunning;
+        lastLocation = null;
+      });
+      print("Granted BackService");
+      print("Running BackService:$isRunning");
+
+    } else {
+      // show error
+      print("Not Granted BackService");
+
+    }
+  }
+
+  Future<bool> _checkLocationPermission() async {
+    final access = await loc2.LocationPermissions().checkPermissionStatus();
+    switch (access) {
+      case loc2.PermissionStatus.unknown:
+      case loc2.PermissionStatus.denied:
+      case loc2.PermissionStatus.restricted:
+        final permission = await loc2.LocationPermissions().requestPermissions(
+          permissionLevel: loc2.LocationPermissionLevel.locationAlways,
+        );
+        print(loc2.PermissionStatus.granted);
+        if (permission == loc2.PermissionStatus.granted) {
+          return true;
+        } else {
+          return false;
+        }
+
+      case loc2.PermissionStatus.granted:
+        return true;
+
+      default:
+        return false;
+    }
+  }
+
+  Future<void> _startLocator() async {
+    Map<String, dynamic> data = {'countInit': 1};
+    return await BackgroundLocator.registerLocationUpdate(
+        LocationCallbackHandler.callback,
+        initCallback: LocationCallbackHandler.initCallback,
+        initDataCallback: data,
+        disposeCallback: LocationCallbackHandler.disposeCallback,
+        iosSettings: IOSSettings(
+            accuracy: settings.LocationAccuracy.NAVIGATION,
+            distanceFilter: 0,
+            stopWithTerminate: true),
+        autoStop: false,
+        androidSettings: AndroidSettings(
+            accuracy: settings.LocationAccuracy.NAVIGATION,
+            interval: 5,
+            distanceFilter: 0,
+            client: LocationClient.google,
+            androidNotificationSettings: AndroidNotificationSettings(
+                notificationChannelName: 'Location tracking',
+                notificationTitle: 'Start Location Tracking',
+                notificationMsg: 'Track location in background',
+                notificationBigMsg:
+                'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
+                notificationIconColor: Colors.grey,
+                notificationTapCallback:
+                LocationCallbackHandler.notificationCallback)));
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,9 +302,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
                           color: Colors.white,
                         ),
                         onPressed: () async {
-                          await launchUrl(Uri.parse(
+                          _onStart();
+                            await launchUrl(Uri.parse(
                               'google.navigation:q=${widget.lat}, ${widget.lng}&key=${Constants.GOOGLE_MAPS_API_KEY}'));
-                        },
+                       },
                       ),
                     ),
                   ),
@@ -181,15 +351,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
       locationSubscription =
           location.onLocationChanged.listen((LocationData currentLocation) {
         if (currentLocation.longitude != null) {
-          final timestamp = DateTime.now().toIso8601String();
-          final driverLocation = DriverLocationModel(
-              driverId: "driverId",
-              busId: "B1",
-              latitude: currentLocation.latitude!,
-              longitude: currentLocation.longitude!,
-              timestamp: timestamp);
-
-          _databaseHelper.saveDriverLocation(driverLocation, "tracking");
           print(
               'Current location: ${currentLocation.latitude}, ${currentLocation.longitude}');
         }
