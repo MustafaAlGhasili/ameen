@@ -58,8 +58,9 @@ class StudentsList extends StatelessWidget {
                         itemBuilder: (context, i) {
                           return ButtonModel(
                             onTap: () {
-                              Get.to(() => StudentDetails(student: student[i],
-
+                              Get.to(() => StudentDetails(
+                                    student: student[i],
+                                no: 0,
                                   ));
                             },
                             bus: true,
@@ -99,5 +100,3 @@ class StudentsList extends StatelessWidget {
     );
   }
 }
-
-

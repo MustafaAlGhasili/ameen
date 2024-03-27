@@ -196,6 +196,7 @@ class DatabaseHelper {
           .equalTo(busId)
           .get();
 
+      print(snapshot.value);
       return snapshot.children
           .map((child) => StudentModel.fromSnapshot(child))
           .toList();
