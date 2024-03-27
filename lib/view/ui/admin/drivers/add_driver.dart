@@ -1,9 +1,5 @@
 import 'package:ameen/controller/admin_controller.dart';
-import 'package:ameen/model/driver.dart';
-import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/admin/drivers/drivers_list.dart';
-import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:ameen/view/ui/widget/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,24 +35,38 @@ class AddDriver extends StatefulWidget {
 }
 
 class _AddDriverState extends State<AddDriver> {
+  bool _isLoading = false;
+
   final CamController camController =
       Get.find(); // Assuming GetX controller instance
   String? _selectedImagePath; // Store the selected image path
+  String? licenceImgUrl;
 
   Future<void> _handleCameraPick(
       ImageSource imageSource, String fullName) async {
-    final response =
-        await camController.takeDriverPhotoFromCamera(imageSource);
+    setState(() {
+      _isLoading = true; // Set loading state to false
+    });
+    final response = await camController.takeDriverPhotoFromCamera(imageSource);
     setState(() {
       _selectedImagePath = camController.picture.path;
     });
     if (response == 200) {
       // Assuming success code is 200
+      licenceImgUrl = camController.driverImgUrl.value;
+      if (licenceImgUrl != null) {
+        controller.driverLicence.value = licenceImgUrl!;
+        print("Image url: $licenceImgUrl");
+      } else {
+        print("Image url not found");
+      }
       setState(() {
         _selectedImagePath = camController.picture.path;
       });
     }
-    // Handle other response codes
+    setState(() {
+      _isLoading = false; // Set loading state to false
+    });
   }
 
   void _showImageOptionsDialog(BuildContext context) async {
@@ -159,6 +169,26 @@ class _AddDriverState extends State<AddDriver> {
                   padding: EdgeInsets.symmetric(
                       horizontal: width * 0.03, vertical: height * 0.02),
                   child: TextFieldModel(
+                    onChanged: (val) {
+                      controller.driverPhone = val;
+                    },
+                    text: "رقم الجوال",
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.02),
+                  child: TextFieldModel(
+                    onChanged: (val) {
+                      controller.driverEmail = val;
+                    },
+                    text: "البريد الإلكتروني",
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.02),
+                  child: TextFieldModel(
                     controller: controller.bDate,
 
                     sufIcon: IconButton(
@@ -201,7 +231,7 @@ class _AddDriverState extends State<AddDriver> {
                     onTap: () => _showImageOptionsDialog(context),
                     child: TextFieldModel(
                       onChanged: (val) {
-                        controller.driverLicence = val;
+                        //   controller.driverLicence = val;
                       },
                       isEnabled: false,
                       sufIcon: const Icon(
@@ -222,41 +252,55 @@ class _AddDriverState extends State<AddDriver> {
                     text: "رقم الباص ",
                   ),
                 ),
-                ButtonModel(
-                  onTap: () {
-                    if (key.currentState!.validate()) {
-                      DatabaseHelper dbHelper = DatabaseHelper();
-                      dbHelper.save(
-                          DriverModel(
-                            fName: controller.driverFName,
-                            lName: controller.driverLName,
-                            phone: controller.driverPhone,
-                            nationalId: controller.driverNationalID,
-                            isEnabled: false,
-                            driverBDate: controller.driverBDate.value,
-                            blood: controller.driverBlood.value,
-                            driverLicence: controller.driverLicence,
-                            busId: controller.driverBussNo,
-                          ),
-                          'drivers');
-                      Get.back();
-                      controller.clearData();
-                    } else {
-                      print("error");
-                    }
-                  },
-                  content: "حفط",
-                  rowMainAxisAlignment: MainAxisAlignment.center,
-                  backColor: PRIMARY_COLOR,
-                  height: height * 0.06,
-                  hMargin: width * 0.07,
-                  style: const TextStyle(color: Colors.white),
-                )
+                ElevatedButton(
+                  onPressed: _isLoading ? null : () => _saveDriver(),
+                  // Disable button when loading
+                  style: ElevatedButton.styleFrom(
+                    primary: PRIMARY_COLOR,
+                    onPrimary: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      vertical: height * 0.02,
+                      horizontal: width * 0.07,
+                    ),
+                  ),
+                  child: _isLoading
+                      ? CircularProgressIndicator() // Show loading indicator
+                      : Text(
+                          "حفظ",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+
   }
+  Future<void> _saveDriver() async {
+    // Validate form
+    if (key.currentState!.validate()) {
+      setState(() {
+        _isLoading = true; // Set loading state to true
+      });
+
+      // Call saveDriver method from controller
+      final result = await controller.saveDriver();
+      print("result is $result");
+
+      setState(() {
+        _isLoading = false; // Set loading state to false
+      });
+
+      // Navigate back
+      Get.back();
+      controller.clearData();
+      Get.back();
+
+    } else {
+      print("error");
+    }
+  }
+
 }

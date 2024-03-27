@@ -26,8 +26,6 @@ class DatabaseHelper {
 
       if (model is StudentModel) {
         model.id = modelId!;
-      } else if (model is DriverModel) {
-        model.id = modelId!;
       }
       await newModelRef.set(model.toMap());
 
@@ -50,6 +48,20 @@ class DatabaseHelper {
       return parentModel.id;
     } catch (error) {
       print('Error saving ${parentModel.toString()}: $error');
+      return null;
+    }
+  }
+  Future<String?> saveDriver(DriverModel driverModel, String refName) async {
+    try {
+      print("Is being save");
+      print("Driver Id:${driverModel.id}");
+      DatabaseReference newModelRef =
+          _rootRef.child(refName).child(driverModel.id);
+      await newModelRef.set(driverModel.toMap());
+
+      return driverModel.id;
+    } catch (error) {
+      print('Error saving ${driverModel.toString()}: $error');
       return null;
     }
   }

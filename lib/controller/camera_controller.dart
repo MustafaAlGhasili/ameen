@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:ameen/utils/constant.dart';
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,9 @@ class CamController extends GetxController {
   double? imgUploaded = 0.0;
 
   RxString fileNameValue = ''.obs;
+
   String get fileName => fileNameValue.value;
-
-
+  RxString driverImgUrl = ''.obs;
 
   bool _isLoading = false; // Add this variable
   bool get isLoading => _isLoading;
@@ -79,14 +80,16 @@ class CamController extends GetxController {
         'Connection': 'keep-alive',
         'User-Agent': 'ClinicPlush'
       });
-      final response = await Dio().put(url,
+      final response = await Dio().put(
+        url,
         data: Stream.fromIterable(image.map((e) => [e])),
         options: options,
         onSendProgress: (count, total) {
           imgUploaded = count / total;
-        },);
+        },
+      );
       print(response);
-     // navigator!.pop();
+      // navigator!.pop();
 
       if (response.statusCode == 200) {
         // Image uploaded successfully.
@@ -149,12 +152,16 @@ class CamController extends GetxController {
         'Connection': 'keep-alive',
         'User-Agent': 'ClinicPlush'
       });
+      print('Image uploading!');
+      Get.back();
       final response = await Dio().put(url,
           data: Stream.fromIterable(image.map((e) => [e])), options: options);
       print(response);
 
       if (response.statusCode == 200) {
         print('Image uploaded successfully!');
+        driverImgUrl.value = "${Constants.DRIVER_IMAGES_URL}$fileName";
+
         return 200;
       } else {
         print('Failed to upload image: ${response.statusMessage}');
@@ -179,8 +186,8 @@ class CamController extends GetxController {
   Future<XFile?> capturePhoto() async {
     Get.dialog(const Center(
         child: CircularProgressIndicator(
-          color: Colors.white,
-        )));
+      color: Colors.white,
+    )));
     if (cameraController.value.isTakingPicture) {
       return null;
     }
@@ -216,8 +223,8 @@ class CamController extends GetxController {
     return 502;
   }
 
-  Future<int> takePhotoFromCamera(ImageSource imageSource,
-      String fullName) async {
+  Future<int> takePhotoFromCamera(
+      ImageSource imageSource, String fullName) async {
     setLoading(true); // Set loading state to true before processing
 
     print("Full Name");
@@ -260,6 +267,7 @@ class CamController extends GetxController {
         if (xFile.path.isNotEmpty) {
           picture = xFile;
           File file = File(picture.path);
+          print("Call upload ");
           return uploadGeneralPhoto(file: file);
         }
       }

@@ -82,11 +82,10 @@ class _DriversListState extends State<DriversList> {
             )
           ],
         ),
-        body: Column(
-          children: [
-            SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Container(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
                 height: height * 0.75,
                 padding: EdgeInsets.only(top: height * 0.05),
                 child: FirebaseAnimatedList(
@@ -129,25 +128,26 @@ class _DriversListState extends State<DriversList> {
                   const Center(child: CircularProgressIndicator()),
                 ),
               ),
-            ),
-            ButtonModel(
-              onTap: () {
-                Get.to(() => const AddDriver());
-              },
-              padding: 10,
-              hMargin: width * 0.05,
-              vMargin: height * 0.02,
-              height: height * 0.06,
-              rowMainAxisAlignment: MainAxisAlignment.center,
-              backColor: const Color.fromARGB(255, 113, 65, 146),
-              style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-              content: "اضافة سائق جديد",
-            ),
-          ],
+              ButtonModel(
+                onTap: () {
+                  Get.to(() => const AddDriver());
+                },
+                padding: 10,
+                hMargin: width * 0.05,
+                vMargin: height * 0.02,
+                height: height * 0.06,
+                rowMainAxisAlignment: MainAxisAlignment.center,
+                backColor: const Color.fromARGB(255, 113, 65, 146),
+                style: TextStyle(color: Colors.white, fontSize: width * 0.05),
+                content: "اضافة سائق جديد",
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
 
   bool driverMatchesSearch(DriverModel driver, String searchText) {
     return driver.fName.contains(searchText) ||
