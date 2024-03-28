@@ -86,9 +86,6 @@ class DriverHome extends StatelessWidget {
                                               ButtonModel(
                                                 onTap: () {
                                                   controller.createTrip(1);
-                                                  Get.to(() => const Trip(
-                                                        tripType: 1,
-                                                      ));
                                                 },
                                                 content: 'رحلة الصباح',
                                                 backColor: PRIMARY_COLOR,

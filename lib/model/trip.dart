@@ -23,6 +23,18 @@ class TripModel implements ToMapConvertible {
 
   factory TripModel.fromSnapshot(DataSnapshot snapshot) {
     final Map<Object?, Object?> data = snapshot.value as Map<Object?, Object?>;
+
+    final studentTripStatusMap = data['studentTripStatus'] as Map<dynamic, dynamic>?;
+
+
+    // Convert studentTripStatusMap to Map<String, StudentTripStatus>
+    final Map<String, StudentTripStatus>? studentTripStatus = studentTripStatusMap?.map(
+          (key, value) => MapEntry(
+          key.toString(),
+          StudentTripStatus.fromMap(value as Map<dynamic, dynamic>)
+      ),
+    );
+
     return TripModel(
       id: data['id'] as String?,
       type: data['type'] as int?,
@@ -30,11 +42,7 @@ class TripModel implements ToMapConvertible {
       busId: data['busId'] as String?,
       status: data['status'] as int?,
       createdAt: DateTime.parse(data['createdAt'] as String),
-      studentTripStatus:
-          (data['studentTripStatus'] as Map<dynamic, dynamic>?)?.map(
-        (key, value) => MapEntry(key.toString(),
-            StudentTripStatus.fromMap(value as Map<String, dynamic>)),
-      ),
+      studentTripStatus: studentTripStatus,
     );
   }
 
@@ -49,7 +57,7 @@ class TripModel implements ToMapConvertible {
       studentTripStatus:
           (map['studentTripStatus'] as Map<String, dynamic>?)?.map(
         (key, value) => MapEntry(
-            key, StudentTripStatus.fromMap(value as Map<String, dynamic>)),
+            key, StudentTripStatus.fromMap(value as Map<dynamic, dynamic>)),
       ),
     );
   }
@@ -77,7 +85,7 @@ class StudentTripStatus {
     required this.status,
   });
 
-  factory StudentTripStatus.fromMap(Map<String, dynamic> map) {
+  factory StudentTripStatus.fromMap(Map<dynamic, dynamic> map) {
     return StudentTripStatus(
       id: map['id'] as String,
       status: map['status'] as int,

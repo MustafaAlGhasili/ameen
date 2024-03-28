@@ -361,11 +361,12 @@ class DatabaseHelper {
     return tripId;
   }
 
-  Future<List<StudentModel>> getStudentsOnBus1WithStatus(String busId) async {
+  Future<List<StudentModel>> getStudentsOnBusWithStatus(String busId) async {
     print("Getting Students on Bus 1 with Status");
 
     // 1. Get Trip for Bus 1
-    final tripSnapshot = await _rootRef.child('trips')
+    final tripSnapshot = await _rootRef
+        .child('trips')
         .orderByChild('busId')
         .equalTo(busId)
         .get();
@@ -383,7 +384,6 @@ class DatabaseHelper {
         .map((entry) => entry.key) // Get student IDs
         .toList();
 
-
     // Check if any student has status 1
     if (studentsWithStatus1?.isEmpty ?? true) {
       print("No Students with Status 1 on Bus 1 Trip");
@@ -393,7 +393,8 @@ class DatabaseHelper {
     // 3. Get Student Details based on student IDs
     final studentList = <StudentModel>[];
     for (String studentId in studentsWithStatus1!) {
-      final studentSnapshot = await DatabaseHelper.studentsRef.child(studentId).get();
+      final studentSnapshot =
+          await DatabaseHelper.studentsRef.child(studentId).get();
       if (studentSnapshot.exists) {
         studentList.add(StudentModel.fromSnapshot(studentSnapshot));
       }
@@ -401,10 +402,53 @@ class DatabaseHelper {
 
     print("Students on Bus 1 with Status 1:");
     studentList.forEach((student) {
-      print('Student ID: ${student.id}, Status: ${tripData.studentTripStatus![student.id!.toString()]!.status}');
+      print(
+          'Student ID: ${student.id}, Status: ${tripData.studentTripStatus![student.id!.toString()]!.status}');
     });
 
     return studentList;
   }
 
+  Future<TripModel?> getTripById(String tripId) async {
+    try {
+      DataSnapshot tripSnapshot =
+          await _rootRef.child('trips').child(tripId).get();
+      if (tripSnapshot.exists) {
+        print("Found Trip");
+        return TripModel.fromSnapshot(tripSnapshot);
+      }
+
+      if (tripSnapshot.children.isEmpty) {
+        print("No Trip Found : $tripId");
+        return null; // Return null if no trip exists
+      }
+
+    } catch (e) {
+      print("Error fetching latest trip: $e");
+      return null; // Return null in case of error
+    }
+    return null;
+  }
+  Future<TripModel?> ListenTripById(String tripId, void Function(TripModel?) onDataChanged) async {
+    try {
+      DatabaseReference tripRef = _rootRef.child('trips').child(tripId);
+
+      // Listen for data changes
+      tripRef.onValue.listen((event) {
+        if (event.snapshot.exists) {
+          print("Found Trip");
+          TripModel trip = TripModel.fromSnapshot(event.snapshot);
+          onDataChanged(trip);
+        } else {
+          print("No Trip Found: $tripId");
+          onDataChanged(null);
+        }
+      });
+
+    } catch (e) {
+      print("Error fetching latest trip: $e");
+      onDataChanged(null);
+    }
+    return null;
+  }
 }
