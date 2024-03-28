@@ -5,11 +5,13 @@ import 'package:ameen/model/student.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/parent.dart';
+import '../model/trip.dart';
 
 class LocalStorageService {
   static const String parentKey = 'parent';
   static const String studentKey = 'student';
   static const String driverKey = 'driver';
+  static const String tripKey = 'trip';
 
   static Future<void> saveParent(ParentModel parent) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -76,5 +78,24 @@ class LocalStorageService {
   static Future<int?> getUserType() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getInt('userType');
+  }
+
+
+  static Future<TripModel?> getTrip() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final tripJson = prefs.getString(tripKey);
+    if (tripJson != null) {
+      final Map<String, dynamic> tripMap = json.decode(tripJson);
+      return TripModel.fromMap(tripMap);
+    } else {
+      return null;
+    }
+  }
+  static Future<void> saveTrip(TripModel trip) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final tripJson = json.encode(trip.toMap());
+    await prefs.setString(tripKey, tripJson);
+    print("Saved trip:");
+    print(tripJson);
   }
 }

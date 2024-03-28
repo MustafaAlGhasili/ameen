@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../model/driver.dart';
 import '../utils/DatabaseHelper.dart';
-
+import 'driver_controller.dart';
 class AdminController extends GetxController {
   String driverFName = '';
   String driverLName = '';

@@ -1,7 +1,7 @@
 import 'package:ameen/controller/admin_controller.dart';
+import 'package:ameen/controller/driver_controller.dart';
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/services/firebase_notification.dart';
-import 'package:ameen/view/ui/admin/drivers/add_driver.dart';
 import 'package:ameen/view/ui/driver/driver_home.dart';
 import 'package:ameen/view/ui/driver/map.dart';
 import 'package:ameen/view/ui/home/home.dart';
@@ -35,6 +35,7 @@ void main() async {
   Get.put(SignController());
   Get.put(HomeController());
   Get.put(CamController());
+  Get.put(DriverController());
   runApp(GetMaterialApp(
     localizationsDelegates: const [
       S.delegate,
@@ -43,7 +44,7 @@ void main() async {
     useInheritedMediaQuery: true,
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home:  DriverHome(),
+    home: const DriverHome(),
   ));
 }
 

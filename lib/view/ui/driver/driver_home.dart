@@ -1,3 +1,4 @@
+import 'package:ameen/controller/driver_controller.dart';
 import 'package:ameen/model/driver.dart';
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
@@ -11,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
 DatabaseHelper dbHelper = DatabaseHelper();
+DriverController controller = Get.find();
 
 class DriverHome extends StatelessWidget {
   const DriverHome({Key? key}) : super(key: key);
@@ -83,6 +85,7 @@ class DriverHome extends StatelessWidget {
                                               ),
                                               ButtonModel(
                                                 onTap: () {
+                                                  controller.createTrip(1);
                                                   Get.to(() => const Trip(
                                                         tripType: 1,
                                                       ));
@@ -100,6 +103,7 @@ class DriverHome extends StatelessWidget {
                                               ),
                                               ButtonModel(
                                                 onTap: () {
+                                                  controller.createTrip(2);
                                                   Get.to(() => const Trip(
                                                         tripType: 2,
                                                       ));
@@ -183,7 +187,8 @@ class DrawerModel extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return FutureBuilder<DriverModel?>(
-      future: LocalStorageService.getDriver(), // Call the getData method asynchronously
+      future: LocalStorageService.getDriver(),
+      // Call the getData method asynchronously
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
@@ -323,6 +328,4 @@ class DrawerModel extends StatelessWidget {
       },
     );
   }
-
-
 }

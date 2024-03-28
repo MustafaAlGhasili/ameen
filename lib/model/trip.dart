@@ -1,11 +1,13 @@
 import 'package:firebase_database/firebase_database.dart';
+
 import '../utils/data_converter.dart';
 
 class TripModel implements ToMapConvertible {
-  late  String? id;
+  late String? id;
   final int? type;
   final String? driverId;
   final String? busId;
+  final int? status;
   final DateTime? createdAt;
   final Map<String, StudentTripStatus>? studentTripStatus;
 
@@ -16,6 +18,7 @@ class TripModel implements ToMapConvertible {
     required this.busId,
     required this.createdAt,
     required this.studentTripStatus,
+    this.status = 0,
   });
 
   factory TripModel.fromSnapshot(DataSnapshot snapshot) {
@@ -25,9 +28,28 @@ class TripModel implements ToMapConvertible {
       type: data['type'] as int?,
       driverId: data['driverId'] as String?,
       busId: data['busId'] as String?,
+      status: data['status'] as int?,
       createdAt: DateTime.parse(data['createdAt'] as String),
-      studentTripStatus: (data['studentTripStatus'] as Map<dynamic, dynamic>?)?.map(
-            (key, value) => MapEntry(key.toString(), StudentTripStatus.fromMap(value as Map<String, dynamic>)),
+      studentTripStatus:
+          (data['studentTripStatus'] as Map<dynamic, dynamic>?)?.map(
+        (key, value) => MapEntry(key.toString(),
+            StudentTripStatus.fromMap(value as Map<String, dynamic>)),
+      ),
+    );
+  }
+
+  factory TripModel.fromMap(Map<String, dynamic> map) {
+    return TripModel(
+      id: map['id'] as String?,
+      type: map['type'] as int?,
+      driverId: map['driverId'] as String?,
+      busId: map['busId'] as String?,
+      status: map['status'] as int?,
+      createdAt: DateTime.parse(map['createdAt'] as String),
+      studentTripStatus:
+          (map['studentTripStatus'] as Map<String, dynamic>?)?.map(
+        (key, value) => MapEntry(
+            key, StudentTripStatus.fromMap(value as Map<String, dynamic>)),
       ),
     );
   }
@@ -38,8 +60,10 @@ class TripModel implements ToMapConvertible {
       'type': type,
       'driverId': driverId,
       'busId': busId,
+      'status': status,
       'createdAt': createdAt?.toIso8601String(),
-      'studentTripStatus': studentTripStatus?.map((key, value) => MapEntry(key, value.toMap())),
+      'studentTripStatus':
+          studentTripStatus?.map((key, value) => MapEntry(key, value.toMap())),
     };
   }
 }
