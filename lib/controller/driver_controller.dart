@@ -11,12 +11,13 @@ import '../view/ui/driver/student_trip.dart';
 class DriverController extends GetxController {
   final _databaseHelper = DatabaseHelper();
   var currentTrip;
-
+  late String? tripId;
   @override
   void onInit() {
     super.onInit();
     print("Current Trip");
-    print(currentTrip);
+    currentTrip =  LocalStorageService.getTrip();
+    tripId = currentTrip!.id;
   }
 
   Future<bool> createTrip(int type) async {
@@ -60,6 +61,7 @@ class DriverController extends GetxController {
       );
 
       await _databaseHelper.saveTrip(trip);
+      tripId = trip.id!;
       await LocalStorageService.saveTrip(trip);
       Get.to(() => const Trip(
             tripType: 1,
@@ -77,6 +79,7 @@ class DriverController extends GetxController {
 
   Future<TripModel?> getTrip(String id) async {
     final result = await _databaseHelper.getTripById(id);
+    tripId = result?.id;
     print(result);
     return result;
   }
@@ -86,7 +89,7 @@ class DriverController extends GetxController {
 
     bool completed = false; // Flag to track if the completer has been completed
 
-    _databaseHelper.ListenTripById(id, (trip) {
+    _databaseHelper.listenTripById(id, (trip) {
       if (!completed) {
         if (trip != null) {
           print("Trip ID: ${trip.id}");

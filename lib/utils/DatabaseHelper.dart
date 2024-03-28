@@ -429,7 +429,7 @@ class DatabaseHelper {
     }
     return null;
   }
-  Future<TripModel?> ListenTripById(String tripId, void Function(TripModel?) onDataChanged) async {
+  Future<TripModel?> listenTripById(String tripId, void Function(TripModel?) onDataChanged) async {
     try {
       DatabaseReference tripRef = _rootRef.child('trips').child(tripId);
 
