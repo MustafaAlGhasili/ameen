@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../../controller/camera_controller.dart';
 import '../../widget/custem_dropdown_menu.dart';
 
+
 AdminController controller = Get.find();
 
 Future<void> _selectDate(BuildContext context) async {
@@ -264,7 +265,7 @@ class _AddDriverState extends State<AddDriver> {
                     ),
                   ),
                   child: _isLoading
-                      ? CircularProgressIndicator() // Show loading indicator
+                      ? const CircularProgressIndicator() // Show loading indicator
                       : Text(
                           "حفظ",
                           style: const TextStyle(color: Colors.white),

@@ -18,6 +18,8 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() => SignController());
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
@@ -61,7 +63,6 @@ class SignIn extends StatelessWidget {
                       TextFieldModel(
                         controller: controller.signInEmailCont,
                         obscureText: false,
-                        hint: "البريد الاكتروني",
                         text: "البريد الاكتروني",
                         sufIcon: const Icon(IconlyLight.profile),
                         vPadding: height * 0.03,
@@ -69,8 +70,7 @@ class SignIn extends StatelessWidget {
                       Obx(
                         () => TextFieldModel(
                             controller: controller.signInPassCont,
-                            obscureText: controller.visibility.value,
-                            hint: "كلمة السر",
+                            obscureText: !controller.visibility.value,
                             text: "كلمة السر",
                             vPadding: height * 0.03,
                             sufIcon: controller.visibility.value

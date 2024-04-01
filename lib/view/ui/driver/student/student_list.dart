@@ -8,15 +8,16 @@ import '../../../../utils/DatabaseHelper.dart';
 import '../../admin/students/student_info.dart';
 
 class StudentList extends StatelessWidget {
-  const StudentList({super.key});
+      final busId;
+
+  const StudentList({super.key, required this.busId});
 
   @override
   Widget build(BuildContext context) {
     DatabaseHelper dbHelper = DatabaseHelper();
-
     Future<List<StudentModel>>? studentList;
 
-    studentList = dbHelper.getStudentsByBusId('AA');
+    studentList = dbHelper.getStudentsByBusId(busId);
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -86,7 +87,7 @@ class StudentList extends StatelessWidget {
                             width: width * 0.015,
                           ),
                           Text(
-                            student![i].fName,
+                            "${student![i].fName} ${student[i].lName}",
                             style: TextStyle(
                               fontSize: width * 0.05,
                               color: Colors.white,

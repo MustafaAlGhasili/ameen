@@ -12,13 +12,15 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
 DatabaseHelper dbHelper = DatabaseHelper();
-DriverController controller = Get.find();
+DriverModel? driver;
 
 class DriverHome extends StatelessWidget {
-  const DriverHome({Key? key}) : super(key: key);
+  const DriverHome({super.key});
 
   @override
   Widget build(BuildContext context) {
+    DriverController controller = Get.find();
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
@@ -56,14 +58,14 @@ class DriverHome extends StatelessWidget {
                       if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
-                        final DriverModel? driver = snapshot.data;
+                        driver = snapshot.data;
 
                         if (driver != null) {
                           return Column(
                             children: [
                               SizedBox(height: height * 0.08),
                               Text(
-                                "اهلا بعودتك ${driver.fName} ${driver.lName}",
+                                "اهلا بعودتك ${driver!.fName} ${driver!.lName}",
                                 style: TextStyle(fontSize: width * 0.06),
                               ),
                               ButtonModel(
@@ -85,7 +87,7 @@ class DriverHome extends StatelessWidget {
                                               ),
                                               ButtonModel(
                                                 onTap: () {
-                                                  controller.createTrip(1);
+                                                  controller.createTrip(2);
                                                 },
                                                 content: 'رحلة الصباح',
                                                 backColor: PRIMARY_COLOR,
@@ -101,9 +103,6 @@ class DriverHome extends StatelessWidget {
                                               ButtonModel(
                                                 onTap: () {
                                                   controller.createTrip(2);
-                                                  Get.to(() => const Trip(
-                                                        tripType: 2,
-                                                      ));
                                                 },
                                                 content: 'رحلة المساء',
                                                 backColor: PRIMARY_COLOR,
@@ -214,22 +213,9 @@ class DrawerModel extends StatelessWidget {
                       ),
                     ),
                     Text("${driver.fName} ${driver.lName}",
-                        // Use driver's name here
                         style: TextStyle(
                             fontSize: width * 0.08, color: PRIMARY_COLOR)),
                     SizedBox(height: height * 0.03),
-                    // ListTile(
-                    //   textColor: PRIMARY_COLOR,
-                    //   iconColor: PRIMARY_COLOR,
-                    //   dense: true,
-                    //   title: Text("معلوماتي", style: TextStyle(fontSize: width * 0.04)),
-                    //   leading: Icon(IconlyLight.profile, size: width * 0.05),
-                    //   shape: UnderlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(25),
-                    //       borderSide: const BorderSide(width: 2.2)),
-                    //   trailing:
-                    //       Icon(Icons.arrow_forward_ios_outlined, size: width * 0.05),
-                    // ),
                     GestureDetector(
                       onTap: () {},
                       child: Container(
@@ -257,7 +243,8 @@ class DrawerModel extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.to(() => const StudentList());
+                        print(driver.busId);
+                        Get.to(() => StudentList(busId: driver.busId));
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: height * 0.02),
@@ -287,6 +274,7 @@ class DrawerModel extends StatelessWidget {
                       onTap: () {
                         Get.dialog(
                           CustomDialog(
+                              buttonOnTap: () {},
                               buttonText: 'نعم',
                               content: 'هل انت متأكد من حالة الطوائ'),
                         );
@@ -318,7 +306,7 @@ class DrawerModel extends StatelessWidget {
                 ),
               );
             } else {
-              return Text('Driver data not found.');
+              return const Text('Driver data not found.');
             }
           }
         }

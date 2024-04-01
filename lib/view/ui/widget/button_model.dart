@@ -133,20 +133,21 @@ class ButtonModel extends StatelessWidget {
                 :CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.white,
-                  child: CachedNetworkImage(
-                    imageUrl: imgUrl,
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => const Image(image: AssetImage("img/st1.png")),
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
+                  child: Image.asset(imgUrl),
+                  // child: CachedNetworkImage(
+                  //   imageUrl: imgUrl,
+                  //   placeholder: (context, url) => CircularProgressIndicator(),
+                  //   errorWidget: (context, url, error) => const Image(image: AssetImage("img/st1.png")),
+                  //   imageBuilder: (context, imageProvider) => Container(
+                  //     decoration: BoxDecoration(
+                  //       shape: BoxShape.circle,
+                  //       image: DecorationImage(
+                  //         image: imageProvider,
+                  //         fit: BoxFit.cover,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 Padding(
                   padding: EdgeInsets.all(contentPdding),

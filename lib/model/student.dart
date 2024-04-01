@@ -40,7 +40,7 @@ class StudentModel implements ToMapConvertible {
     this.busId, // Optional busId
     this.imgUrl,
     required this.email,
-    required this.phone, // Optional busId
+    required this.phone, 
   });
 
   factory StudentModel.fromSnapshot(DataSnapshot snapshot) {

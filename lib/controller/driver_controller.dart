@@ -9,15 +9,19 @@ import '../model/trip.dart';
 import '../view/ui/driver/student_trip.dart';
 
 class DriverController extends GetxController {
+
+  RxBool isOneEmpty = false.obs;
+  RxBool isTwoEmpty = false.obs;
+
   final _databaseHelper = DatabaseHelper();
   var currentTrip;
   late String? tripId;
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     print("Current Trip");
-    currentTrip =  LocalStorageService.getTrip();
-    tripId = currentTrip!.id;
+    currentTrip = await LocalStorageService.getTrip();
+    tripId = await currentTrip!.id;
   }
 
   Future<bool> createTrip(int type) async {
@@ -27,8 +31,8 @@ class DriverController extends GetxController {
           isSameDay(currentTrip.createdAt!, DateTime.now()) &&
           currentTrip.type == type) {
         print("Trip already created today. Ignoring new trip creation.");
-        Get.to(() => const Trip(
-              tripType: 1,
+        Get.to(() => Trip(
+              tripType: type,
             ));
         return false;
       }
@@ -104,6 +108,7 @@ class DriverController extends GetxController {
 
     return completer.future;
   }
+
   Future<List<StudentModel>> getBusStudentsWithStatus(int status) async {
     try {
       final driver = await LocalStorageService.getDriver();

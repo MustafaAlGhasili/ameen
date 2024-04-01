@@ -48,23 +48,27 @@ class _DriversListState extends State<DriversList> {
           centerTitle: true,
           title: _isSearching
               ? TextField(
-            controller: _searchController,
-            autofocus: true,
-            decoration: InputDecoration(
-              hintText: 'ابحث...',
-              hintStyle: TextStyle(color: Colors.white),
-              border: InputBorder.none,
-            ),
-            style: TextStyle(color: Colors.white),
-            onChanged: (value) {
-              // Implement search logic here
-              setState(() {});
-            },
-          )
+                
+                  cursorColor: Colors.white,
+                  controller: _searchController,
+                  autofocus: true,
+                  smartDashesType: SmartDashesType.enabled,
+                  decoration:const InputDecoration(
+
+                    hintText: 'ابحث...',
+                    hintStyle: TextStyle(color: Colors.white),
+                    border: InputBorder.none,
+                  ),
+                  style: TextStyle(color: Colors.white),
+                  onChanged: (value) {
+                    // Implement search logic here
+                    setState(() {});
+                  },
+                )
               : const Text(
-            "قائمة السائقين",
-            style: TextStyle(color: Colors.white),
-          ),
+                  "قائمة السائقين",
+                  style: TextStyle(color: Colors.white),
+                ),
           actions: [
             IconButton(
               onPressed: () {
@@ -125,7 +129,7 @@ class _DriversListState extends State<DriversList> {
                     );
                   },
                   defaultChild:
-                  const Center(child: CircularProgressIndicator()),
+                      const Center(child: CircularProgressIndicator()),
                 ),
               ),
               ButtonModel(
@@ -147,7 +151,6 @@ class _DriversListState extends State<DriversList> {
       ),
     );
   }
-
 
   bool driverMatchesSearch(DriverModel driver, String searchText) {
     return driver.fName.contains(searchText) ||

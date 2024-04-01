@@ -2,6 +2,7 @@ import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/controller/driver_controller.dart';
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/services/firebase_notification.dart';
+import 'package:ameen/view/ui/admin/home.dart';
 import 'package:ameen/view/ui/driver/driver_home.dart';
 import 'package:ameen/view/ui/driver/map.dart';
 import 'package:ameen/view/ui/home/home.dart';
@@ -28,14 +29,15 @@ void main() async {
   FirebaseNotification firebaseNotification = FirebaseNotification();
   await firebaseNotification.initialize();
 //  await firebaseNotification.subscribeToTopic("parents");
-  String token = "fE8Q0a7sQQ--yWhCLw-HqW:APA91bHeFJITcbqMiOM5qVQoLKx4uw-IQ-lR95UEbdHxyfi-iiBAUvim4uMRy7nExF91CveHfn20wYBG9xoV_nBlBEzPev_6SBdOll4vRTPbHyTiSLSr2R8VKmjJanZahssBMTDam3QK";
+  String token =
+      "fE8Q0a7sQQ--yWhCLw-HqW:APA91bHeFJITcbqMiOM5qVQoLKx4uw-IQ-lR95UEbdHxyfi-iiBAUvim4uMRy7nExF91CveHfn20wYBG9xoV_nBlBEzPev_6SBdOll4vRTPbHyTiSLSr2R8VKmjJanZahssBMTDam3QK";
   //await firebaseNotification.sendNotification("title2", "body2", token);
   //await firebaseNotification.sendToTopic("title3", "body3", "parents");
-  Get.put(AdminController());
-  Get.put(SignController());
-  Get.put(HomeController());
-  Get.put(CamController());
-  Get.put(DriverController());
+  Get.lazyPut(() => AdminController());
+  Get.lazyPut(() => HomeController());
+  Get.lazyPut(() => DriverController());
+  Get.lazyPut(()=> CamController());
+
   runApp(GetMaterialApp(
     localizationsDelegates: const [
       S.delegate,
@@ -44,7 +46,7 @@ void main() async {
     useInheritedMediaQuery: true,
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: const DriverHome(),
+    home: AdminHome(),
   ));
 }
 

@@ -11,9 +11,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-late List<CameraDescription> cameras;
 
 class CamController extends GetxController {
+late List<CameraDescription> cameras;
+
   late CameraController cameraController;
   late XFile picture;
   Uint8List? _imageBytes;
@@ -35,12 +36,15 @@ class CamController extends GetxController {
   }
 
   @override
-  void onInit() {
+  void onInit() async{
+    cameras = await availableCameras(); // Assuming availableCameras() fetches cameras
+
     initializeControllerFuture();
     super.onInit();
   }
 
   Future<void> initializeControllerFuture() async {
+
     cameraController = CameraController(
       cameras[0],
       ResolutionPreset.veryHigh,
