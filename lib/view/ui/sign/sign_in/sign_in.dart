@@ -92,7 +92,7 @@ class SignIn extends StatelessWidget {
                               : () async {
                                   final result = await controller
                                       .signInWithEmailAndPassword(
-                                          controller.signInEmailCont.text,
+                                          controller.signInEmailCont.text.trim(),
                                           controller.signInPassCont.text,
                                           loginType!);
                                   print("result is $result");

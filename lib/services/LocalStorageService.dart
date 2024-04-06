@@ -63,9 +63,12 @@ class LocalStorageService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final studentJson = prefs.getString(studentKey);
     if (studentJson != null) {
+      print("Found student in local: $studentJson");
       final Map<String, dynamic> studentMap = json.decode(studentJson);
       return StudentModel.fromMap(studentMap);
     } else {
+      print("Not Found student in local");
+
       return null;
     }
   }

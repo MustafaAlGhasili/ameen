@@ -155,7 +155,7 @@ class _TestMapState extends State<TestMap> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Route Line Example'),
+        title: const Text('تتبع الطالب'),
         centerTitle: true,
       ),
       body: SizedBox(
@@ -166,7 +166,7 @@ class _TestMapState extends State<TestMap> {
             if (busMarker2 != null)
               GoogleMap(
                 initialCameraPosition: CameraPosition(
-                  target: point1,
+                  target: currentLocation ?? point1,
                   zoom: 15.0,
                 ),
                 myLocationEnabled: true,

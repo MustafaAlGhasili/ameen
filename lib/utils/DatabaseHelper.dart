@@ -145,21 +145,10 @@ class DatabaseHelper {
 
       print("Student Data Try:");
 
-      if (studentSnapshot.exists) {
-        // Ensure studentSnapshot.value is not null before accessing values
-        if (studentSnapshot.value != null) {
-          print("Student Data:");
-          print(studentSnapshot.value);
-          // Map<String, dynamic> studentData = studentSnapshot.value.values.first;
-          // return StudentModel.fromMap(studentData);
-          return null;
-        } else {
-          // Handle the case where studentSnapshot.value is unexpectedly null
-          print("Unexpected data structure: studentSnapshot.value is null");
-          return null;
-        }
+      if (studentSnapshot.exists && studentSnapshot.value != null) {
+        DataSnapshot firstChildSnapshot = studentSnapshot.children.first;
+        return StudentModel.fromSnapshot(firstChildSnapshot);
       } else {
-        // Not found
         return null;
       }
     } catch (error) {

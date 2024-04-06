@@ -2,6 +2,7 @@ import 'package:ameen/controller/home_controller.dart';
 import 'package:ameen/model/student.dart';
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/view/ui/home/settings.dart';
+import 'package:ameen/view/ui/map/track_student_map.dart';
 import 'package:ameen/view/ui/sign/start.dart';
 import 'package:ameen/view/ui/test/test_map.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
@@ -95,7 +96,7 @@ class HomePage extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => TestMap());
+                                Get.to(() => TrackStudentMap());
 
                                 //controller.map.value = true;
                               },

@@ -37,6 +37,7 @@ void main() async {
   Get.lazyPut(() => HomeController());
   Get.lazyPut(() => DriverController());
   Get.lazyPut(()=> CamController());
+  Get.lazyPut(()=> SignController());
 
   runApp(GetMaterialApp(
     localizationsDelegates: const [
@@ -46,7 +47,7 @@ void main() async {
     useInheritedMediaQuery: true,
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: AdminHome(),
+    home: SplashScreen(),
   ));
 }
 

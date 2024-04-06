@@ -171,7 +171,7 @@ class SignController extends GetxController {
         lName: parentLName.text,
         nationalId: parentNationalId.text,
         email: parentEmail.text,
-        isEnabled: true,
+        isEnabled: false,
         //TODO Change it after admin
         phone: parentPhone.text,
       );
@@ -272,11 +272,13 @@ class SignController extends GetxController {
           StudentModel? student =
               await _databaseHelper.getStudentByParentId(parent.id);
 
+          print("Found Student $student");
           await LocalStorageService.saveParent(parent);
           await LocalStorageService.saveStudent(student!);
           return true;
         }
-      } else if (loginType == 1) {
+      }
+      else if (loginType == 1) {
         DriverModel? driver =
             await _databaseHelper.getUserById<DriverModel>(userId, loginType);
         print("Found Driver");
@@ -294,7 +296,8 @@ class SignController extends GetxController {
           print("No Data for driver");
           return false;
         }
-      } else {
+      }
+      else {
         AdminModel? admin =
             await _databaseHelper.getUserById<AdminModel>(userId, loginType);
         print("Found Admin");
@@ -322,6 +325,13 @@ class SignController extends GetxController {
       }
       _isLoading(false);
       return false;
+    }
+    catch(e){
+      print("Error: $e");
+      loginErrorValue.value = e.toString();
+      _isLoading(false);
+      return false;
+
     }
   }
 
