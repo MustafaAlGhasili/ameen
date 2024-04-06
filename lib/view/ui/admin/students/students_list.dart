@@ -91,7 +91,7 @@ class _StudentsListState extends State<StudentsList> {
                   height: height * 0.75,
                   padding: EdgeInsets.only(top: height * 0.05),
                   child: FutureBuilder(
-                    future: dbHelper.getStudentsOfEnabledParents(),
+                    future: dbHelper.getStudentsParentsByStatus(true),
                     builder: (context, snapshot) {
                       final student = snapshot.data;
                       print("student = $student");

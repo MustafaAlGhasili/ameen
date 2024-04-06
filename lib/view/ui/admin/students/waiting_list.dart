@@ -31,7 +31,7 @@ class WaitingList extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         body: FutureBuilder(
-          future: dbHelper.getStudentsOfDisabledParents(),
+          future: dbHelper.getStudentsParentsByStatus(false),
           builder: (context, snapshot) {
             final student = snapshot.data;
             if (snapshot.connectionState == ConnectionState.waiting) {

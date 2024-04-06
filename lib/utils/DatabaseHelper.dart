@@ -296,32 +296,51 @@ class DatabaseHelper {
     DatabaseReference studentsRef = _rootRef.child('students');
     DatabaseReference parentsRef = _rootRef.child('parents');
 
-    final snapshot =
-        await parentsRef.orderByChild('isEnabled').equalTo(true).get();
-    List<ParentModel> parentList = snapshot.children
-        .map((child) => ParentModel.fromSnapshot(child))
+    final parentSnapshot = await parentsRef.orderByChild('isEnabled').equalTo(true).get();
+    final parentList = parentSnapshot.children.map((child) => ParentModel.fromSnapshot(child)).toList();
+
+    final studentSnapshot = await studentsRef.orderByChild('parentId').get();
+
+    final List<StudentModel> students = studentSnapshot.children
+        .map((studentChild) => StudentModel.fromSnapshot(studentChild))
+        .where((student) => parentList.any((parent) => parent.id == student.parentId))
         .toList();
 
-    List<StudentModel> studentsOfDisabledParents = [];
 
-    for (ParentModel parent in parentList) {
-      final snapshot =
-          await studentsRef.orderByChild('parentId').equalTo(parent.id).get();
-
-      List<StudentModel> studentsOfCurrentParent = snapshot.children
-          .map((child) => StudentModel.fromSnapshot(child))
-          .toList();
-
-      if (studentsOfCurrentParent.isNotEmpty) {
-        studentsOfDisabledParents.add(studentsOfCurrentParent.first);
-      }
-    }
     print("Disabled Data");
-    studentsOfDisabledParents.forEach((student) {
+    students.forEach((student) {
       print('Student ID: ${student.id}, Parent ID: ${student.parentId}');
     });
 
-    return studentsOfDisabledParents;
+    parentList.forEach((parent) {
+      print('Parent ID: ${parent.id}, Status: ${parent.isEnabled}');
+    });
+
+    return students;
+  }
+
+  Future<List<StudentModel>> getStudentsParentsByStatus(bool status) async {
+    print("I'm Called ");
+    DatabaseReference studentsRef = _rootRef.child('students');
+    DatabaseReference parentsRef = _rootRef.child('parents');
+
+    final parentSnapshot = await parentsRef.orderByChild('isEnabled').equalTo(status).get();
+    final parentList = parentSnapshot.children.map((child) => ParentModel.fromSnapshot(child)).toList();
+
+    final studentSnapshot = await studentsRef.orderByChild('parentId').get();
+
+    final List<StudentModel> students = studentSnapshot.children
+        .map((studentChild) => StudentModel.fromSnapshot(studentChild))
+        .where((student) => parentList.any((parent) => parent.id == student.parentId))
+        .toList();
+
+
+    students.forEach((student) {
+      print('Student ID: ${student.id}, Parent ID: ${student.parentId}');
+    });
+
+
+    return students;
   }
 
   Future<DriverLocationModel?> getDriverLocation() async {
@@ -411,14 +430,15 @@ class DatabaseHelper {
         print("No Trip Found : $tripId");
         return null; // Return null if no trip exists
       }
-
     } catch (e) {
       print("Error fetching latest trip: $e");
       return null; // Return null in case of error
     }
     return null;
   }
-  Future<TripModel?> listenTripById(String tripId, void Function(TripModel?) onDataChanged) async {
+
+  Future<TripModel?> listenTripById(
+      String tripId, void Function(TripModel?) onDataChanged) async {
     try {
       DatabaseReference tripRef = _rootRef.child('trips').child(tripId);
 
@@ -433,7 +453,6 @@ class DatabaseHelper {
           onDataChanged(null);
         }
       });
-
     } catch (e) {
       print("Error fetching latest trip: $e");
       onDataChanged(null);
