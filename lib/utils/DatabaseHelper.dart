@@ -247,7 +247,7 @@ class DatabaseHelper {
   }
 
   Future<void> updateField(
-      String reference, String id, String fieldName, String value) async {
+      String reference, String id, String fieldName, dynamic value) async {
     try {
       DatabaseReference ref = _rootRef.child(reference).child(id);
       await ref.update({fieldName: value});

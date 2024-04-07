@@ -2,12 +2,14 @@ import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/widget/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../controller/camera_controller.dart';
+import '../../../../utils/validation.dart';
 import '../../widget/custem_dropdown_menu.dart';
 
 
@@ -37,7 +39,6 @@ class AddDriver extends StatefulWidget {
 
 class _AddDriverState extends State<AddDriver> {
   bool _isLoading = false;
-
   final CamController camController =
       Get.find(); // Assuming GetX controller instance
   String? _selectedImagePath; // Store the selected image path
@@ -89,12 +90,12 @@ class _AddDriverState extends State<AddDriver> {
                 ListTile(
                   title: const Text('الكاميرا'),
                   onTap: () => _handleCameraPick(ImageSource.camera,
-                      '${controller.driverBlood}_${controller.driverBDate}_1'),
+                      '${controller.driverFName}_${controller.driverLName}_1'),
                 ),
                 ListTile(
                   title: const Text('معرض الصور'),
                   onTap: () => _handleCameraPick(ImageSource.gallery,
-                      '${controller.driverBlood}_${controller.driverBDate}_1'),
+                      '${controller.driverFName}_${controller.driverLName}_1'),
                 ),
               ],
             ),
@@ -115,6 +116,9 @@ class _AddDriverState extends State<AddDriver> {
 
   @override
   Widget build(BuildContext context) {
+
+    Validation validation = Validation();
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
@@ -140,6 +144,8 @@ class _AddDriverState extends State<AddDriver> {
                   padding: EdgeInsets.symmetric(
                       horizontal: width * 0.03, vertical: height * 0.02),
                   child: TextFieldModel(
+                    keyboardType: TextInputType.name,
+                    validator: (val) => validation.validator(val),
                     onChanged: (val) {
                       controller.driverFName = val;
                     },
@@ -150,6 +156,8 @@ class _AddDriverState extends State<AddDriver> {
                   padding: EdgeInsets.symmetric(
                       horizontal: width * 0.03, vertical: height * 0.02),
                   child: TextFieldModel(
+                    keyboardType: TextInputType.name,
+                    validator: (val) => validation.validator(val),
                     onChanged: (val) {
                       controller.driverLName = val;
                     },
@@ -160,6 +168,9 @@ class _AddDriverState extends State<AddDriver> {
                   padding: EdgeInsets.symmetric(
                       horizontal: width * 0.03, vertical: height * 0.02),
                   child: TextFieldModel(
+                    validator: (val) => validation.validator(val),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (val) {
                       controller.driverNationalID = val;
                     },
@@ -170,9 +181,15 @@ class _AddDriverState extends State<AddDriver> {
                   padding: EdgeInsets.symmetric(
                       horizontal: width * 0.03, vertical: height * 0.02),
                   child: TextFieldModel(
-                    onChanged: (val) {
+                    validator: (val) => validation.phoneValidator(val),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    maxLength: 10,
+                    onChanged: (val){
                       controller.driverPhone = val;
                     },
+                    keyboardType: TextInputType.number,
                     text: "رقم الجوال",
                   ),
                 ),
@@ -180,6 +197,8 @@ class _AddDriverState extends State<AddDriver> {
                   padding: EdgeInsets.symmetric(
                       horizontal: width * 0.03, vertical: height * 0.02),
                   child: TextFieldModel(
+                    validator: (val) => validation.emailValidator(val),
+                    keyboardType: TextInputType.emailAddress,
                     onChanged: (val) {
                       controller.driverEmail = val;
                     },
@@ -190,18 +209,20 @@ class _AddDriverState extends State<AddDriver> {
                   padding: EdgeInsets.symmetric(
                       horizontal: width * 0.03, vertical: height * 0.02),
                   child: TextFieldModel(
+                    onTap: () => _selectDate(context),
+                    validator: (val) => validation.validator(val),
+                    readOnly: true,
                     controller: controller.bDate,
-
-                    sufIcon: IconButton(
-                        onPressed: () => _selectDate(context),
-                        icon: Icon(
-                          IconlyLight.calendar,
-                          size: width * 0.055,
-                        )),
-
+                    onChanged: (value) {
+                      controller.driverBDate.value = value;
+                    },
+                    sufIcon: Icon(
+                      IconlyLight.calendar,
+                      size: width * 0.055,
+                    ),
                     keyboardType: TextInputType.datetime,
                     text: "تاريخ الميلاد",
-                    // vPadding: height * 0.035,
+                    // vPadding: height * 0.03,
                     obscureText: false,
                   ),
                 ),
@@ -231,8 +252,9 @@ class _AddDriverState extends State<AddDriver> {
                   child: GestureDetector(
                     onTap: () => _showImageOptionsDialog(context),
                     child: TextFieldModel(
+                      // validator: (val) => validation.validator(val),
                       onChanged: (val) {
-                        //   controller.driverLicence = val;
+                          // controller.driverLicence = val;
                       },
                       isEnabled: false,
                       sufIcon: const Icon(
@@ -246,7 +268,27 @@ class _AddDriverState extends State<AddDriver> {
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: width * 0.03, vertical: height * 0.02),
+                  child: GestureDetector(
+                    onTap: () => _showImageOptionsDialog(context),
+                    child: TextFieldModel(
+                      // validator: (val) => validation.validator(val),
+                      onChanged: (val) {
+                          // controller.driverLicence.value = val;
+                      },
+                      isEnabled: false,
+                      sufIcon: const Icon(
+                        Icons.keyboard_arrow_down,
+                        color: Colors.black,
+                      ),
+                      text: "ادراج الصورة الشخصيه",
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.03, vertical: height * 0.02),
                   child: TextFieldModel(
+                    validator: (val) => validation.validator(val),
                     onChanged: (val) {
                       controller.driverBussNo = val;
                     },
@@ -261,7 +303,7 @@ class _AddDriverState extends State<AddDriver> {
                     onPrimary: Colors.white,
                     padding: EdgeInsets.symmetric(
                       vertical: height * 0.02,
-                      horizontal: width * 0.07,
+                      horizontal: width * 0.2,
                     ),
                   ),
                   child: _isLoading
@@ -271,14 +313,17 @@ class _AddDriverState extends State<AddDriver> {
                           style: const TextStyle(color: Colors.white),
                         ),
                 ),
+                SizedBox(
+                  height: height * 0.03,
+                ),
               ],
             ),
           ),
         ),
       ),
     );
-
   }
+
   Future<void> _saveDriver() async {
     // Validate form
     if (key.currentState!.validate()) {
@@ -298,10 +343,8 @@ class _AddDriverState extends State<AddDriver> {
       Get.back();
       controller.clearData();
       Get.back();
-
     } else {
       print("error");
     }
   }
-
 }

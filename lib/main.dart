@@ -2,6 +2,7 @@ import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/controller/driver_controller.dart';
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/services/firebase_notification.dart';
+import 'package:ameen/view/ui/admin/drivers/add_driver.dart';
 import 'package:ameen/view/ui/admin/home.dart';
 import 'package:ameen/view/ui/driver/driver_home.dart';
 import 'package:ameen/view/ui/driver/map.dart';
@@ -36,7 +37,7 @@ void main() async {
   Get.lazyPut(() => AdminController());
   Get.lazyPut(() => HomeController());
   Get.lazyPut(() => DriverController());
-  Get.lazyPut(()=> CamController());
+  Get.put( CamController());
   Get.lazyPut(()=> SignController());
 
   runApp(GetMaterialApp(
