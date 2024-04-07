@@ -102,9 +102,9 @@ class LocalStorageService {
     }
   }
 
-  static Future<void> saveTrip(TripModel trip) async {
+  static Future<void> saveTrip(TripModel? trip) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final tripJson = json.encode(trip.toMap());
+    final tripJson = json.encode(trip!.toMap());
     await prefs.setString(tripKey, tripJson);
     print("Saved trip:");
     print(tripJson);
