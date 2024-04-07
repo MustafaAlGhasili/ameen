@@ -386,5 +386,7 @@ class SignController extends GetxController {
     }
   }
 
+
+
   void fetchInfo() {}
 }

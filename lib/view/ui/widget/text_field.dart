@@ -18,6 +18,7 @@ class TextFieldModel extends StatefulWidget {
   final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
   final void Function()? onTap;
+  final int maxLines;
 
   // final String? Function(String?)? validator;
 
@@ -37,7 +38,9 @@ class TextFieldModel extends StatefulWidget {
     this.readOnly = false,
     this.maxLength,
     this.validator,
-    this.inputFormatters, this.onTap,
+    this.inputFormatters,
+    this.onTap,
+    this.maxLines = 1,
     // this.validator,
   });
 
@@ -46,14 +49,12 @@ class TextFieldModel extends StatefulWidget {
 }
 
 class _TextFieldModelState extends State<TextFieldModel> {
-
   @override
   Widget build(BuildContext context) {
-    return
-
-        Padding(
-      padding: EdgeInsets.only(top: widget.vPadding, left: widget.hPadding),
+    return Padding(
+      padding: EdgeInsets.only(top: widget.vPadding, left: widget.hPadding, right: widget.hPadding),
       child: TextFormField(
+        maxLines: widget.maxLines,
         onTap: widget.onTap,
         maxLength: widget.maxLength,
         inputFormatters: widget.inputFormatters,

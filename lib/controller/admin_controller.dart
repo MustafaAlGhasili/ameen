@@ -13,6 +13,7 @@ class AdminController extends GetxController {
   String driverNationalID = '';
   String driverBussNo = '';
   RxString driverLicence = ''.obs;
+  String sendNotification='';
 
   final List<String> blood = ["B+", "A+", "B-", "A-"];
   RxList<String> buses = ['B1', 'C1', 'D1'].obs;

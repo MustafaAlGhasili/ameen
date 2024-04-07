@@ -1,21 +1,25 @@
 import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/model/student.dart';
+import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
+import 'package:ameen/view/ui/admin/home.dart';
 import 'package:ameen/view/ui/widget/custem_dropdown_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
 
 import '../../widget/button_model.dart';
 
 AdminController controller = Get.find();
 
 class WaitingStudent extends StatelessWidget {
-  StudentModel student;
+  final StudentModel student;
 
-  WaitingStudent({super.key, required this.student});
+  const WaitingStudent({super.key, required this.student});
 
   @override
   Widget build(BuildContext context) {
+    DatabaseHelper dbHelper = DatabaseHelper();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Directionality(
@@ -189,7 +193,56 @@ class WaitingStudent extends StatelessWidget {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () async{
+                                  dbHelper.updateField('parents',
+                                      student.parentId, "isEnabled", true);
+                                  dbHelper.updateField('students', student.id,
+                                      "busId", controller.selectedBus.value);
+                                  if(controller.selectedBus.value.isEmpty){
+                                    Get.showSnackbar(
+                                      GetSnackBar(
+                                        borderRadius: 20,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: width * 0.045,
+                                            vertical: height * 0.015),
+                                        icon: Icon(
+                                          IconlyLight.info_circle,
+                                          color: Colors.white,
+                                          size: width * 0.065,
+                                        ),
+                                        title: "خطأ",
+                                        message: "الرحاء اختيار رقم الباص",
+                                        duration: const Duration(seconds: 2),
+                                        animationDuration:
+                                        const Duration(milliseconds: 800),
+                                      ),
+                                    );
+                                  }else{
+                                    Get.dialog(const Center(
+                                      child: CircularProgressIndicator(color: Colors.white,),
+                                    ));
+                                    await Future.delayed(const Duration(seconds: 1));
+                                    Get.offAll(()=> const AdminHome());
+                                    Get.showSnackbar(
+                                      GetSnackBar(
+                                        borderRadius: 20,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: width * 0.045,
+                                            vertical: height * 0.015),
+                                        icon: Icon(
+                                          IconlyLight.user,
+                                          color: Colors.white,
+                                          size: width * 0.065,
+                                        ),
+                                        message: "تم قبول الطالب بنجاح",
+                                        duration: const Duration(seconds: 2),
+                                        animationDuration:
+                                        const Duration(seconds: 1),
+                                      ),
+                                    );
+                                  }
+
+                                },
                                 child: Container(
                                     margin: EdgeInsets.all(10),
                                     height: height * 0.06,
@@ -221,6 +274,12 @@ class WaitingStudent extends StatelessWidget {
                     rowMainAxisAlignment: MainAxisAlignment.center,
                   ),
                   ButtonModel(
+                    onTap: () {
+                      dbHelper.deleteById(student.id, 'students');
+                      dbHelper.deleteById(student.parentId, 'parents');
+
+                      Get.back();
+                    },
                     hMargin: width * 0.03,
                     backColor: PRIMARY_COLOR,
                     vMargin: height * 0.01,

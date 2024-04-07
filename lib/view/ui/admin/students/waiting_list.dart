@@ -16,8 +16,6 @@ class WaitingList extends StatelessWidget {
   Widget build(BuildContext context) {
     DatabaseHelper dbHelper = DatabaseHelper();
 
-  
-
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Directionality(
@@ -34,8 +32,13 @@ class WaitingList extends StatelessWidget {
           future: dbHelper.getStudentsParentsByStatus(false),
           builder: (context, snapshot) {
             final student = snapshot.data;
+            print("object $student");
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
+            } else if ( student!.isEmpty) {
+              return const Center(
+                child: Text("No student found"),
+              );
             } else if (snapshot.hasData) {
               return ListView.builder(
                 itemCount: snapshot.data?.length,
