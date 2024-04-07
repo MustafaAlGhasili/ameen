@@ -83,17 +83,25 @@ class LocalStorageService {
     return prefs.getInt('userType');
   }
 
-
   static Future<TripModel?> getTrip() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final tripJson = prefs.getString(tripKey);
-    if (tripJson != null) {
-      final Map<String, dynamic> tripMap = json.decode(tripJson);
-      return TripModel.fromMap(tripMap);
-    } else {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final tripJson = prefs.getString(tripKey);
+
+      print("Local Trip Data: $tripJson");
+
+      if (tripJson != null) {
+        final Map<String, dynamic> tripMap = json.decode(tripJson);
+        return TripModel.fromMap(tripMap);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print("Error fetching local trip: $e");
       return null;
     }
   }
+
   static Future<void> saveTrip(TripModel trip) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final tripJson = json.encode(trip.toMap());

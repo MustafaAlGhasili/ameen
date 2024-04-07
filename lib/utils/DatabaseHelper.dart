@@ -221,6 +221,23 @@ class DatabaseHelper {
     }
   }
 
+  Future<void> makeManualAttendance(
+      String tripId, String studentId, int status) async {
+    try {
+      DatabaseReference tripRef = _rootRef
+          .child('trips')
+          .child(tripId)
+          .child("studentTripStatus")
+          .child(studentId);
+
+      await tripRef.update({'status': status});
+
+      print('Student with ID: $studentId in Trip $tripId');
+    } catch (error) {
+      print('Error updating parent isEnabled status: $error');
+    }
+  }
+
   Future<int> updateParentStatusByStudentId(
       String studentId, bool isEnabled) async {
     try {
@@ -296,16 +313,19 @@ class DatabaseHelper {
     DatabaseReference studentsRef = _rootRef.child('students');
     DatabaseReference parentsRef = _rootRef.child('parents');
 
-    final parentSnapshot = await parentsRef.orderByChild('isEnabled').equalTo(true).get();
-    final parentList = parentSnapshot.children.map((child) => ParentModel.fromSnapshot(child)).toList();
+    final parentSnapshot =
+        await parentsRef.orderByChild('isEnabled').equalTo(true).get();
+    final parentList = parentSnapshot.children
+        .map((child) => ParentModel.fromSnapshot(child))
+        .toList();
 
     final studentSnapshot = await studentsRef.orderByChild('parentId').get();
 
     final List<StudentModel> students = studentSnapshot.children
         .map((studentChild) => StudentModel.fromSnapshot(studentChild))
-        .where((student) => parentList.any((parent) => parent.id == student.parentId))
+        .where((student) =>
+            parentList.any((parent) => parent.id == student.parentId))
         .toList();
-
 
     print("Disabled Data");
     students.forEach((student) {
@@ -324,21 +344,23 @@ class DatabaseHelper {
     DatabaseReference studentsRef = _rootRef.child('students');
     DatabaseReference parentsRef = _rootRef.child('parents');
 
-    final parentSnapshot = await parentsRef.orderByChild('isEnabled').equalTo(status).get();
-    final parentList = parentSnapshot.children.map((child) => ParentModel.fromSnapshot(child)).toList();
+    final parentSnapshot =
+        await parentsRef.orderByChild('isEnabled').equalTo(status).get();
+    final parentList = parentSnapshot.children
+        .map((child) => ParentModel.fromSnapshot(child))
+        .toList();
 
     final studentSnapshot = await studentsRef.orderByChild('parentId').get();
 
     final List<StudentModel> students = studentSnapshot.children
         .map((studentChild) => StudentModel.fromSnapshot(studentChild))
-        .where((student) => parentList.any((parent) => parent.id == student.parentId))
+        .where((student) =>
+            parentList.any((parent) => parent.id == student.parentId))
         .toList();
-
 
     students.forEach((student) {
       print('Student ID: ${student.id}, Parent ID: ${student.parentId}');
     });
-
 
     return students;
   }

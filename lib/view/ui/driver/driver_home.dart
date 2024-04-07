@@ -1,21 +1,19 @@
-import 'package:ameen/controller/driver_controller.dart';
-import 'package:ameen/model/driver.dart';
-import 'package:ameen/services/LocalStorageService.dart';
-import 'package:ameen/utils/DatabaseHelper.dart';
-import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/driver/student/student_list.dart';
-import 'package:ameen/view/ui/driver/student_trip.dart';
-import 'package:ameen/view/ui/widget/button_model.dart';
-import 'package:ameen/view/ui/widget/cusom_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 
-DatabaseHelper dbHelper = DatabaseHelper();
-DriverModel? driver;
+import '../../../controller/driver_controller.dart';
+import '../../../model/driver.dart';
+import '../../../model/trip.dart';
+import '../../../services/LocalStorageService.dart';
+import '../../../utils/constants.dart';
+import '../sign/start.dart';
+import '../widget/button_model.dart';
+import '../widget/cusom_dialog.dart';
+import 'drawer.dart';
 
 class DriverHome extends StatelessWidget {
-  const DriverHome({super.key});
+  const DriverHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +44,9 @@ class DriverHome extends StatelessWidget {
                 height: height * 0.62,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(width * 0.1)),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(width * 0.1),
+                  ),
                 ),
                 child: FutureBuilder<DriverModel?>(
                   future: LocalStorageService.getDriver(),
@@ -58,88 +57,186 @@ class DriverHome extends StatelessWidget {
                       if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
-                        driver = snapshot.data;
+                        DriverModel? driver = snapshot.data;
 
                         if (driver != null) {
                           return Column(
                             children: [
                               SizedBox(height: height * 0.08),
                               Text(
-                                "اهلا بعودتك ${driver!.fName} ${driver!.lName}",
+                                "اهلا بعودتك ${driver.fName} ${driver.lName}",
                                 style: TextStyle(fontSize: width * 0.06),
                               ),
-                              ButtonModel(
-                                onTap: () {
-                                  Get.dialog(
-                                    SizedBox(
-                                      child: Dialog(
-                                        child: SizedBox(
-                                          height: height * 0.25,
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                height: height * 0.04,
-                                              ),
-                                              Text(
-                                                "الرجاء اختيار",
-                                                style: TextStyle(
-                                                    fontSize: width * 0.045),
-                                              ),
-                                              ButtonModel(
-                                                onTap: () {
-                                                  controller.createTrip(2);
-                                                },
-                                                content: 'رحلة الصباح',
-                                                backColor: PRIMARY_COLOR,
-                                                height: height * 0.05,
-                                                hMargin: width * 0.05,
-                                                rowMainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                style: TextStyle(
+                              FutureBuilder<TripModel?>(
+                                future: LocalStorageService.getTrip(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else {
+                                    if (snapshot.hasData &&
+                                        snapshot.data != null) {
+                                      bool isMorningTrip =
+                                          snapshot.data!.type == 1;
+
+                                      // Show the dialog to choose the trip
+                                      return Column(
+                                        children: [
+                                          isMorningTrip
+                                              ? ButtonModel(
+                                                  onTap: () {
+                                                    Get.dialog(
+                                                      CustomDialog(
+                                                        buttonText:
+                                                            'نعم',
+                                                        content:
+                                                            'هل ترغب في مواصلة رحلة الصباح؟',
+                                                        buttonOnTap: () {
+                                                          controller.createTrip(
+                                                              snapshot
+                                                                  .data!.type!);
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                  height: height * 0.07,
+                                                  width: width,
+                                                  rowMainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  backColor: PRIMARY_COLOR,
+                                                  vMargin: height * 0.02,
+                                                  style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: width * 0.04),
-                                                vMargin: height * 0.015,
-                                              ),
-                                              ButtonModel(
-                                                onTap: () {
-                                                  controller.createTrip(2);
-                                                },
-                                                content: 'رحلة المساء',
-                                                backColor: PRIMARY_COLOR,
-                                                height: height * 0.05,
-                                                hMargin: width * 0.05,
-                                                rowMainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                style: TextStyle(
+                                                    fontSize: width * 0.055,
+                                                  ),
+                                                  hMargin: width * 0.07,
+                                                  content:
+                                                      'مواصلة الرحلة الصباحية',
+                                                )
+                                              : ButtonModel(
+                                                  onTap: () {
+                                                    Get.dialog(
+                                                      CustomDialog(
+                                                        buttonText:
+                                                            'رحلة المساء',
+                                                        content:
+                                                            'هل ترغب في مواصلة رحلة المساء؟',
+                                                        buttonOnTap: () {
+                                                          controller.createTrip(
+                                                              snapshot
+                                                                  .data!.type!);
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                  height: height * 0.07,
+                                                  width: width,
+                                                  rowMainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  backColor: PRIMARY_COLOR,
+                                                  vMargin: height * 0.02,
+                                                  style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: width * 0.04),
+                                                    fontSize: width * 0.055,
+                                                  ),
+                                                  hMargin: width * 0.07,
+                                                  content:
+                                                      'مواصلة الرحلة المسائية',
+                                                ),
+                                        ],
+                                      );
+                                    } else {
+                                      // If no trip data is available, show the button for creating a trip
+                                      return ButtonModel(
+                                        onTap: () {
+                                          // Handle creating a new trip
+                                          print('Creating a new trip');
+                                          Get.dialog(
+                                            SizedBox(
+                                              child: Dialog(
+                                                child: SizedBox(
+                                                  height: height * 0.25,
+                                                  child: Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        height: height * 0.04,
+                                                      ),
+                                                      Text(
+                                                        "الرجاء اختيار",
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                width * 0.045),
+                                                      ),
+                                                      ButtonModel(
+                                                        onTap: () {
+                                                          controller
+                                                              .createTrip(1);
+                                                        },
+                                                        content: 'رحلة الصباح',
+                                                        backColor:
+                                                            PRIMARY_COLOR,
+                                                        height: height * 0.05,
+                                                        hMargin: width * 0.05,
+                                                        rowMainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize:
+                                                                width * 0.04),
+                                                        vMargin: height * 0.015,
+                                                      ),
+                                                      ButtonModel(
+                                                        onTap: () {
+                                                          controller
+                                                              .createTrip(2);
+                                                        },
+                                                        content: 'رحلة المساء',
+                                                        backColor:
+                                                            PRIMARY_COLOR,
+                                                        height: height * 0.05,
+                                                        hMargin: width * 0.05,
+                                                        rowMainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize:
+                                                                width * 0.04),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          );
+                                        },
+                                        height: height * 0.07,
+                                        width: width,
+                                        rowMainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        backColor: PRIMARY_COLOR,
+                                        vMargin: height * 0.02,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width * 0.055,
                                         ),
-                                      ),
-                                    ),
-                                  );
+                                        hMargin: width * 0.07,
+                                        content: 'ابدأ رحلة جديدة',
+                                      );
+                                    }
+                                  }
                                 },
-                                height: height * 0.07,
-                                width: width,
-                                rowMainAxisAlignment: MainAxisAlignment.center,
-                                backColor: PRIMARY_COLOR,
-                                vMargin: height * 0.1,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: width * 0.055,
-                                ),
-                                hMargin: width * 0.07,
-                                content: 'ابدا العمل',
                               ),
                               ButtonModel(
                                 onTap: () {
                                   Get.dialog(
                                     CustomDialog(
                                       buttonText: 'نعم',
-                                      content: 'هل انت متاكد من تسجيل الخروج؟',
-                                      buttonOnTap: () {
+                                      content: 'هل انت متأكد من تسجيل الخروج؟',
+                                      buttonOnTap: () async {
+                                        await FirebaseAuth.instance.signOut();
+                                        Get.offAll(() => const Start());
                                         //sign out
                                       },
                                     ),
@@ -171,146 +268,6 @@ class DriverHome extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class DrawerModel extends StatelessWidget {
-  const DrawerModel({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return FutureBuilder<DriverModel?>(
-      future: LocalStorageService.getDriver(),
-      // Call the getData method asynchronously
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        } else {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            final DriverModel? driver = snapshot.data;
-
-            if (driver != null) {
-              return Drawer(
-                width: width * 0.65,
-                backgroundColor: Colors.yellowAccent.shade700,
-                child: Column(
-                  children: [
-                    SizedBox(height: height * 0.07),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 3),
-                        borderRadius: BorderRadius.circular(1000),
-                      ),
-                      child: CircleAvatar(
-                        backgroundImage: const AssetImage('img/driver.png'),
-                        backgroundColor: Colors.white,
-                        radius: width * 0.2,
-                      ),
-                    ),
-                    Text("${driver.fName} ${driver.lName}",
-                        style: TextStyle(
-                            fontSize: width * 0.08, color: PRIMARY_COLOR)),
-                    SizedBox(height: height * 0.03),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        decoration: UnderlineTabIndicator(
-                            insets:
-                                EdgeInsets.symmetric(horizontal: width * 0.045),
-                            borderSide: const BorderSide(
-                                color: PRIMARY_COLOR, width: 1.7)),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: width * 0.05, vertical: height * 0.01),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(IconlyLight.profile,
-                                size: width * 0.05, color: PRIMARY_COLOR),
-                            Text("معلوماتي",
-                                style: TextStyle(
-                                    fontSize: width * 0.04,
-                                    color: PRIMARY_COLOR)),
-                            Icon(Icons.arrow_forward_ios_outlined,
-                                size: width * 0.05, color: PRIMARY_COLOR),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        print(driver.busId);
-                        Get.to(() => StudentList(busId: driver.busId));
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: height * 0.02),
-                        decoration: UnderlineTabIndicator(
-                            insets:
-                                EdgeInsets.symmetric(horizontal: width * 0.045),
-                            borderSide: const BorderSide(
-                                color: PRIMARY_COLOR, width: 1.7)),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: width * 0.05, vertical: height * 0.01),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(Icons.task,
-                                size: width * 0.05, color: PRIMARY_COLOR),
-                            Text("قائمة الطلاب",
-                                style: TextStyle(
-                                    fontSize: width * 0.04,
-                                    color: PRIMARY_COLOR)),
-                            Icon(Icons.arrow_forward_ios_outlined,
-                                size: width * 0.05, color: PRIMARY_COLOR),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.dialog(
-                          CustomDialog(
-                              buttonOnTap: () {},
-                              buttonText: 'نعم',
-                              content: 'هل انت متأكد من حالة الطوائ'),
-                        );
-                      },
-                      child: Container(
-                        decoration: UnderlineTabIndicator(
-                            insets:
-                                EdgeInsets.symmetric(horizontal: width * 0.045),
-                            borderSide: const BorderSide(
-                                color: PRIMARY_COLOR, width: 1.7)),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: width * 0.05, vertical: height * 0.01),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(IconlyLight.info_circle,
-                                size: width * 0.05, color: PRIMARY_COLOR),
-                            Text("حالة طوارئ",
-                                style: TextStyle(
-                                    fontSize: width * 0.04,
-                                    color: PRIMARY_COLOR)),
-                            Icon(Icons.arrow_forward_ios_outlined,
-                                size: width * 0.05, color: PRIMARY_COLOR),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              return const Text('Driver data not found.');
-            }
-          }
-        }
-      },
     );
   }
 }

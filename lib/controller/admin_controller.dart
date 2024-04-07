@@ -50,7 +50,7 @@ class AdminController extends GetxController {
         email: driverEmail,
         phone: driverPhone,
         nationalId: driverNationalID,
-        isEnabled: false,
+        isEnabled: true,
         driverBDate: bDate.text,
         blood: driverBlood.value,
         driverLicence: driverLicence.value,

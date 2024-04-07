@@ -62,13 +62,7 @@ class _TestMapUberState extends State<TestMapUber> {
             width: double.infinity,
             child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => NavigationScreen(
-                         // double.parse(latController.text),
-                         // double.parse(lngController.text)
-                          15.3546934,44.163375
-                      )));
-                },
+                      },
                 child: Text('Get Directions')),
           ),
         ]),

@@ -27,16 +27,18 @@ class DriverController extends GetxController {
   Future<bool> createTrip(int type) async {
     try {
       currentTrip = await LocalStorageService.getTrip();
+      print("Checking current trip");
+
       if (currentTrip != null &&
           isSameDay(currentTrip.createdAt!, DateTime.now()) &&
           currentTrip.type == type) {
         print("Trip already created today. Ignoring new trip creation.");
-        Get.to(() => Trip(
-              tripType: type,
-            ));
+        Get.off(() => Trip(
+          tripType: type,
+        ));
         return false;
       }
-
+      print("Getting Driver");
       final driver = await LocalStorageService.getDriver();
       if (driver == null) {
         throw Exception("Driver not found");
@@ -47,7 +49,10 @@ class DriverController extends GetxController {
         throw Exception(
             "No students found for the driver's bus: ${driver.busId}");
       }
-
+      if(students.length==0){
+        print("No Students for this bus");
+      }
+      print("Students List$students");
       Map<String, StudentTripStatus> studentTripStatus = {};
       students.forEach((student) {
         studentTripStatus[student.id] =
@@ -67,9 +72,9 @@ class DriverController extends GetxController {
       await _databaseHelper.saveTrip(trip);
       tripId = trip.id!;
       await LocalStorageService.saveTrip(trip);
-      Get.to(() => const Trip(
-            tripType: 1,
-          ));
+      Get.to(() =>  Trip(
+        tripType: type,
+      ));
       return true;
     } catch (e) {
       print("Error creating trip: $e");
@@ -117,16 +122,19 @@ class DriverController extends GetxController {
       }
       final students = await _databaseHelper.getStudentsByBusId(driver.busId);
       List<StudentModel> filteredStudents = [];
-
+      print("Started getting students for the bus");
       if (students.isEmpty) {
         throw Exception("No students found for the driver's bus");
       }
+      print("Started getting trip for the bus");
       final dbTrip = await _databaseHelper.getTripById(currentTrip.id);
       print(dbTrip);
       final studentTripStatus = dbTrip?.studentTripStatus;
       if (studentTripStatus != null) {
-        print("Start Filtering");
+        print("Start Filtering ${studentTripStatus.length} Students");
         students.forEach((student) {
+          print("Checking  ${student.fName} Status Which is ${studentTripStatus[student.id]?.status} ");
+
           if (studentTripStatus[student.id]?.status == status) {
             print("Found Student Status");
             filteredStudents.add(student);
@@ -136,6 +144,10 @@ class DriverController extends GetxController {
         filteredStudents.forEach((student) {
           print('Student ID Is: ${student.id}, Name: ${student.fName}');
         });
+      }
+      else{
+        print("students for the bus are null");
+
       }
 
       return filteredStudents;
