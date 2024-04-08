@@ -8,7 +8,7 @@ import 'package:intl/intl.dart'; // Import DateFormat for date formatting
 
 import '../model/admin.dart';
 import '../model/driver.dart';
-import '../model/notificationModel.dart';
+import '../model/notification.dart';
 import '../model/school.dart';
 import 'data_converter.dart';
 
@@ -28,6 +28,10 @@ class DatabaseHelper {
       String modelId = newModelRef.key ?? '';
 
       if (model is StudentModel) {
+        model.id = modelId!;
+      }
+
+      if (model is NotificationModel) {
         model.id = modelId!;
       }
       await newModelRef.set(model.toMap());

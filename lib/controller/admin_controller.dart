@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../model/driver.dart';
 import '../utils/DatabaseHelper.dart';
-import 'driver_controller.dart';
+
 class AdminController extends GetxController {
   String driverFName = '';
   String driverLName = '';
@@ -13,7 +13,7 @@ class AdminController extends GetxController {
   String driverNationalID = '';
   String driverBussNo = '';
   RxString driverLicence = ''.obs;
-  String sendNotification='';
+  String sendNotification = '';
 
   final List<String> blood = ["B+", "A+", "B-", "A-"];
   RxList<String> buses = ['B1', 'C1', 'D1'].obs;

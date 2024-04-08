@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+
 import '../utils/data_converter.dart';
 
 class NotificationModel implements ToMapConvertible {
@@ -6,6 +7,7 @@ class NotificationModel implements ToMapConvertible {
   final String? title;
   final String? description;
   final String? parentId;
+  final int? type;
   final String? createdAt;
 
   NotificationModel({
@@ -13,6 +15,7 @@ class NotificationModel implements ToMapConvertible {
     required this.title,
     required this.description,
     required this.parentId,
+    required this.type,
     required this.createdAt,
   });
 
@@ -23,6 +26,7 @@ class NotificationModel implements ToMapConvertible {
       title: data['title'] as String?,
       description: data['description'] as String?,
       parentId: data['parentId'] as String?,
+      type: data['type'] as int,
       createdAt: data['createdAt'] as String?,
     );
   }
@@ -33,6 +37,7 @@ class NotificationModel implements ToMapConvertible {
       'title': title,
       'description': description,
       'parentId': parentId,
+      'type': type,
       'createdAt': createdAt,
     };
   }

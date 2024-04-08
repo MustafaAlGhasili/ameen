@@ -1,24 +1,21 @@
-import 'package:ameen/controller/admin_controller.dart';
-import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/admin/drivers/add_driver.dart';
-import 'package:ameen/view/ui/widget/button_model.dart';
-import 'package:ameen/view/ui/widget/text_field.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:ameen/controller/admin_controller.dart';
+import 'package:ameen/controller/notification_controller.dart';
+import 'package:ameen/utils/constants.dart';
+import 'package:ameen/view/ui/widget/text_field.dart';
 
 class SendNotification extends StatelessWidget {
-  const SendNotification({super.key});
+  const SendNotification({Key? key});
 
   @override
   Widget build(BuildContext context) {
-
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    Get.put(AdminController());
+    bool isLoading = false;
 
-    AdminController controller = Get.find();
+    // Get the NotificationController instance
+    NotificationController controller = Get.find();
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -38,6 +35,7 @@ class SendNotification extends StatelessWidget {
             TextFieldModel(
               maxLines: 3,
               onChanged: (value) {
+                // Assign the value to sendNotification variable
                 controller.sendNotification = value;
               },
               hPadding: width * 0.04,
@@ -46,22 +44,44 @@ class SendNotification extends StatelessWidget {
             SizedBox(
               height: height * 0.03,
             ),
-            ButtonModel(
-              onTap: () {
-                //send notification
-              },
-              hMargin: width * 0.04,
-              style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-              height: height * 0.055,
-              backColor: PRIMARY_COLOR,
-              rowMainAxisAlignment: MainAxisAlignment.center,
-              content: 'ارسال',
-            )
+            Obx(() {
+              return ElevatedButton(
+                onPressed: controller.isLoading.value
+                    ? null // Disable the button while loading
+                    : () async {
+                  // Set isLoading to true before sending the notification
+                  controller.isLoading(true);
+                  // Send notification
+                  bool success = await controller.createAdminNotification(controller.sendNotification);
+                  if (success) {
+                    // Handle success scenario
+                  } else {
+                    // Handle failure scenario
+                  }
+                  // Set isLoading back to false after sending the notification
+                  controller.isLoading(false);
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: PRIMARY_COLOR,
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                ),
+                child: controller.isLoading.value
+                    ? SizedBox( // Show loading indicator when loading
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                )
+                    : Text( // Show button text when not loading
+                  'إرسال',
+                  style: TextStyle(fontSize: width * 0.05,color: Colors.white),
+                ),
+              );
+            }),
           ],
         ),
       ),
     );
   }
 }
-
-
