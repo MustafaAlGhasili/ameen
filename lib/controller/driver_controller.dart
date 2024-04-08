@@ -140,10 +140,11 @@ class DriverController extends GetxController {
             filteredStudents.add(student);
           }
         });
-        print("Students with status $status:");
+       /* print("Students with status $status:");
         filteredStudents.forEach((student) {
           print('Student ID Is: ${student.id}, Name: ${student.fName}');
-        });
+        });*/
+        filteredStudents.sort((a, b) => a.fName.compareTo(b.fName));
       }
       else{
         print("students for the bus are null");

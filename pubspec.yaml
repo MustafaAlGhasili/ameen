@@ -98,6 +98,13 @@ flutter:
     - img/
   #   - images/a_dot_ham.jpeg
 
+  fonts:
+    - family: TajawalFont
+      fonts:
+        - asset: fonts/Tajawal-Regular.ttf
+        - asset: fonts/Tajawal-Medium.ttf
+        - asset: fonts/Tajawal-Bold.ttf
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
