@@ -4,9 +4,11 @@ import 'package:ameen/model/student.dart';
 import 'package:ameen/model/token.dart';
 import 'package:ameen/model/trip.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart'; // Import DateFormat for date formatting
 
 import '../model/admin.dart';
 import '../model/driver.dart';
+import '../model/notificationModel.dart';
 import '../model/school.dart';
 import 'data_converter.dart';
 
@@ -478,6 +480,76 @@ class DatabaseHelper {
     } catch (e) {
       print("Error fetching latest trip: $e");
       onDataChanged(null);
+    }
+    return null;
+  }
+
+  Future<List<NotificationModel>> getNotifications() async {
+    DataSnapshot dataSnapshot = await _rootRef.child("notifications").get();
+    return dataSnapshot.children
+        .map((child) => NotificationModel.fromSnapshot(child))
+        .toList();
+  }
+
+  Future<List<NotificationModel>?> filterNotificationsByDate(
+      List<NotificationModel> notifications) async {
+    DateTime now = DateTime.now();
+    DateFormat formatter = DateFormat('yyyyMMdd'); // Format to compare dates
+
+    List<NotificationModel> todayNotifications = [];
+    List<NotificationModel> yesterdayNotifications = [];
+    List<NotificationModel> otherDaysNotifications = [];
+
+    notifications.forEach((notification) {
+      // Parse the createdAt string back to DateTime
+      DateTime createdAtDate = DateTime.parse(notification.createdAt ?? '');
+
+      String createdAtDateString = formatter.format(createdAtDate);
+      String todayDateString = formatter.format(now);
+      String yesterdayDateString =
+          formatter.format(now.subtract(Duration(days: 1)));
+
+      if (createdAtDateString == todayDateString) {
+        todayNotifications.add(notification);
+      } else if (createdAtDateString == yesterdayDateString) {
+        yesterdayNotifications.add(notification);
+      } else {
+        otherDaysNotifications.add(notification);
+      }
+    });
+
+    Future<List<List<NotificationModel>>> filterNotificationsByDate(
+        List<NotificationModel> notifications) async {
+      DateTime now = DateTime.now();
+      DateFormat formatter = DateFormat('yyyyMMdd'); // Format to compare dates
+
+      List<NotificationModel> todayNotifications = [];
+      List<NotificationModel> yesterdayNotifications = [];
+      List<NotificationModel> otherDaysNotifications = [];
+
+      notifications.forEach((notification) {
+        // Parse the createdAt string back to DateTime
+        DateTime createdAtDate = DateTime.parse(notification.createdAt ?? '');
+
+        String createdAtDateString = formatter.format(createdAtDate);
+        String todayDateString = formatter.format(now);
+        String yesterdayDateString =
+            formatter.format(now.subtract(Duration(days: 1)));
+
+        if (createdAtDateString == todayDateString) {
+          todayNotifications.add(notification);
+        } else if (createdAtDateString == yesterdayDateString) {
+          yesterdayNotifications.add(notification);
+        } else {
+          otherDaysNotifications.add(notification);
+        }
+      });
+
+      return [
+        todayNotifications,
+        yesterdayNotifications,
+        otherDaysNotifications
+      ];
     }
     return null;
   }
