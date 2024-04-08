@@ -2,7 +2,6 @@ import 'package:ameen/view/ui/driver/student/student_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../model/driver.dart';
 import '../../../services/LocalStorageService.dart';
@@ -108,10 +107,7 @@ class DrawerModel extends StatelessWidget {
                       onTap: () {
                         Get.dialog(
                           CustomDialog(
-                              buttonOnTap: () {
-                                launchUrl(Uri(scheme: 'tel', path: '911'));
-
-                              },
+                              buttonOnTap: () {},
                               buttonText: 'نعم',
                               content: 'هل انت متأكد من حالة الطوائ'),
                         );
