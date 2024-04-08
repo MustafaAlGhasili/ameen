@@ -4,6 +4,7 @@ import 'package:ameen/view/ui/driver/drawer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -125,7 +126,7 @@ class _TripState extends State<Trip> {
                                           radius: 25,
                                           backgroundColor: Colors.white,
                                           child: CachedNetworkImage(
-                                            imageUrl: student.imgUrl ?? " ",
+                                            imageUrl: student.imgUrl ?? "",
                                             placeholder: (context, url) =>
                                                 CircularProgressIndicator(),
                                             errorWidget:
@@ -190,7 +191,7 @@ class _TripState extends State<Trip> {
                   // Assuming this function returns a List<StudentModel>
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasData) {
                       final List<StudentModel> students = snapshot.data!;
                       if (students.isEmpty) {
@@ -198,8 +199,7 @@ class _TripState extends State<Trip> {
                           child: ButtonModel(
                             onTap: () async {
                               if (widget.tripType == 1) {
-                                await launchUrl(Uri.parse(
-                                    'google.navigation:q=24.7851092,46.5693527&key=${Constants.GOOGLE_MAPS_API_KEY}'));
+                                await launchUrl(Uri.parse('google.navigation:q=24.7851092,46.5693527&key=${Constants.GOOGLE_MAPS_API_KEY}'));
                               } else {
                                 Get.dialog(
                                   CustomDialog(
@@ -227,89 +227,87 @@ class _TripState extends State<Trip> {
                           itemCount: students.length,
                           itemBuilder: (context, index) {
                             final StudentModel student = students[index];
-
                             return Container(
                               margin: EdgeInsets.symmetric(
-                                  horizontal: width * 0.05,
-                                  vertical: height * 0.015),
+                                horizontal: width * 0.05,
+                                vertical: height * 0.015,
+                              ),
                               decoration: BoxDecoration(
                                 color: PRIMARY_COLOR,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               height: height * 0.07,
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 8.0),
-                                        child: CircleAvatar(
-                                          radius: 25,
-                                          backgroundColor: Colors.white,
-                                          child: CachedNetworkImage(
-                                            imageUrl: student.imgUrl ?? " ",
-                                            placeholder: (context, url) =>
-                                                CircularProgressIndicator(),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Image(
-                                                        image: AssetImage(
-                                                            "img/st1.png")),
-                                            imageBuilder:
-                                                (context, imageProvider) =>
-                                                    Container(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 8.0),
+                                          child: CircleAvatar(
+                                            radius: 25,
+                                            backgroundColor: Colors.white,
+                                            child: CachedNetworkImage(
+                                              imageUrl: student.imgUrl ?? " ",
+                                              placeholder: (context, url) =>
+                                                  CircularProgressIndicator(),
+                                              errorWidget: (context, url, error) =>
+                                              const Image(image: AssetImage("img/st1.png")),
+                                              imageBuilder: (context, imageProvider) =>
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(width: width * 0.02),
-                                      Text(
-                                        '${student.fName} ${student.lName}',
-                                        style: TextStyle(
-                                            fontSize: width * 0.045,
-                                            color: Colors.white),
-                                      ),
-                                    ],
+                                        SizedBox(width: width * 0.02),
+                                        Text(
+                                          '${student.fName} ${student.lName}',
+                                          style: TextStyle(fontSize: width * 0.045, color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "1KM",
-                                        // Assuming status is part of your StudentModel
-                                        style: TextStyle(
-                                            fontSize: width * 0.045,
-                                            color: Colors.white),
-                                      ),
-                                      ButtonModel(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      NavigationScreen(
-                                                        student: student,
-                                                        tripId:
-                                                            controller.tripId!,
-                                                      )));
-                                        },
-                                        rowMainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        hMargin: width * 0.03,
-                                        height: height * 0.03,
-                                        width: width * 0.15,
-                                        content: 'بدء',
-                                        backColor: Colors.white,
-                                      ),
-                                    ],
+                                  FutureBuilder<double>(
+                                    future: _calculateDistance(student.latitude!, student.longitude!),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                        // Handle loading state
+                                        return CircularProgressIndicator();
+                                      } else if (snapshot.hasData) {
+                                        // Distance calculation successful
+                                        double distanceInKm = snapshot.data!;
+                                        return Text(
+                                          '${distanceInKm.toStringAsFixed(2)} كم',
+                                          style: TextStyle(fontSize: width * 0.035, color: Colors.white),
+                                        );
+                                      } else {
+                                        // Handle error state
+                                        return Text('Error calculating distance');
+                                      }
+                                    },
+                                  ),
+                                  ButtonModel(
+                                    onTap: () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => NavigationScreen(
+                                          student: student,
+                                          tripId: controller.tripId!,
+                                        ),
+                                      ));
+                                    },
+                                    rowMainAxisAlignment: MainAxisAlignment.center,
+                                    hMargin: width * 0.03,
+                                    height: height * 0.03,
+                                    width: width * 0.15,
+                                    content: 'بدء',
+                                    backColor: Colors.white,
                                   ),
                                 ],
                               ),
@@ -320,8 +318,10 @@ class _TripState extends State<Trip> {
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else {
-                      return Center(child: Text('No data available'));
+                      return const Center(child: Text('No data available'));
                     }
+                    // Add a default return statement to ensure a non-nullable Widget is returned
+                    return SizedBox(); // You can return an empty SizedBox or any other appropriate Widget
                   },
                 ),
               ),
@@ -362,5 +362,23 @@ class _TripState extends State<Trip> {
     } else {
       print("Updated no data");
     }
+  }
+
+  Future<double> _calculateDistance(double latitude, double longitude) async {
+    // Get current location
+    Position currentPosition = await Geolocator.getCurrentPosition();
+
+    // Calculate distance between current location and the provided coordinates
+    double distanceInMeters = await Geolocator.distanceBetween(
+      currentPosition.latitude,
+      currentPosition.longitude,
+      latitude,
+      longitude,
+    );
+
+    // Convert distance from meters to kilometers
+    double distanceInKm = distanceInMeters / 1000;
+
+    return distanceInKm;
   }
 }
