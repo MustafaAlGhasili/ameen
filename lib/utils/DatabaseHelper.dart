@@ -277,6 +277,16 @@ class DatabaseHelper {
     }
   }
 
+  Future update(dynamic model, String refName)async{
+    try {
+    DatabaseReference ref = _rootRef.child(refName).child(model.id);
+    await ref.update(model.toJson());
+
+    } catch (error) {
+    print('Error updating  status: $error');
+    }
+  }
+
   Future<List<StudentModel>> getStudentsOfDisabledParents() async {
     print("I'm Called ");
     DatabaseReference studentsRef = _rootRef.child('students');

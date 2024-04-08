@@ -88,20 +88,23 @@ class Parent extends StatelessWidget {
               SizedBox(
                 height: height * 0.035,
               ),
-              Obx(() => TextFieldModel(
-                controller: controller.parenPassword,
-                  validator: (val) => validation.passwordValidator(val),
-                  obscureText: !controller.visibility.value,
-                  text: "ادخل كلمة المرور",
-                  sufIcon: controller.visibility.value
-                      ? IconButton(
-                          icon: const Icon(Icons.visibility_outlined),
-                          onPressed: controller.changeVisibility,
-                        )
-                      : IconButton(
-                          icon: const Icon(Icons.visibility_off_outlined),
-                          onPressed: controller.changeVisibility,
-                        ))),
+              Directionality(
+                textDirection: TextDirection.ltr,
+                child: Obx(() => TextFieldModel(
+                  controller: controller.parenPassword,
+                    validator: (val) => validation.passwordValidator(val),
+                    obscureText: !controller.visibility.value,
+                    text: "ادخل كلمة المرور",
+                    sufIcon: controller.visibility.value
+                        ? IconButton(
+                            icon: const Icon(Icons.visibility_outlined),
+                            onPressed: controller.changeVisibility,
+                          )
+                        : IconButton(
+                            icon: const Icon(Icons.visibility_off_outlined),
+                            onPressed: controller.changeVisibility,
+                          ))),
+              ),
               SizedBox(
                 height: height * 0.05,
               ),

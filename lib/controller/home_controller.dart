@@ -50,33 +50,6 @@ class HomeController extends GetxController {
 
   }
 
-  Future<StudentModel?> studentShared() async{
-
-    final student = StudentModel(
-      id: '123',
-      imgUrl: '555',
-      busId: '858',
-      fName: controller.studentFName.text,
-      lName: controller.studentLName.text,
-      nationalId: controller.studentNationalId.text,
-      birthDate: controller.studentBDate.text,
-      gender: controller.genderValue.value,
-      blood: controller.bloodValue.value,
-      isEnabled: false,
-      parentId: '55',
-      schoolId: '55',
-      grade: 55,
-      longitude: 12,
-      latitude: 13,
-      address: '55',
-      email: controller.studentEmail.text,
-       phone: controller.studentPhone.text,
-    );
-    await LocalStorageService.saveStudent(student);
-    final getStudent = await  LocalStorageService.getStudent();
-    print("getStudent $getStudent");
-    return getStudent;
-  }
 
 
 }

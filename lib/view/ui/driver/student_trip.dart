@@ -1,5 +1,6 @@
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/constants.dart';
+import 'package:ameen/view/ui/driver/drawer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +53,9 @@ class _TripState extends State<Trip> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: Colors.white,
-        drawer: const Drawer(),
+        drawer: const DrawerModel(),
         appBar: AppBar(
+
           foregroundColor: Colors.white,
           backgroundColor: PRIMARY_COLOR,
           title: Text(title,

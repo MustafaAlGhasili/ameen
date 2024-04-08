@@ -4,23 +4,23 @@ import '../utils/data_converter.dart';
 
 class StudentModel implements ToMapConvertible {
   String id;
-  final String fName;
-  final String lName;
-  final String nationalId;
-  final String birthDate;
-  final String gender;
-  final String blood;
+   String fName;
+   String lName;
+   String nationalId;
+   String birthDate;
+   String gender;
+   String blood;
   final bool isEnabled;
   final String parentId;
-  final String address;
+   String address;
   final String schoolId;
   final String? busId; // Make it nullable
   final String? imgUrl; // Make it nullable
   final int grade;
   final double? latitude;
   final double? longitude;
-  final String email;
-  final String phone;
+   String email;
+   String phone;
 
   StudentModel({
     this.id = "",

@@ -4,11 +4,11 @@ import '../utils/data_converter.dart';
 
 class ParentModel implements ToMapConvertible {
   final String id;
-  final String fName;
-  final String lName;
-  final String email;
-  final String phone;
-  final String nationalId;
+   String fName;
+   String lName;
+   String email;
+   String phone;
+   String nationalId;
   final bool isEnabled;
 
   ParentModel({

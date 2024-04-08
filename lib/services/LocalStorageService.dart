@@ -22,6 +22,17 @@ class LocalStorageService {
     print(parentJson);
   }
 
+  void updateParent(ParentModel parent) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Serialize model to JSON
+    String jsonModel = jsonEncode(parent.toJson());
+
+    // Store serialized JSON string in SharedPreferences
+    await prefs.setString(parentKey, jsonModel);
+  }
+
+
   static Future<void> saveDriver(DriverModel driver) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final parentJson =
@@ -62,6 +73,7 @@ class LocalStorageService {
   static Future<StudentModel?> getStudent() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final studentJson = prefs.getString(studentKey);
+
     if (studentJson != null) {
       print("Found student in local: $studentJson");
       final Map<String, dynamic> studentMap = json.decode(studentJson);
@@ -71,6 +83,10 @@ class LocalStorageService {
 
       return null;
     }
+  }
+
+  static Future updateData()async {
+
   }
 
   static void saveUserType(int userType) async {
