@@ -1,11 +1,7 @@
 import 'package:ameen/controller/sign_controller.dart';
-import 'package:ameen/model/student.dart';
+import 'package:ameen/view/ui/sign/sign_up/waiting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../model/parent.dart';
-import '../../../../services/LocalStorageService.dart';
-import '../../home/home.dart';
-import 'sign_up.dart';
 
 class PrivacyTerms extends StatelessWidget {
   const PrivacyTerms({super.key});
@@ -73,13 +69,12 @@ class PrivacyTerms extends StatelessWidget {
                     ? () async {
                         final result = await controller.registerParent();
 
-
                         print("result is $result");
                         // if (result) {
-                          controller.createUserWithEmailAndPassword(
-                              controller.parentEmail.text,
-                              controller.parenPassword.text);
-                          Get.offAll(() => const Home());
+                        controller.createUserWithEmailAndPassword(
+                            controller.parentEmail.text,
+                            controller.parenPassword.text);
+                        Get.offAll(() => WaitingApprovalScreen());
                         // }
                       }
                     : null,

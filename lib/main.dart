@@ -2,6 +2,7 @@ import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/controller/driver_controller.dart';
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/services/firebase_notification.dart';
+import 'package:ameen/view/ui/sign/sign_up/waiting_screen.dart';
 import 'package:ameen/view/ui/sign/splash_screen.dart';
 import 'package:ameen/view/ui/sign/start.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,7 +42,7 @@ void main() async {
     theme: ThemeData(
         fontFamily: 'TajawalFont',
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home: SplashScreen(),
+    home: WaitingApprovalScreen(),
   ));
 }
 
