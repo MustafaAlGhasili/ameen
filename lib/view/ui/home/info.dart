@@ -1,9 +1,16 @@
 import 'package:ameen/model/student.dart';
+import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/home/home_widgets.dart';
+import 'package:ameen/view/ui/home/home_widgets/home.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../model/parent.dart';
+import '../../../services/LocalStorageService.dart';
+import 'edit_data.dart';
+
+StudentModel? student;
+ParentModel? parent;
 
 class About extends StatelessWidget {
   const About({super.key});
@@ -35,6 +42,10 @@ class About extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: ButtonModel(
+                      onTap: () => Get.to(() => Edit(
+                            no: 0,
+                             student: student,
+                          )),
                       textAlign: TextAlign.center,
                       content: 'تعديل',
                       rowMainAxisAlignment: MainAxisAlignment.center,
@@ -62,6 +73,10 @@ class About extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: ButtonModel(
+                      onTap: () => Get.to(() =>  Edit(
+                            no: 1,
+                        parent: parent,
+                          )),
                       textAlign: TextAlign.center,
                       content: 'تعديل',
                       rowMainAxisAlignment: MainAxisAlignment.center,
@@ -101,8 +116,9 @@ class StudentInfo extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return FutureBuilder<StudentModel?>(
-      future: controller.studentShared(),
+      future: LocalStorageService.getStudent(),
       builder: (context, snapshot) {
+        student = snapshot.data;
         print("erro ${snapshot.error}");
         print("connectionState ${snapshot.connectionState}");
         print("studentModel ${snapshot.data}");
@@ -127,7 +143,7 @@ class StudentInfo extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(snapshot.data!.fName),
+                child: Text(student!.fName),
               ),
               SizedBox(
                 height: height * 0.03,
@@ -146,7 +162,7 @@ class StudentInfo extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(snapshot.data!.lName),
+                child: Text(student!.lName),
               ),
               SizedBox(
                 height: height * 0.03,
@@ -165,7 +181,7 @@ class StudentInfo extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(snapshot.data!.nationalId),
+                child: Text(student!.nationalId),
               ),
               SizedBox(
                 height: height * 0.03,
@@ -184,7 +200,7 @@ class StudentInfo extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(snapshot.data!.birthDate),
+                child: Text(student!.phone),
               ),
               SizedBox(
                 height: height * 0.03,
@@ -203,7 +219,7 @@ class StudentInfo extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(snapshot.data!.email),
+                child: Text(student!.email),
               ),
               SizedBox(
                 height: height * 0.03,
@@ -222,7 +238,7 @@ class StudentInfo extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(snapshot.data!.blood),
+                child: Text(student!.blood),
               ),
               SizedBox(
                 height: height * 0.03,
@@ -241,7 +257,7 @@ class StudentInfo extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(snapshot.data!.id),
+                child: Text("${student!.busId}"),
               ),
             ],
           );
@@ -264,15 +280,14 @@ class ParentInfo extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    ParentModel? parentModel;
     return FutureBuilder<ParentModel?>(
-      future: controller.parentShared(),
+      future: LocalStorageService.getParent(),
       builder: (context, snapshot) {
-        parentModel = snapshot.data;
-        // print("parent ${parentModel!.fName}");
-        // print(parentModel!.fName);
+        parent = snapshot.data;
+        // print("parent ${parent!.fName}");
+        // print(parent!.fName);
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasData) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,114 +295,98 @@ class ParentInfo extends StatelessWidget {
               SizedBox(
                 height: height * 0.05,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Text("الاسم"),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text("الاسم الاول"),
               ),
               Container(
-                padding: EdgeInsets.all(13),
+                padding: const EdgeInsets.all(13),
                 width: width,
                 height: height * 0.06,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(parentModel!.fName),
+                child: Text(parent!.fName),
               ),
               SizedBox(
                 height: height * 0.03,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Text("الاسم الاخير"),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text("الاسم الاخير"),
               ),
               Container(
-                padding: EdgeInsets.all(13),
+                padding: const EdgeInsets.all(13),
                 width: width,
                 height: height * 0.06,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(parentModel!.lName),
+                child: Text(parent!.lName),
               ),
               SizedBox(
                 height: height * 0.03,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Text("رقم الأحوال"),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text("رقم الأحوال"),
               ),
               Container(
-                padding: EdgeInsets.all(13),
+                padding: const EdgeInsets.all(13),
                 width: width,
                 height: height * 0.06,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(parentModel!.nationalId),
+                child: Text(parent!.nationalId),
               ),
               SizedBox(
                 height: height * 0.03,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Text("رقم التواصل "),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text("رقم التواصل "),
               ),
               Container(
-                padding: EdgeInsets.all(13),
+                padding: const EdgeInsets.all(13),
                 width: width,
                 height: height * 0.06,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(parentModel!.phone),
+                child: Text(parent!.phone),
               ),
+              // SizedBox(
+              //   height: height * 0.03,
+              // ),
+              // const Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 8.0),
+              //   child: Text("تاريخ الميلاد"),
+              // ),
+              // Container(
+              //   padding: const EdgeInsets.all(13),
+              //   width: width,
+              //   height: height * 0.06,
+              //   decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(20),
+              //       border: Border.all(color: Colors.black)),
+              //   child: Text(parent!.email),
+              // ),
               SizedBox(
                 height: height * 0.03,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Text("تاريخ الميلاد"),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text("رقم الباص "),
               ),
               Container(
-                padding: EdgeInsets.all(13),
+                padding: const EdgeInsets.all(13),
                 width: width,
                 height: height * 0.06,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(parentModel!.email),
-              ),
-              SizedBox(
-                height: height * 0.03,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Text("فصيلة الدم "),
-              ),
-              Container(
-                padding: EdgeInsets.all(13),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(parentModel!.id),
-              ),
-              SizedBox(
-                height: height * 0.03,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Text("رقم الباص "),
-              ),
-              Container(
-                padding: EdgeInsets.all(13),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(parentModel!.phone),
+                child: Text(parent!.phone),
               ),
             ],
           );

@@ -1,10 +1,11 @@
-import 'package:ameen/controller/sign_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../controller/home_controller.dart';
-import 'home_widgets.dart';
+import 'home_widgets/home.dart';
+import 'home_widgets/notification.dart';
+import 'home_widgets/profile.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});

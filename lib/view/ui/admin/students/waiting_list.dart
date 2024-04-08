@@ -48,7 +48,7 @@ class WaitingList extends StatelessWidget {
                       Get.to(() => WaitingStudent(student: student[i]));
                     },
                     bus: true,
-                    imgUrl: "img/st1.png",
+                    imgUrl: student[i].imgUrl!,
                     padding: 10,
                     hMargin: width * 0.05,
                     vMargin: height * 0.02,

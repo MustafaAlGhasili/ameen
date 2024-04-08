@@ -207,6 +207,7 @@ class SignController extends GetxController {
       student.id = studentId!;
       await LocalStorageService.saveParent(parent);
       await LocalStorageService.saveStudent(student);
+      print("saved");
       _isLoading(false);
       return true;
     } catch (e) {
