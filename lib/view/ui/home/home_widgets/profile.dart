@@ -1,6 +1,8 @@
+import 'package:ameen/controller/home_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
 import '../../../../model/student.dart';
@@ -10,7 +12,6 @@ import '../../widget/button_model.dart';
 import '../../widget/cusom_dialog.dart';
 import '../info.dart';
 import '../settings.dart';
-import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -19,6 +20,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    HomeController controller = Get.find();
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -104,6 +106,7 @@ class ProfilePage extends StatelessWidget {
                             CustomDialog(
                                 buttonOnTap: () async {
                                   // absent notification
+
                                   Get.dialog(
                                     const Center(
                                       child: CircularProgressIndicator(
@@ -111,9 +114,9 @@ class ProfilePage extends StatelessWidget {
                                       ),
                                     ),
                                   );
-                                  await Future.delayed(
-                                      const Duration(seconds: 1));
-                                  // Navigator.pop(context);
+
+                                  await controller.createAbsenceRequest();
+                                  //TODO
                                   Get.showSnackbar(
                                     GetSnackBar(
                                       borderRadius: 20,

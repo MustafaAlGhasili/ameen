@@ -6,9 +6,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../controller/driver_controller.dart';
+import '../../../model/absence.dart';
 import '../../../model/student.dart';
 import '../../../model/trip.dart';
 import '../../../utils/constant.dart';
@@ -37,6 +40,7 @@ class _TripState extends State<Trip> {
   void initState() {
     super.initState();
     updateUI();
+    updateAbsence();
     title = widget.tripType == 2 ? "رحلة المساء" : "رحلة الصباح";
   }
 
@@ -56,7 +60,6 @@ class _TripState extends State<Trip> {
         backgroundColor: Colors.white,
         drawer: const DrawerModel(),
         appBar: AppBar(
-
           foregroundColor: Colors.white,
           backgroundColor: PRIMARY_COLOR,
           title: Text(title,
@@ -199,7 +202,8 @@ class _TripState extends State<Trip> {
                           child: ButtonModel(
                             onTap: () async {
                               if (widget.tripType == 1) {
-                                await launchUrl(Uri.parse('google.navigation:q=24.7851092,46.5693527&key=${Constants.GOOGLE_MAPS_API_KEY}'));
+                                await launchUrl(Uri.parse(
+                                    'google.navigation:q=24.7851092,46.5693527&key=${Constants.GOOGLE_MAPS_API_KEY}'));
                               } else {
                                 Get.dialog(
                                   CustomDialog(
@@ -243,7 +247,8 @@ class _TripState extends State<Trip> {
                                     child: Row(
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(right: 8.0),
+                                          padding:
+                                              const EdgeInsets.only(right: 8.0),
                                           child: CircleAvatar(
                                             radius: 25,
                                             backgroundColor: Colors.white,
@@ -251,33 +256,41 @@ class _TripState extends State<Trip> {
                                               imageUrl: student.imgUrl ?? " ",
                                               placeholder: (context, url) =>
                                                   CircularProgressIndicator(),
-                                              errorWidget: (context, url, error) =>
-                                              const Image(image: AssetImage("img/st1.png")),
-                                              imageBuilder: (context, imageProvider) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      image: DecorationImage(
-                                                        image: imageProvider,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Image(
+                                                          image: AssetImage(
+                                                              "img/st1.png")),
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
                                                   ),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                         SizedBox(width: width * 0.02),
                                         Text(
                                           '${student.fName} ${student.lName}',
-                                          style: TextStyle(fontSize: width * 0.045, color: Colors.white),
+                                          style: TextStyle(
+                                              fontSize: width * 0.045,
+                                              color: Colors.white),
                                         ),
                                       ],
                                     ),
                                   ),
                                   FutureBuilder<double>(
-                                    future: _calculateDistance(student.latitude!, student.longitude!),
+                                    future: _calculateDistance(
+                                        student.latitude!, student.longitude!),
                                     builder: (context, snapshot) {
-                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
                                         // Handle loading state
                                         return CircularProgressIndicator();
                                       } else if (snapshot.hasData) {
@@ -285,24 +298,29 @@ class _TripState extends State<Trip> {
                                         double distanceInKm = snapshot.data!;
                                         return Text(
                                           '${distanceInKm.toStringAsFixed(2)} كم',
-                                          style: TextStyle(fontSize: width * 0.035, color: Colors.white),
+                                          style: TextStyle(
+                                              fontSize: width * 0.035,
+                                              color: Colors.white),
                                         );
                                       } else {
                                         // Handle error state
-                                        return Text('Error calculating distance');
+                                        return Text(
+                                            'Error calculating distance');
                                       }
                                     },
                                   ),
                                   ButtonModel(
                                     onTap: () {
-                                      Navigator.of(context).push(MaterialPageRoute(
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
                                         builder: (context) => NavigationScreen(
                                           student: student,
-                                          tripId: controller.tripId!,
+                                          tripId: controller.currentTrip.id!,
                                         ),
                                       ));
                                     },
-                                    rowMainAxisAlignment: MainAxisAlignment.center,
+                                    rowMainAxisAlignment:
+                                        MainAxisAlignment.center,
                                     hMargin: width * 0.03,
                                     height: height * 0.03,
                                     width: width * 0.15,
@@ -336,7 +354,7 @@ class _TripState extends State<Trip> {
     DatabaseReference databaseReference = FirebaseDatabase.instance
         .ref()
         .child('trips')
-        .child(controller.tripId!);
+        .child(controller.currentTrip.id!);
 
     databaseReference.onValue.listen((event) {
       DataSnapshot dataSnapshot = event.snapshot;
@@ -351,6 +369,25 @@ class _TripState extends State<Trip> {
           print("Updating Location");
         });
       }
+    });
+  }
+
+  void updateAbsence() async {
+    initializeDateFormatting('en_US', null);
+
+    final String today = intl.DateFormat('yyyy-MM-dd').format(DateTime.now());
+    DatabaseReference databaseReference =
+        FirebaseDatabase.instance.ref().child('absences').child(today);
+
+    databaseReference.onValue.listen((event) async {
+      DataSnapshot dataSnapshot = event.snapshot;
+      print("getting absence data");
+      print(dataSnapshot);
+      final result = dataSnapshot.children
+          .map((child) => AbsenceModel.fromSnapshot(child))
+          .toList();
+      print('absence updated');
+      await controller.refreshTodayAbsence(result);
     });
   }
 

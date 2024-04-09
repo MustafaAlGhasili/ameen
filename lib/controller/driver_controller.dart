@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ameen/model/absence.dart';
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:get/get.dart';
@@ -9,19 +10,22 @@ import '../model/trip.dart';
 import '../view/ui/driver/student_trip.dart';
 
 class DriverController extends GetxController {
-
   RxBool isOneEmpty = false.obs;
   RxBool isTwoEmpty = false.obs;
-
+  late List<AbsenceModel> absenceList;
+  late List<String> absenceIdsList = [];
   final _databaseHelper = DatabaseHelper();
   var currentTrip;
   late String? tripId;
+
   @override
   void onInit() async {
     super.onInit();
     print("Current Trip");
-    currentTrip = await LocalStorageService.getTrip();
+    /* currentTrip = await LocalStorageService.getTrip();
     tripId = await currentTrip!.id;
+   */
+    await getTodayAbsence();
   }
 
   Future<bool> createTrip(int type) async {
@@ -34,8 +38,8 @@ class DriverController extends GetxController {
           currentTrip.type == type) {
         print("Trip already created today. Ignoring new trip creation.");
         Get.off(() => Trip(
-          tripType: type,
-        ));
+              tripType: type,
+            ));
         return false;
       }
       print("Getting Driver");
@@ -49,7 +53,7 @@ class DriverController extends GetxController {
         throw Exception(
             "No students found for the driver's bus: ${driver.busId}");
       }
-      if(students.length==0){
+      if (students.length == 0) {
         print("No Students for this bus");
       }
       print("Students List$students");
@@ -72,9 +76,9 @@ class DriverController extends GetxController {
       await _databaseHelper.saveTrip(trip);
       tripId = trip.id!;
       await LocalStorageService.saveTrip(trip);
-      Get.to(() =>  Trip(
-        tripType: type,
-      ));
+      Get.to(() => Trip(
+            tripType: type,
+          ));
       return true;
     } catch (e) {
       print("Error creating trip: $e");
@@ -114,6 +118,28 @@ class DriverController extends GetxController {
     return completer.future;
   }
 
+  Future<void> getTodayAbsence() async {
+    absenceList = await _databaseHelper.getTodayAbsences();
+    absenceList.forEach((absence) {
+      absenceIdsList.add(absence.studentId);
+    });
+
+    print("Absence List$absenceIdsList");
+  }
+
+  Future<void> refreshTodayAbsence(List<AbsenceModel> absenceList) async {
+    print("Refreshing Absence");
+    if (absenceIdsList.length > 0) {
+      absenceIdsList.clear();
+      absenceList.forEach((absence) {
+        absenceIdsList.add(absence.studentId);
+      });
+      print("Absence List$absenceIdsList");
+      _databaseHelper.updateField("trips", currentTrip.id, "status", 1);
+      _databaseHelper.updateField("trips", currentTrip.id, "status", 0);
+    }
+  }
+
   Future<List<StudentModel>> getBusStudentsWithStatus(int status) async {
     try {
       final driver = await LocalStorageService.getDriver();
@@ -128,12 +154,18 @@ class DriverController extends GetxController {
       }
       print("Started getting trip for the bus");
       final dbTrip = await _databaseHelper.getTripById(currentTrip.id);
-      print(dbTrip);
       final studentTripStatus = dbTrip?.studentTripStatus;
+      print("dbTrip/n:${dbTrip?.id}");
+      print("studentTripStatus/n:$studentTripStatus");
       if (studentTripStatus != null) {
         print("Start Filtering ${studentTripStatus.length} Students");
-        students.forEach((student) {
-          print("Checking  ${student.fName} Status Which is ${studentTripStatus[student.id]?.status} ");
+        List<StudentModel> nonAbsentStudents = students
+            .where((student) => !absenceIdsList.contains(student.id))
+            .toList();
+
+        nonAbsentStudents.forEach((student) {
+          print(
+              "Checking  ${student.fName} Status Which is ${studentTripStatus[student.id]?.status} ");
 
           if (studentTripStatus[student.id]?.status == status) {
             print("Found Student Status");
@@ -144,10 +176,8 @@ class DriverController extends GetxController {
         filteredStudents.forEach((student) {
           print('Student ID Is: ${student.id}, Name: ${student.fName}');
         });
-      }
-      else{
+      } else {
         print("students for the bus are null");
-
       }
 
       return filteredStudents;

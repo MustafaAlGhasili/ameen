@@ -1,9 +1,11 @@
+import 'package:ameen/model/absence.dart';
 import 'package:ameen/model/location.dart';
 import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
 import 'package:ameen/model/token.dart';
 import 'package:ameen/model/trip.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart'; // Import DateFormat for date formatting
 
 import '../model/admin.dart';
@@ -19,6 +21,8 @@ class DatabaseHelper {
       FirebaseDatabase.instance.ref().child('students');
   static final DatabaseReference driverRef =
       FirebaseDatabase.instance.ref().child('drivers');
+  static final DatabaseReference absenceRef =
+      FirebaseDatabase.instance.ref().child('absences');
 
   Future<String?> save<T extends ToMapConvertible>(
       T model, String refName) async {
@@ -406,6 +410,24 @@ class DatabaseHelper {
     return tripId;
   }
 
+  Future<String?> saveAbsence(AbsenceModel absence) async {
+    String absenceId = _rootRef.push().key ?? '';
+    print("Is being save");
+    print("absences Id:${absenceId}");
+//    absence.id = absenceId;
+    DatabaseReference absenceRef = _rootRef
+        .child("absences")
+        .child(absence.createdAt)
+        .child(absence.studentId);
+    absenceRef.set(absence.toMap()).then((_) {
+      print('absence created successfully');
+    }).catchError((error) {
+      print('Failed to create absence: $error');
+    });
+
+    return absenceId;
+  }
+
   Future<List<StudentModel>> getStudentsOnBusWithStatus(String busId) async {
     print("Getting Students on Bus 1 with Status");
 
@@ -574,7 +596,9 @@ class DatabaseHelper {
       final snapshot = await _rootRef
           .child('notifications')
           .orderByChild('parentId')
-          .startAt(parentId).endAt('none').get();
+          .startAt(parentId)
+          .endAt('none')
+          .get();
 
       print("Notifications snapshot$snapshot");
       print(snapshot.value);
@@ -583,6 +607,23 @@ class DatabaseHelper {
           .toList();
     } catch (error) {
       print('Error getting notifications : $error');
+      return [];
+    }
+  }
+
+  Future<List<AbsenceModel>> getTodayAbsences() async {
+    try {
+
+      await initializeDateFormatting('en_US', null);
+
+      final String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+      final snapshot = await _rootRef.child('absences').child(today).get();
+      return snapshot.children
+          .map((child) => AbsenceModel.fromSnapshot(child))
+          .toList();
+    } catch (error) {
+      print('Error getting absence: $error');
       return [];
     }
   }
