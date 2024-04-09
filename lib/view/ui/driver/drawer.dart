@@ -1,4 +1,6 @@
+import 'package:ameen/view/ui/admin/drivers/driver_presoanl_info.dart';
 import 'package:ameen/view/ui/driver/student/student_list.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -6,6 +8,7 @@ import 'package:iconly/iconly.dart';
 import '../../../model/driver.dart';
 import '../../../services/LocalStorageService.dart';
 import '../../../utils/constants.dart';
+import '../admin/drivers/driver_info.dart';
 import '../widget/cusom_dialog.dart';
 
 class DrawerModel extends StatelessWidget {
@@ -20,7 +23,7 @@ class DrawerModel extends StatelessWidget {
       // Call the getData method asynchronously
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -40,9 +43,24 @@ class DrawerModel extends StatelessWidget {
                         borderRadius: BorderRadius.circular(1000),
                       ),
                       child: CircleAvatar(
-                        backgroundImage: const AssetImage('img/driver.png'),
                         backgroundColor: Colors.white,
                         radius: width * 0.2,
+                        child: CachedNetworkImage(
+                          imageUrl: driver.photo ?? " ",
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Image(image: AssetImage("img/st1.png")),
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Text("${driver.fName} ${driver.lName}",
@@ -50,11 +68,15 @@ class DrawerModel extends StatelessWidget {
                             fontSize: width * 0.08, color: PRIMARY_COLOR)),
                     SizedBox(height: height * 0.03),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => DriverPInfo(
+                              driver: driver,
+                            ));
+                      },
                       child: Container(
                         decoration: UnderlineTabIndicator(
                             insets:
-                            EdgeInsets.symmetric(horizontal: width * 0.045),
+                                EdgeInsets.symmetric(horizontal: width * 0.045),
                             borderSide: const BorderSide(
                                 color: PRIMARY_COLOR, width: 1.7)),
                         padding: EdgeInsets.symmetric(
@@ -83,7 +105,7 @@ class DrawerModel extends StatelessWidget {
                         margin: EdgeInsets.symmetric(vertical: height * 0.02),
                         decoration: UnderlineTabIndicator(
                             insets:
-                            EdgeInsets.symmetric(horizontal: width * 0.045),
+                                EdgeInsets.symmetric(horizontal: width * 0.045),
                             borderSide: const BorderSide(
                                 color: PRIMARY_COLOR, width: 1.7)),
                         padding: EdgeInsets.symmetric(
@@ -115,7 +137,7 @@ class DrawerModel extends StatelessWidget {
                       child: Container(
                         decoration: UnderlineTabIndicator(
                             insets:
-                            EdgeInsets.symmetric(horizontal: width * 0.045),
+                                EdgeInsets.symmetric(horizontal: width * 0.045),
                             borderSide: const BorderSide(
                                 color: PRIMARY_COLOR, width: 1.7)),
                         padding: EdgeInsets.symmetric(

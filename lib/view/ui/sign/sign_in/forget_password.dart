@@ -57,7 +57,9 @@ class ForgetPassword extends StatelessWidget {
                         height: height * 0.05,
                       ),
                       TextFieldModel(
-                        controller: controller.signInEmailCont,
+                        onChanged: (val) {
+                          controller.signInEmailCont = val;
+                        },
                         obscureText: false,
                         hint: "البريد الاكتروني",
                         text: "البريد الاكتروني",
@@ -73,7 +75,7 @@ class ForgetPassword extends StatelessWidget {
                               ? null
                               : () async {
                                   final result = await controller.resetPassword(
-                                    controller.signInEmailCont.text,
+                                    controller.signInEmailCont!,
                                   );
                                   print("result is $result");
                                   if (result) {

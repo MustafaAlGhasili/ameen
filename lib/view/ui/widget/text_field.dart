@@ -19,6 +19,7 @@ class TextFieldModel extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final void Function()? onTap;
   final int maxLines;
+  final TextStyle? textStyle;
 
   // final String? Function(String?)? validator;
 
@@ -40,7 +41,7 @@ class TextFieldModel extends StatefulWidget {
     this.validator,
     this.inputFormatters,
     this.onTap,
-    this.maxLines = 1,
+    this.maxLines = 1, this.textStyle,
     // this.validator,
   });
 
@@ -71,7 +72,7 @@ class _TextFieldModelState extends State<TextFieldModel> {
         onChanged: widget.onChanged,
         obscureText: widget.obscureText,
         decoration: InputDecoration(
-            label: Text("${widget.text}"),
+            label: Text("${widget.text}", style: widget.textStyle),
             isDense: true,
             contentPadding: const EdgeInsets.fromLTRB(25, 27, 25, 0),
             hintText: widget.hint,

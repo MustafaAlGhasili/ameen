@@ -1,6 +1,5 @@
 import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/controller/driver_controller.dart';
-import 'package:ameen/controller/notification_controller.dart';
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/services/firebase_notification.dart';
 import 'package:ameen/view/ui/admin/admin_notification.dart';
@@ -35,6 +34,7 @@ void main() async {
   Get.lazyPut(() => NotificationController());
   Get.put(CamController());
   Get.put(SignController());
+
 
   runApp(GetMaterialApp(
     localizationsDelegates: const [

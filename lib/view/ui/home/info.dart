@@ -32,7 +32,7 @@ class About extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: SizedBox(
-            height: height * 2,
+            height: height * 1.8,
             width: width,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.07),
@@ -44,7 +44,7 @@ class About extends StatelessWidget {
                     child: ButtonModel(
                       onTap: () => Get.to(() => Edit(
                             no: 0,
-                             student: student,
+                            student: student,
                           )),
                       textAlign: TextAlign.center,
                       content: 'تعديل',
@@ -73,9 +73,9 @@ class About extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: ButtonModel(
-                      onTap: () => Get.to(() =>  Edit(
+                      onTap: () => Get.off(() => Edit(
                             no: 1,
-                        parent: parent,
+                            parent: parent,
                           )),
                       textAlign: TextAlign.center,
                       content: 'تعديل',
@@ -272,9 +272,14 @@ class StudentInfo extends StatelessWidget {
   }
 }
 
-class ParentInfo extends StatelessWidget {
+class ParentInfo extends StatefulWidget {
   const ParentInfo({super.key});
 
+  @override
+  State<ParentInfo> createState() => _ParentInfoState();
+}
+
+class _ParentInfoState extends State<ParentInfo> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -289,6 +294,8 @@ class ParentInfo extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else if (snapshot.hasData) {
+          delay();
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -377,7 +384,7 @@ class ParentInfo extends StatelessWidget {
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text("رقم الباص "),
+                child: Text("البريد الالكتروني"),
               ),
               Container(
                 padding: const EdgeInsets.all(13),
@@ -386,7 +393,7 @@ class ParentInfo extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black)),
-                child: Text(parent!.phone),
+                child: Text(parent!.email),
               ),
             ],
           );
@@ -398,5 +405,10 @@ class ParentInfo extends StatelessWidget {
         }
       },
     );
+  }
+
+  void delay() async {
+    Future.delayed(const Duration(seconds: 1));
+    setState(() {});
   }
 }

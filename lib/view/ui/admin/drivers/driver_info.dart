@@ -1,6 +1,7 @@
 import 'package:ameen/model/driver.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,18 +35,33 @@ class DriverInfo extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: EdgeInsets.only(top: height * 0.1),
-                child: Container(
-                  height: height * 0.2,
-                  width: width * 0.45,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(500),
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 113, 65, 146))),
-                  child: Image(
-                    width: width * 0.27,
-                    image: AssetImage("img/driver.png"),
+              SizedBox(
+                height: height * 0.06
+              ),
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(1),
+                margin: EdgeInsets.only(top: height * 0.035),
+                decoration: const BoxDecoration(
+                    color: Colors.black, shape: BoxShape.circle),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: width * 0.23,
+                  child: CachedNetworkImage(
+                    imageUrl: driver.photo ?? " ",
+                    placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                    const Image(image: AssetImage("img/st1.png")),
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),

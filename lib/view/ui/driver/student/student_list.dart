@@ -1,6 +1,6 @@
 import 'package:ameen/model/student.dart';
 import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/driver/driver_home.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -79,8 +79,28 @@ class StudentList extends StatelessWidget {
                             padding: const EdgeInsets.all(7.0),
                             child: CircleAvatar(
                               backgroundColor: Colors.white,
-                              backgroundImage: AssetImage(img[i]),
                               radius: width * 0.09,
+                              child:  CachedNetworkImage(
+                                imageUrl: student![i].imgUrl ?? " ",
+                                placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                errorWidget:
+                                    (context, url, error) =>
+                                const Image(
+                                    image: AssetImage(
+                                        "img/st1.png")),
+                                imageBuilder:
+                                    (context, imageProvider) =>
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -108,4 +128,3 @@ class StudentList extends StatelessWidget {
 }
 
 
-List<String> img = ['img/img.png', 'img/img2.png'];
