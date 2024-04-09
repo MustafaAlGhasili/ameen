@@ -2,11 +2,13 @@ import 'package:ameen/model/notification.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:get/get.dart';
 
+import '../services/LocalStorageService.dart';
+
 class NotificationController extends GetxController {
   late DatabaseHelper _databaseHelper;
   RxBool _isLoading = false.obs; // Add this variable
   RxBool get isLoading => _isLoading;
-  String sendNotification='';
+  String sendNotification = '';
 
   @override
   void onInit() {
@@ -34,6 +36,23 @@ class NotificationController extends GetxController {
       print('Error sending password reset email: $e');
       _isLoading(false);
       return false;
+    }
+  }
+
+  Future<List<NotificationModel>> getParentNotifications() async {
+    try {
+      final parent = await LocalStorageService.getParent();
+      if (parent == null) {
+        throw Exception("Parent not found");
+      }
+      final notifications =
+          await _databaseHelper.getNotificationsByParentId(parent.id);
+
+      print("Notifications found$notifications");
+      return notifications;
+    } catch (e) {
+      print("Error fetching Notifications: $e");
+      return []; // Return an empty list in case of error
     }
   }
 }

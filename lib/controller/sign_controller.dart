@@ -14,6 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../model/school.dart';
 import '../model/student.dart';
 import '../services/LocalStorageService.dart';
+import '../services/firebase_notification.dart';
 import '../utils/DatabaseHelper.dart';
 
 class SignController extends GetxController {
@@ -263,6 +264,9 @@ class SignController extends GetxController {
         ParentModel? parent =
             await _databaseHelper.getUserById<ParentModel>(userId, loginType);
         print("Found Parent");
+        FirebaseNotification firebaseNotification = FirebaseNotification();
+        await firebaseNotification.initialize();
+        await firebaseNotification.subscribeToTopic("parents");
         print(parent);
         if (parent != null) {
           if (!parent.isEnabled) {
@@ -278,8 +282,7 @@ class SignController extends GetxController {
           await LocalStorageService.saveStudent(student!);
           return true;
         }
-      }
-      else if (loginType == 1) {
+      } else if (loginType == 1) {
         DriverModel? driver =
             await _databaseHelper.getUserById<DriverModel>(userId, loginType);
         print("Found Driver");
@@ -297,8 +300,7 @@ class SignController extends GetxController {
           print("No Data for driver");
           return false;
         }
-      }
-      else {
+      } else {
         AdminModel? admin =
             await _databaseHelper.getUserById<AdminModel>(userId, loginType);
         print("Found Admin");
@@ -326,13 +328,11 @@ class SignController extends GetxController {
       }
       _isLoading(false);
       return false;
-    }
-    catch(e){
+    } catch (e) {
       print("Error: $e");
       loginErrorValue.value = e.toString();
       _isLoading(false);
       return false;
-
     }
   }
 
@@ -386,8 +386,6 @@ class SignController extends GetxController {
       // Add any other properties you want to access
     }
   }
-
-
 
   void fetchInfo() {}
 }

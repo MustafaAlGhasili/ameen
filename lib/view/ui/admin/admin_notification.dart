@@ -49,9 +49,7 @@ class AdminNotifications extends StatelessWidget {
                 Animation<double> animation, int index) {
               NotificationModel notification =
               NotificationModel.fromSnapshot(snapshot);
-              return NotificationCard(notification: notification,
-
-              );
+              return NotificationCard(notification: notification,);
             },
           ),
         ),

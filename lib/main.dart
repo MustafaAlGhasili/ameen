@@ -3,8 +3,9 @@ import 'package:ameen/controller/driver_controller.dart';
 import 'package:ameen/controller/notification_controller.dart';
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/services/firebase_notification.dart';
-import 'package:ameen/view/ui/admin/notification.dart';
+import 'package:ameen/view/ui/admin/admin_notification.dart';
 import 'package:ameen/view/ui/admin/send_notification.dart';
+import 'package:ameen/view/ui/home/home_widgets/parent_notification.dart';
 import 'package:ameen/view/ui/sign/start.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ void main() async {
     useInheritedMediaQuery: true,
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home:  Notifications(),
+    home:  const ParentNotifications(),
   ));
 }
 

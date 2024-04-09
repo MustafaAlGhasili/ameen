@@ -4,7 +4,7 @@ import 'package:iconly/iconly.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../controller/home_controller.dart';
 import 'home_widgets/home.dart';
-import 'home_widgets/notification.dart';
+import 'home_widgets/parent_notification.dart';
 import 'home_widgets/profile.dart';
 
 class Home extends StatelessWidget {
@@ -74,6 +74,6 @@ class Home extends StatelessWidget {
 
 List<Widget> homePages = [
   const HomePage(),
-  const NotificationPage(),
+  const ParentNotifications(),
   const ProfilePage(),
 ];

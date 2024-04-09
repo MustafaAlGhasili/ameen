@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../widget/button_model.dart';
-import 'notification.dart';
+import 'admin_notification.dart';
 
 class AdminHome extends StatelessWidget {
   const AdminHome({super.key});

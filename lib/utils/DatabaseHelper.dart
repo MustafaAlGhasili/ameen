@@ -281,13 +281,12 @@ class DatabaseHelper {
     }
   }
 
-  Future update(dynamic model, String refName)async{
+  Future update(dynamic model, String refName) async {
     try {
-    DatabaseReference ref = _rootRef.child(refName).child(model.id);
-    await ref.update(model.toJson());
-
+      DatabaseReference ref = _rootRef.child(refName).child(model.id);
+      await ref.update(model.toJson());
     } catch (error) {
-    print('Error updating  status: $error');
+      print('Error updating  status: $error');
     }
   }
 
@@ -565,6 +564,26 @@ class DatabaseHelper {
         otherDaysNotifications
       ];
     }
+
     return null;
+  }
+
+  Future<List<NotificationModel>> getNotificationsByParentId(
+      String parentId) async {
+    try {
+      final snapshot = await _rootRef
+          .child('notifications')
+          .orderByChild('parentId')
+          .startAt(parentId).endAt('none').get();
+
+      print("Notifications snapshot$snapshot");
+      print(snapshot.value);
+      return snapshot.children
+          .map((child) => NotificationModel.fromSnapshot(child))
+          .toList();
+    } catch (error) {
+      print('Error getting notifications : $error');
+      return [];
+    }
   }
 }
