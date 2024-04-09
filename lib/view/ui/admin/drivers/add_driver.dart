@@ -1,6 +1,7 @@
 import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/widget/text_field.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,6 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../../controller/camera_controller.dart';
 import '../../../../utils/validation.dart';
 import '../../widget/custem_dropdown_menu.dart';
-
 
 AdminController controller = Get.find();
 
@@ -43,6 +43,8 @@ class _AddDriverState extends State<AddDriver> {
       Get.find(); // Assuming GetX controller instance
   String? _selectedImagePath; // Store the selected image path
   String? licenceImgUrl;
+  String? driverPhoto;
+  AdminController adminController = Get.find();
 
   Future<void> _handleCameraPick(
       ImageSource imageSource, String fullName) async {
@@ -59,7 +61,9 @@ class _AddDriverState extends State<AddDriver> {
       if (licenceImgUrl != null) {
         controller.driverLicence.value = licenceImgUrl!;
         print("Image url: $licenceImgUrl");
-      } else {
+      } else if (driverPhoto! != null){
+
+      }else {
         print("Image url not found");
       }
       setState(() {
@@ -116,7 +120,6 @@ class _AddDriverState extends State<AddDriver> {
 
   @override
   Widget build(BuildContext context) {
-
     Validation validation = Validation();
 
     double height = MediaQuery.of(context).size.height;
@@ -186,7 +189,7 @@ class _AddDriverState extends State<AddDriver> {
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     maxLength: 10,
-                    onChanged: (val){
+                    onChanged: (val) {
                       controller.driverPhone = val;
                     },
                     keyboardType: TextInputType.number,
@@ -246,43 +249,72 @@ class _AddDriverState extends State<AddDriver> {
                         controller.driverBlood.value = val!;
                       })),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.03, vertical: height * 0.02),
-                  child: GestureDetector(
-                    onTap: () => _showImageOptionsDialog(context),
-                    child: TextFieldModel(
-                      // validator: (val) => validation.validator(val),
-                      onChanged: (val) {
-                          // controller.driverLicence = val;
-                      },
-                      isEnabled: false,
-                      sufIcon: const Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.black,
-                      ),
-                      text: "ادراج صورة من رخصة القيادة",
+                Row(
+                  children: [
+                    SizedBox(
+                      width: width * 0.03,
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.03, vertical: height * 0.02),
-                  child: GestureDetector(
-                    onTap: () => _showImageOptionsDialog(context),
-                    child: TextFieldModel(
-                      // validator: (val) => validation.validator(val),
-                      onChanged: (val) {
-                          // controller.driverLicence.value = val;
-                      },
-                      isEnabled: false,
-                      sufIcon: const Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.black,
-                      ),
-                      text: "ادراج الصورة الشخصيه",
+                    GestureDetector(
+                      onTap: () => _showImageOptionsDialog(context),
+                      child: Container(
+                          height: height * 0.13,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black45),
+                              borderRadius: BorderRadius.circular(11)),
+                          width: width * 0.45,
+                          alignment: Alignment.center,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: width * 0.01),
+                          child: DottedBorder(
+                            stackFit: StackFit.expand,
+                            borderPadding: EdgeInsets.all(width * 0.027),
+                            color: Colors.black38,
+                            borderType: BorderType.RRect,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(IconlyLight.image, size: width * 0.07,color: PRIMARY_COLOR),
+                                SizedBox(
+                                  height: height * 0.01,
+                                ),
+                                Text("ادراج الصوره الشخصيه", style: TextStyle(fontSize: width * 0.036),)
+                              ],
+                            ),
+                          )),
                     ),
-                  ),
+                    SizedBox(
+                      width: width * 0.02,
+                    ),
+                    GestureDetector(
+                      onTap: () => _showImageOptionsDialog(context),
+                      child: Container(
+                          height: height * 0.13,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black45),
+                              borderRadius: BorderRadius.circular(11)),
+                          width: width * 0.45,
+                          alignment: Alignment.center,
+                          padding:
+                          EdgeInsets.symmetric(horizontal: width * 0.01),
+                          child: DottedBorder(
+
+                            stackFit: StackFit.expand,
+                            borderPadding: EdgeInsets.all(width * 0.027),
+                            color: Colors.black38,
+                            borderType: BorderType.RRect,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(IconlyLight.image, size: width * 0.07,color: PRIMARY_COLOR),
+                                SizedBox(
+                                  height: height * 0.01,
+                                ),
+                                Text("ادراج صوره رخصه القياده", style: TextStyle(fontSize: width * 0.036),)
+                              ],
+                            ),
+                          )),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -308,9 +340,9 @@ class _AddDriverState extends State<AddDriver> {
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator() // Show loading indicator
-                      : Text(
+                      : const Text(
                           "حفظ",
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white),
                         ),
                 ),
                 SizedBox(

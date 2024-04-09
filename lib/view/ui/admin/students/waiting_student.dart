@@ -4,6 +4,7 @@ import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/admin/home.dart';
 import 'package:ameen/view/ui/widget/custem_dropdown_menu.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -40,20 +41,31 @@ class WaitingStudent extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: height * 0.035),
-                    child: Container(
-                      margin: EdgeInsets.only(right: width * 0.27),
-                      height: height * 0.15,
-                      width: width * 0.35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(500),
-                          border: Border.all(
-                              color: const Color.fromARGB(255, 113, 65, 146))),
-                      // child: Image(
-                      //   width: width * 0.27,
-                      //   image: AssetImage(student.im),
-                      // ),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(1),
+                    margin: EdgeInsets.only(top: height * 0.035),
+                    decoration: const BoxDecoration(
+                        color: Colors.black, shape: BoxShape.circle),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: width * 0.15,
+                      child: CachedNetworkImage(
+                        imageUrl: student.imgUrl ?? " ",
+                        placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                        const Image(image: AssetImage("img/st1.png")),
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   Padding(

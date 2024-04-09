@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../model/driver.dart';
 import '../utils/DatabaseHelper.dart';
 import 'driver_controller.dart';
+
 class AdminController extends GetxController {
   String driverFName = '';
   String driverLName = '';
@@ -13,7 +14,8 @@ class AdminController extends GetxController {
   String driverNationalID = '';
   String driverBussNo = '';
   RxString driverLicence = ''.obs;
-  String sendNotification='';
+  String driverPhoto = '';
+  String sendNotification = '';
 
   final List<String> blood = ["B+", "A+", "B-", "A-"];
   RxList<String> buses = ['B1', 'C1', 'D1'].obs;
@@ -56,7 +58,9 @@ class AdminController extends GetxController {
         blood: driverBlood.value,
         driverLicence: driverLicence.value,
         busId: driverBussNo,
+        photo: driverPhoto,
       );
+
       await dbHelper.saveDriver(driver, 'drivers');
       await authService.resetPassword(driverEmail);
       _isLoading(false);

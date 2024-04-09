@@ -1,4 +1,5 @@
 import 'package:ameen/view/ui/sign/sign_in/sign_in.dart';
+import 'package:ameen/view/ui/sign/start.dart';
 import 'package:flutter/material.dart';
 
 class WaitingApprovalScreen extends StatelessWidget {
@@ -28,7 +29,7 @@ class WaitingApprovalScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => SignIn()), // Navigate to the sign-in screen
+                  MaterialPageRoute(builder: (context) => Start()), // Navigate to the sign-in screen
                 );
               },
               child: Text(

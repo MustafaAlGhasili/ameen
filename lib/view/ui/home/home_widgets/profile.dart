@@ -102,7 +102,7 @@ class ProfilePage extends StatelessWidget {
                         onTap: () {
                           Get.dialog(
                             CustomDialog(
-                                buttonOnTap: () async{
+                                buttonOnTap: () async {
                                   // absent notification
                                   Get.dialog(
                                     const Center(
@@ -111,8 +111,9 @@ class ProfilePage extends StatelessWidget {
                                       ),
                                     ),
                                   );
-                                  await Future.delayed(const Duration(seconds: 1));
-                                  Get.back();
+                                  await Future.delayed(
+                                      const Duration(seconds: 1));
+                                  // Navigator.pop(context);
                                   Get.showSnackbar(
                                     GetSnackBar(
                                       borderRadius: 20,
@@ -124,12 +125,13 @@ class ProfilePage extends StatelessWidget {
                                         color: Colors.white,
                                         size: width * 0.065,
                                       ),
-                                      message:"تم ارسال اشعار الغياب بنجاح",
+                                      message: "تم ارسال اشعار الغياب بنجاح",
                                       duration: const Duration(seconds: 2),
                                       animationDuration:
-                                      const Duration(milliseconds: 600),
+                                          const Duration(milliseconds: 600),
                                     ),
                                   );
+                                  Get.back(closeOverlays: true);
                                 },
                                 buttonText: "نعم",
                                 content: "هل انت متاكد من اشعار الغياب؟"),

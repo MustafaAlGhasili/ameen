@@ -1,6 +1,8 @@
+import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/view/ui/admin/drivers/drivers_list.dart';
 import 'package:ameen/view/ui/admin/students/students_list.dart';
 import 'package:ameen/view/ui/sign/start.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +23,8 @@ class AdminHome extends StatelessWidget {
             Container(
               margin: const EdgeInsets.all(15),
               child: IconButton(
-                onPressed: () {
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
                   Get.offAll(const Start());
                 },
                 icon: Icon(

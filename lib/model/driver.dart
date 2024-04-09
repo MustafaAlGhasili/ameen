@@ -13,6 +13,7 @@ class DriverModel implements ToMapConvertible {
   final String blood;
   final String driverLicence;
   final String busId;
+  final String photo;
 
   DriverModel({
     required this.id,
@@ -26,6 +27,7 @@ class DriverModel implements ToMapConvertible {
     required this.blood,
     required this.driverLicence,
     required this.busId,
+    required this.photo,
   });
 
   @override
@@ -42,6 +44,7 @@ class DriverModel implements ToMapConvertible {
       'blood': blood,
       'driverLicence': driverLicence,
       'busId': busId,
+      'photo': photo,
     };
   }
 
@@ -52,13 +55,15 @@ class DriverModel implements ToMapConvertible {
       fName: data['firstName'] as String,
       lName: data['lastName'] as String,
       phone: data['phone'] as String,
-      email: data['email'] as String, // Get email from snapshot
+      email: data['email'] as String,
+      // Get email from snapshot
       nationalId: data['nationalId'] as String,
       isEnabled: data['isEnabled'] as bool,
       driverBDate: data['driverBDate'] as String,
       blood: data['blood'] as String,
       driverLicence: data['driverLicence'] as String,
       busId: data['busId'] as String,
+      photo: data['photo'] as String,
     );
   }
 
@@ -68,13 +73,15 @@ class DriverModel implements ToMapConvertible {
       fName: map['firstName'] as String,
       lName: map['lastName'] as String,
       phone: map['phone'] as String,
-      email: map['email'] as String, // Get email from map
+      email: map['email'] as String,
+      // Get email from map
       nationalId: map['nationalId'] as String,
       isEnabled: map['isEnabled'] as bool,
       driverBDate: map['driverBDate'] as String,
       blood: map['blood'] as String,
       driverLicence: map['driverLicence'] as String,
       busId: map['busId'] as String,
+      photo: map['photo'] as String,
     );
   }
 }

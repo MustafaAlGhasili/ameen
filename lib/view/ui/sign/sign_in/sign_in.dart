@@ -61,28 +61,37 @@ class SignIn extends StatelessWidget {
                         style: TextStyle(fontSize: height * 0.033),
                       ),
                       TextFieldModel(
-                        controller: controller.signInEmailCont,
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (val) {
+                          controller.signInEmailCont = val;
+                        },
                         obscureText: false,
                         text: "البريد الاكتروني",
                         sufIcon: const Icon(IconlyLight.profile),
                         vPadding: height * 0.03,
                       ),
-                      Obx(
-                        () => TextFieldModel(
-                            controller: controller.signInPassCont,
-                            obscureText: !controller.visibility.value,
-                            text: "كلمة السر",
-                            vPadding: height * 0.03,
-                            sufIcon: controller.visibility.value
-                                ? IconButton(
-                                    icon: const Icon(Icons.visibility_outlined),
-                                    onPressed: controller.changeVisibility,
-                                  )
-                                : IconButton(
-                                    icon: const Icon(
-                                        Icons.visibility_off_outlined),
-                                    onPressed: controller.changeVisibility,
-                                  )),
+                      Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: Obx(
+                          () => TextFieldModel(
+                              onChanged: (val) {
+                                controller.signInPassCont = val;
+                              },
+                              obscureText: !controller.visibility.value,
+                              text: "كلمة السر",
+                              vPadding: height * 0.03,
+                              sufIcon: controller.visibility.value
+                                  ? IconButton(
+                                      icon:
+                                          const Icon(Icons.visibility_outlined),
+                                      onPressed: controller.changeVisibility,
+                                    )
+                                  : IconButton(
+                                      icon: const Icon(
+                                          Icons.visibility_off_outlined),
+                                      onPressed: controller.changeVisibility,
+                                    )),
+                        ),
                       ),
                       SizedBox(height: height * 0.02),
                       Obx(
@@ -92,8 +101,8 @@ class SignIn extends StatelessWidget {
                               : () async {
                                   final result = await controller
                                       .signInWithEmailAndPassword(
-                                          controller.signInEmailCont.text.trim(),
-                                          controller.signInPassCont.text,
+                                          controller.signInEmailCont!.trim(),
+                                          controller.signInPassCont!,
                                           loginType!);
                                   print("result is $result");
                                   if (result) {
@@ -189,64 +198,4 @@ class SignIn extends StatelessWidget {
       ),
     );
   }
-
-//   bool validateInputs(BuildContext context, double height, double width) {
-//     if (controller.signInEmailCont.text.isEmpty) {
-//       Get.showSnackbar(
-//         GetSnackBar(
-//           margin: EdgeInsets.symmetric(
-//               horizontal: width * 0.045, vertical: height * 0.015),
-//           icon: Icon(
-//             IconlyLight.info_circle,
-//             color: Colors.white,
-//             size: width * 0.065,
-//           ),
-//           title: "Error",
-//           message: "Please Enter the Email",
-//           duration: const Duration(seconds: 2),
-//           borderRadius: 20,
-//           animationDuration: const Duration(milliseconds: 600),
-//         ),
-//       );
-//       return false;
-//     } else if (controller.signInPassCont.text.isEmpty) {
-//       Get.showSnackbar(
-//         GetSnackBar(
-//           margin: EdgeInsets.symmetric(
-//               horizontal: width * 0.045, vertical: height * 0.015),
-//           icon: Icon(
-//             IconlyLight.info_circle,
-//             color: Colors.white,
-//             size: width * 0.065,
-//           ),
-//           borderRadius: 20,
-//           title: "Error",
-//           message: "Please Enter the Password",
-//           duration: const Duration(seconds: 2),
-//           animationDuration: const Duration(milliseconds: 600),
-//         ),
-//       );
-//       return false;
-//     } else if (!controller.signInEmailCont.text.contains('@')) {
-//       Get.showSnackbar(
-//         GetSnackBar(
-//           borderRadius: 20,
-//           margin: EdgeInsets.symmetric(
-//               horizontal: width * 0.045, vertical: height * 0.015),
-//           icon: Icon(
-//             IconlyLight.info_circle,
-//             color: Colors.white,
-//             size: width * 0.065,
-//           ),
-//           title: "Error",
-//           message: "Invalid Email",
-//           duration: const Duration(seconds: 2),
-//           animationDuration: const Duration(milliseconds: 600),
-//         ),
-//       );
-//
-//       return false;
-//     }
-//     return true;
-//   }
 }

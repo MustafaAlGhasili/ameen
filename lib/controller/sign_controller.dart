@@ -34,8 +34,8 @@ class SignController extends GetxController {
   final studentPhone = TextEditingController();
   final studentEmail = TextEditingController();
 
-  final signInEmailCont = TextEditingController();
-  final signInPassCont = TextEditingController();
+  String? signInEmailCont;
+  String? signInPassCont;
   final emailVerificationCont = TextEditingController();
 
   String forgetPassword = '';
@@ -278,8 +278,7 @@ class SignController extends GetxController {
           await LocalStorageService.saveStudent(student!);
           return true;
         }
-      }
-      else if (loginType == 1) {
+      } else if (loginType == 1) {
         DriverModel? driver =
             await _databaseHelper.getUserById<DriverModel>(userId, loginType);
         print("Found Driver");
@@ -297,8 +296,7 @@ class SignController extends GetxController {
           print("No Data for driver");
           return false;
         }
-      }
-      else {
+      } else {
         AdminModel? admin =
             await _databaseHelper.getUserById<AdminModel>(userId, loginType);
         print("Found Admin");
@@ -326,13 +324,11 @@ class SignController extends GetxController {
       }
       _isLoading(false);
       return false;
-    }
-    catch(e){
+    } catch (e) {
       print("Error: $e");
       loginErrorValue.value = e.toString();
       _isLoading(false);
       return false;
-
     }
   }
 
@@ -370,6 +366,9 @@ class SignController extends GetxController {
     return null;
   }
 
+
+
+
   void addSchoolsToMenu() async {
     List<SchoolModel> schoolsList = await _databaseHelper.getAllSchools();
     generalSchoolsList = schoolsList.obs;
@@ -388,6 +387,4 @@ class SignController extends GetxController {
   }
 
 
-
-  void fetchInfo() {}
 }

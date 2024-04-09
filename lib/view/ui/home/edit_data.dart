@@ -9,6 +9,7 @@ import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
 
 import '../../../utils/validation.dart';
 import '../widget/text_field.dart';
@@ -42,9 +43,9 @@ class Edit extends StatelessWidget {
 }
 
 class Parent extends StatelessWidget {
-  ParentModel parent;
+  final ParentModel parent;
 
-  Parent({super.key, required this.parent});
+  const Parent({super.key, required this.parent});
 
   @override
   Widget build(BuildContext context) {
@@ -169,10 +170,25 @@ class Parent extends StatelessWidget {
 
                   await LocalStorageService.saveParent(parent);
 
-                  await dbHelper.update(parent!, 'parents');
+                  await dbHelper.update(parent, 'parents');
 
-
-                  Get.to(const About());
+                  Get.off(()=> const About());
+                  Get.showSnackbar(
+                    GetSnackBar(
+                      borderRadius: 20,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: width * 0.045, vertical: height * 0.015),
+                      icon: Icon(
+                        IconlyLight.info_circle,
+                        color: Colors.white,
+                        size: width * 0.065,
+                      ),
+                      message: "تم تحديث البيانات بنجاح",
+                      duration: const Duration(seconds: 2),
+                      animationDuration: const Duration(milliseconds: 800),
+                    ),
+                  );
+                  // Get.back();
                 }
               },
             ),
@@ -184,9 +200,9 @@ class Parent extends StatelessWidget {
 }
 
 class Student extends StatelessWidget {
-  StudentModel student;
+  final StudentModel student;
 
-  Student({super.key, required this.student});
+  const Student({super.key, required this.student});
 
   @override
   Widget build(BuildContext context) {
@@ -310,7 +326,7 @@ class Student extends StatelessWidget {
                   await LocalStorageService.saveStudent(student);
                   await dbHelper.update(student, 'students');
 
-                  Get.to(() => const About());
+                  Get.off(() => const About());
                   // Get.back();
                 }
               },

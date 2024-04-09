@@ -1,3 +1,4 @@
+import 'package:ameen/controller/sign_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -257,7 +258,7 @@ class DriverHome extends StatelessWidget {
                           );
                         } else {
                           // If driver data is null, handle it accordingly
-                          return Text('Driver data not found.');
+                          return Center(child: Text('Driver data not found.'));
                         }
                       }
                     }
