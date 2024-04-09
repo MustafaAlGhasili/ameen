@@ -14,7 +14,9 @@ class NotificationCard extends StatelessWidget {
 
   String _formatDate(String isoDate) {
     DateTime parsedDate = DateTime.parse(isoDate);
-    return DateFormat('d MMMM y hh:mm a').format(parsedDate); // Format the date in 12-hour format
+    initializeDateFormatting('ar_SA', null);
+    return DateFormat('d MMMM hh:mm a', 'ar_SA')
+        .format(parsedDate);
   }
 
   @override

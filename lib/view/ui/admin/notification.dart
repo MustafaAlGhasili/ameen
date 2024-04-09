@@ -6,8 +6,8 @@ import 'package:ameen/view/ui/admin/send_notification.dart';
 import 'package:ameen/view/ui/widget/notification_card.dart'; // Import the NotificationCard widget
 import 'package:ameen/model/notification.dart'; // Import the NotificationModel
 
-class Notifications extends StatelessWidget {
-  const Notifications({Key? key});
+class AdminNotifications extends StatelessWidget {
+  const AdminNotifications({Key? key});
 
 
   @override

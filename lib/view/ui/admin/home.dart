@@ -88,7 +88,7 @@ class AdminHome extends StatelessWidget {
                     ),
                     ButtonModel(
                       onTap: () {
-                        Get.to(() => const Notifications());
+                        Get.to(() => const AdminNotifications());
                       },
                       vMargin: height * 0.05,
                       width: width * 0.87,
