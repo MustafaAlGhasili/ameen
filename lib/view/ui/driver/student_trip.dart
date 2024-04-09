@@ -315,7 +315,7 @@ class _TripState extends State<Trip> {
                                           .push(MaterialPageRoute(
                                         builder: (context) => NavigationScreen(
                                           student: student,
-                                          tripId: controller.currentTrip.id!,
+                                          trip: controller.currentTrip,
                                         ),
                                       ));
                                     },

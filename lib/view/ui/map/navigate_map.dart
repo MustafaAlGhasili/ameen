@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'dart:math' show cos, sqrt, asin;
 import 'dart:ui';
 
+import 'package:ameen/model/trip.dart';
 import 'package:ameen/utils/constant.dart';
 import 'package:background_locator_2/background_locator.dart';
 import 'package:background_locator_2/location_dto.dart';
@@ -31,12 +32,12 @@ import 'location_service_repository.dart';
 
 class NavigationScreen extends StatefulWidget {
   final StudentModel student;
-  final String tripId;
+  final TripModel trip;
 
   NavigationScreen({
     Key? key,
     required this.student,
-    required this.tripId,
+    required this.trip,
   }) : super(key: key);
 
   @override
@@ -82,6 +83,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     initPlatformState();
     getNavigation();
     addMarker();
+    _onStart();
   }
 
   void onStop() async {
@@ -109,8 +111,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
     final timestamp = DateTime.now().toIso8601String();
     final driverLocation = DriverLocationModel(
-        driverId: "driverId",
-        busId: "B2",
+        driverId: widget.trip.driverId!,
+        busId: widget.trip.busId!,
         latitude: locationDto.latitude,
         longitude: locationDto.longitude,
         timestamp: timestamp);
@@ -417,7 +419,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                       );
                       final databaseHelper = new DatabaseHelper();
                       await databaseHelper.makeManualAttendance(
-                          widget.tripId, widget.student.id,3);
+                          widget.trip.id!, widget.student.id,3);
                       Get.back();
                       navigator?.pop();
                       Get.back();
@@ -457,7 +459,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                       );
                       final databaseHelper = new DatabaseHelper();
                       await databaseHelper.makeManualAttendance(
-                          widget.tripId, widget.student.id,1);
+                          widget.trip.id!, widget.student.id,1);
                       Get.back();
                       navigator?.pop();
                       Get.back();
@@ -621,6 +623,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         markerId: MarkerId('destination'),
         position: LatLng(widget.student.latitude!, widget.student.longitude!),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
+        infoWindow:InfoWindow(title: widget.student.fName),
       );
     });
   }
