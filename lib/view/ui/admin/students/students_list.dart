@@ -127,7 +127,7 @@ class _StudentsListState extends State<StudentsList> {
                               style: TextStyle(
                                   color: Colors.white, fontSize: width * 0.05),
                               content:
-                                  '${student![i].fName} ${student[i].lName}',
+                                  '${student[i].fName} ${student[i].lName}',
                             );
                           },
                         );

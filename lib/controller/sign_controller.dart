@@ -35,8 +35,8 @@ class SignController extends GetxController {
   final studentPhone = TextEditingController();
   final studentEmail = TextEditingController();
 
-  String? signInEmailCont;
-  String? signInPassCont;
+  String? signInEmailCont = '';
+  String? signInPassCont = '';
   final emailVerificationCont = TextEditingController();
 
   String forgetPassword = '';
@@ -327,6 +327,8 @@ class SignController extends GetxController {
         loginErrorValue.value = "الإيميل او كلمة المرور خاطئة";
       } else if (e.code == 'user-disabled') {
         loginErrorValue.value = "الحساب موقف حالياُ";
+      }else if(e.code == 'channel-error'){
+        loginErrorValue.value = "حصل خطأ الرجاء المحاوله مره اخرى";
       }
       _isLoading(false);
       return false;

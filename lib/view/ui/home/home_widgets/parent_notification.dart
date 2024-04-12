@@ -17,6 +17,7 @@ class ParentNotifications extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          leading: SizedBox(),
           backgroundColor: const Color.fromARGB(255, 113, 65, 146),
           foregroundColor: Colors.white,
           centerTitle: true,

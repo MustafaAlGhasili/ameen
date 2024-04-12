@@ -1,10 +1,16 @@
 import 'package:ameen/controller/admin_controller.dart';
+import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/model/student.dart';
+import 'package:ameen/services/LocalStorageService.dart';
+import 'package:ameen/services/auth_service/AuthService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/admin/home.dart';
+import 'package:ameen/view/ui/admin/students/waiting_list.dart';
+import 'package:ameen/view/ui/widget/cusom_dialog.dart';
 import 'package:ameen/view/ui/widget/custem_dropdown_menu.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -53,9 +59,9 @@ class WaitingStudent extends StatelessWidget {
                       child: CachedNetworkImage(
                         imageUrl: student.imgUrl ?? " ",
                         placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
+                            const CircularProgressIndicator(),
                         errorWidget: (context, url, error) =>
-                        const Image(image: AssetImage("img/st1.png")),
+                            const Image(image: AssetImage("img/st1.png")),
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -205,12 +211,12 @@ class WaitingStudent extends StatelessWidget {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () async{
+                                onTap: () async {
                                   dbHelper.updateField('parents',
                                       student.parentId, "isEnabled", true);
                                   dbHelper.updateField('students', student.id,
                                       "busId", controller.selectedBus.value);
-                                  if(controller.selectedBus.value.isEmpty){
+                                  if (controller.selectedBus.value.isEmpty) {
                                     Get.showSnackbar(
                                       GetSnackBar(
                                         borderRadius: 20,
@@ -226,15 +232,18 @@ class WaitingStudent extends StatelessWidget {
                                         message: "الرحاء اختيار رقم الباص",
                                         duration: const Duration(seconds: 2),
                                         animationDuration:
-                                        const Duration(milliseconds: 800),
+                                            const Duration(milliseconds: 800),
                                       ),
                                     );
-                                  }else{
+                                  } else {
                                     Get.dialog(const Center(
-                                      child: CircularProgressIndicator(color: Colors.white,),
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
                                     ));
-                                    await Future.delayed(const Duration(seconds: 1));
-                                    Get.offAll(()=> const AdminHome());
+                                    await Future.delayed(
+                                        const Duration(seconds: 1));
+                                    Get.offAll(() => const AdminHome());
                                     Get.showSnackbar(
                                       GetSnackBar(
                                         borderRadius: 20,
@@ -249,11 +258,10 @@ class WaitingStudent extends StatelessWidget {
                                         message: "تم قبول الطالب بنجاح",
                                         duration: const Duration(seconds: 2),
                                         animationDuration:
-                                        const Duration(seconds: 1),
+                                            const Duration(seconds: 1),
                                       ),
                                     );
                                   }
-
                                 },
                                 child: Container(
                                     margin: EdgeInsets.all(10),
@@ -287,10 +295,16 @@ class WaitingStudent extends StatelessWidget {
                   ),
                   ButtonModel(
                     onTap: () {
-                      dbHelper.deleteById(student.id, 'students');
-                      dbHelper.deleteById(student.parentId, 'parents');
-
-                      Get.back();
+                      Get.dialog(CustomDialog(
+                        buttonOnTap: () {
+                          dbHelper.deleteById(student.id, 'students');
+                          dbHelper.deleteById(student.parentId, 'parents');
+                          Get.off(() => const WaitingList());
+                          deleteAccount();
+                        },
+                        buttonText: "نعم",
+                        content: "هل انت متاكد من رفض الطالب؟",
+                      ));
                     },
                     hMargin: width * 0.03,
                     backColor: PRIMARY_COLOR,
@@ -312,4 +326,14 @@ class WaitingStudent extends StatelessWidget {
       ),
     );
   }
+}
+
+void deleteAccount() async {
+  SignController signController = Get.find();
+  UserCredential userCredential = await FirebaseAuth.instance
+      .signInWithEmailAndPassword(
+          email: signController.parentEmail.text,
+          password: signController.parenPassword.text);
+  final user = FirebaseAuth.instance.currentUser;
+  user!.delete();
 }

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../widget/button_model.dart';
+import '../widget/cusom_dialog.dart';
 import 'admin_notification.dart';
 
 class AdminHome extends StatelessWidget {
@@ -24,8 +25,17 @@ class AdminHome extends StatelessWidget {
               margin: const EdgeInsets.all(15),
               child: IconButton(
                 onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Get.offAll(const Start());
+                  Get.dialog(
+                    CustomDialog(
+                        buttonOnTap: () async {
+                          await FirebaseAuth.instance.signOut();
+                          Get.offAll(
+                            const Start(),
+                          );
+                        },
+                        buttonText: "نعم",
+                        content: "هل انت متاكد من تسجيل الخروج؟"),
+                  );
                 },
                 icon: Icon(
                   Icons.arrow_back_outlined,

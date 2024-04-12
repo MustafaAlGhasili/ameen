@@ -8,7 +8,7 @@ import '../../../../utils/DatabaseHelper.dart';
 import '../../admin/students/student_info.dart';
 
 class StudentList extends StatelessWidget {
-      final busId;
+  final busId;
 
   const StudentList({super.key, required this.busId});
 
@@ -42,6 +42,8 @@ class StudentList extends StatelessWidget {
           child: FutureBuilder<List<StudentModel>?>(
             future: studentList,
             builder: (context, snapshot) {
+              final student = snapshot.data;
+              print(student);
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: CircularProgressIndicator(
@@ -54,12 +56,14 @@ class StudentList extends StatelessWidget {
                     "Error: ${snapshot.error}",
                   ),
                 );
+              } else if (student!.isEmpty) {
+                return Center(
+                  child: Text("No student found"),
+                );
               }
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, i) {
-                  final student = snapshot.data;
-
                   return GestureDetector(
                     onTap: () {
                       Get.to(() => StudentDetails(
@@ -80,26 +84,23 @@ class StudentList extends StatelessWidget {
                             child: CircleAvatar(
                               backgroundColor: Colors.white,
                               radius: width * 0.09,
-                              child:  CachedNetworkImage(
-                                imageUrl: student![i].imgUrl ?? " ",
+                              child: CachedNetworkImage(
+                                imageUrl: student[i].imgUrl ?? " ",
                                 placeholder: (context, url) =>
                                     const CircularProgressIndicator(),
-                                errorWidget:
-                                    (context, url, error) =>
-                                const Image(
-                                    image: AssetImage(
-                                        "img/st1.png")),
-                                imageBuilder:
-                                    (context, imageProvider) =>
+                                errorWidget: (context, url, error) =>
+                                    const Image(
+                                        image: AssetImage("img/st1.png")),
+                                imageBuilder: (context, imageProvider) =>
                                     Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
                                     ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -107,7 +108,7 @@ class StudentList extends StatelessWidget {
                             width: width * 0.015,
                           ),
                           Text(
-                            "${student![i].fName} ${student[i].lName}",
+                            "${student[i].fName} ${student[i].lName}",
                             style: TextStyle(
                               fontSize: width * 0.05,
                               color: Colors.white,
@@ -126,5 +127,3 @@ class StudentList extends StatelessWidget {
     );
   }
 }
-
-

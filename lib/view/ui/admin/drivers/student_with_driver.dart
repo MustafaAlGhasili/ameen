@@ -11,7 +11,7 @@ import '../students/student_info.dart';
 class StudentWithBusName extends StatelessWidget {
   final String busId;
 
-  const StudentWithBusName({Key? key, required this.busId}) : super(key: key);
+  const StudentWithBusName({super.key, required this.busId});
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +42,19 @@ class StudentWithBusName extends StatelessWidget {
                   itemBuilder: (BuildContext context, DataSnapshot snapshot,
                       Animation<double> animation, int index) {
                     StudentModel student = StudentModel.fromSnapshot(snapshot);
-
-                    return ButtonModel(
+                    print("object ${snapshot.exists}");
+                    if(snapshot.exists == false){
+                      return const Center(
+                        child: Text("No student found"),
+                      );
+                    }else {
+                      return ButtonModel(
                       onTap: () {
                         Get.to(() => StudentDetails(student: student, no: 0));
                       },
                       busName: student.busId ?? student.schoolId,
                       bus: true,
-                      imgUrl: student.imgUrl ?? " ",
+                      imgUrl:student.imgUrl!,
                       padding: 10,
                       hMargin: width * 0.05,
                       vMargin: height * 0.02,
@@ -60,10 +65,11 @@ class StudentWithBusName extends StatelessWidget {
                           color: Colors.white, fontSize: width * 0.05),
                       content: '${student.fName} ${student.lName}',
                     );
-                    return SizedBox();
+                    }
                   },
                   defaultChild:
                       const Center(child: CircularProgressIndicator()),
+
                 ),
               ),
             ),
@@ -74,15 +80,3 @@ class StudentWithBusName extends StatelessWidget {
   }
 }
 
-List<Map<String, String>> drivers = [
-  {
-    "name": "ساره عبد العزيز",
-    "img": "img/student1.png",
-    "busName": "B1",
-  },
-  {
-    "name": "احمد خالد",
-    "img": "img/student2.png",
-    "busName": "B1",
-  },
-];

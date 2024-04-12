@@ -16,6 +16,7 @@ import '../../widget/custem_dropdown_menu.dart';
 AdminController controller = Get.find();
 
 Future<void> _selectDate(BuildContext context) async {
+  Get.put(AdminController());
   final selected = await showDatePicker(
     context: context,
     initialDate: DateTime.now(),
@@ -38,7 +39,9 @@ class AddDriver extends StatefulWidget {
 }
 
 class _AddDriverState extends State<AddDriver> {
+  bool _isUploaded = false;
   bool _isLoading = false;
+
   final CamController camController =
       Get.find(); // Assuming GetX controller instance
   String? _selectedImagePath; // Store the selected image path
@@ -49,7 +52,7 @@ class _AddDriverState extends State<AddDriver> {
   Future<void> _handleCameraPick(
       ImageSource imageSource, String fullName) async {
     setState(() {
-      _isLoading = true; // Set loading state to false
+      _isUploaded = true; // Set loading state to false
     });
     final response = await camController.takeDriverPhotoFromCamera(imageSource);
     setState(() {
@@ -61,9 +64,8 @@ class _AddDriverState extends State<AddDriver> {
       if (licenceImgUrl != null) {
         controller.driverLicence.value = licenceImgUrl!;
         print("Image url: $licenceImgUrl");
-      } else if (driverPhoto! != null){
-
-      }else {
+      } else if (driverPhoto! != null) {
+      } else {
         print("Image url not found");
       }
       setState(() {
@@ -71,7 +73,7 @@ class _AddDriverState extends State<AddDriver> {
       });
     }
     setState(() {
-      _isLoading = false; // Set loading state to false
+      _isUploaded = false; // Set loading state to false
     });
   }
 
@@ -138,216 +140,248 @@ class _AddDriverState extends State<AddDriver> {
             title: const Text("اضافة سائق جديد"),
           ),
           body: SingleChildScrollView(
-            child: Column(
+            child: Stack(
               children: [
-                SizedBox(
-                  height: height * 0.04,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.03, vertical: height * 0.02),
-                  child: TextFieldModel(
-                    keyboardType: TextInputType.name,
-                    validator: (val) => validation.validator(val),
-                    onChanged: (val) {
-                      controller.driverFName = val;
-                    },
-                    text: "الاسم الاول",
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.03, vertical: height * 0.02),
-                  child: TextFieldModel(
-                    keyboardType: TextInputType.name,
-                    validator: (val) => validation.validator(val),
-                    onChanged: (val) {
-                      controller.driverLName = val;
-                    },
-                    text: "الاسم الأخير",
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.03, vertical: height * 0.02),
-                  child: TextFieldModel(
-                    validator: (val) => validation.validator(val),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    onChanged: (val) {
-                      controller.driverNationalID = val;
-                    },
-                    text: "رقم الاحوال",
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.03, vertical: height * 0.02),
-                  child: TextFieldModel(
-                    validator: (val) => validation.phoneValidator(val),
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    maxLength: 10,
-                    onChanged: (val) {
-                      controller.driverPhone = val;
-                    },
-                    keyboardType: TextInputType.number,
-                    text: "رقم الجوال",
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.03, vertical: height * 0.02),
-                  child: TextFieldModel(
-                    validator: (val) => validation.emailValidator(val),
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (val) {
-                      controller.driverEmail = val;
-                    },
-                    text: "البريد الإلكتروني",
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.03, vertical: height * 0.02),
-                  child: TextFieldModel(
-                    onTap: () => _selectDate(context),
-                    validator: (val) => validation.validator(val),
-                    readOnly: true,
-                    controller: controller.bDate,
-                    onChanged: (value) {
-                      controller.driverBDate.value = value;
-                    },
-                    sufIcon: Icon(
-                      IconlyLight.calendar,
-                      size: width * 0.055,
-                    ),
-                    keyboardType: TextInputType.datetime,
-                    text: "تاريخ الميلاد",
-                    // vPadding: height * 0.03,
-                    obscureText: false,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.03, vertical: height * 0.02),
-                  child: Obx(() => CustomDropdownButton2(
-                      icon: Icon(
-                        Icons.keyboard_arrow_down,
-                        size: width * 0.055,
-                      ),
-                      buttonHeight: height * 0.07,
-                      buttonWidth: width,
-                      // dropdownWidth: 20,
-                      hint: 'فصيلة الدم',
-                      value: controller.driverBlood.value.isEmpty
-                          ? null
-                          : controller.driverBlood.value,
-                      dropdownItems: controller.blood,
-                      onChanged: (val) {
-                        controller.driverBlood.value = val!;
-                      })),
-                ),
-                Row(
+                Column(
                   children: [
                     SizedBox(
-                      width: width * 0.03,
+                      height: height * 0.04,
                     ),
-                    GestureDetector(
-                      onTap: () => _showImageOptionsDialog(context),
-                      child: Container(
-                          height: height * 0.13,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black45),
-                              borderRadius: BorderRadius.circular(11)),
-                          width: width * 0.45,
-                          alignment: Alignment.center,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: width * 0.01),
-                          child: DottedBorder(
-                            stackFit: StackFit.expand,
-                            borderPadding: EdgeInsets.all(width * 0.027),
-                            color: Colors.black38,
-                            borderType: BorderType.RRect,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(IconlyLight.image, size: width * 0.07,color: PRIMARY_COLOR),
-                                SizedBox(
-                                  height: height * 0.01,
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width * 0.03, vertical: height * 0.02),
+                      child: TextFieldModel(
+                        keyboardType: TextInputType.name,
+                        validator: (val) => validation.validator(val),
+                        onChanged: (val) {
+                          controller.driverFName = val;
+                        },
+                        text: "الاسم الاول",
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width * 0.03, vertical: height * 0.02),
+                      child: TextFieldModel(
+                        keyboardType: TextInputType.name,
+                        validator: (val) => validation.validator(val),
+                        onChanged: (val) {
+                          controller.driverLName = val;
+                        },
+                        text: "الاسم الأخير",
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width * 0.03, vertical: height * 0.02),
+                      child: TextFieldModel(
+                        validator: (val) => validation.validator(val),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        onChanged: (val) {
+                          controller.driverNationalID = val;
+                        },
+                        text: "رقم الاحوال",
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width * 0.03, vertical: height * 0.02),
+                      child: TextFieldModel(
+                        validator: (val) => validation.phoneValidator(val),
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        maxLength: 10,
+                        onChanged: (val) {
+                          controller.driverPhone = val;
+                        },
+                        keyboardType: TextInputType.number,
+                        text: "رقم الجوال",
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width * 0.03, vertical: height * 0.02),
+                      child: TextFieldModel(
+                        validator: (val) => validation.emailValidator(val),
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (val) {
+                          controller.driverEmail = val;
+                        },
+                        text: "البريد الإلكتروني",
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width * 0.03, vertical: height * 0.02),
+                      child: TextFieldModel(
+                        onTap: () => _selectDate(context),
+                        validator: (val) => validation.validator(val),
+                        readOnly: true,
+                        controller: controller.bDate,
+                        onChanged: (value) {
+                          controller.driverBDate.value = value;
+                        },
+                        sufIcon: Icon(
+                          IconlyLight.calendar,
+                          size: width * 0.055,
+                        ),
+                        keyboardType: TextInputType.datetime,
+                        text: "تاريخ الميلاد",
+                        // vPadding: height * 0.03,
+                        obscureText: false,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width * 0.03, vertical: height * 0.02),
+                      child: Obx(() => CustomDropdownButton2(
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            size: width * 0.055,
+                          ),
+                          buttonHeight: height * 0.07,
+                          buttonWidth: width,
+                          // dropdownWidth: 20,
+                          hint: 'فصيلة الدم',
+                          value: controller.driverBlood.value.isEmpty
+                              ? null
+                              : controller.driverBlood.value,
+                          dropdownItems: controller.blood,
+                          onChanged: (val) {
+                            controller.driverBlood.value = val!;
+                          })),
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: width * 0.03,
+                        ),
+                        GestureDetector(
+                          onTap: () => _showImageOptionsDialog(context),
+                          child: Container(
+                              height: height * 0.13,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black45),
+                                  borderRadius: BorderRadius.circular(11)),
+                              width: width * 0.45,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: width * 0.01),
+                              child: DottedBorder(
+                                stackFit: StackFit.expand,
+                                borderPadding: EdgeInsets.all(width * 0.027),
+                                color: Colors.black38,
+                                borderType: BorderType.RRect,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(IconlyLight.image,
+                                        size: width * 0.07,
+                                        color: PRIMARY_COLOR),
+                                    SizedBox(
+                                      height: height * 0.01,
+                                    ),
+                                    Text(
+                                      "ادراج الصوره الشخصيه",
+                                      style: TextStyle(fontSize: width * 0.036),
+                                    )
+                                  ],
                                 ),
-                                Text("ادراج الصوره الشخصيه", style: TextStyle(fontSize: width * 0.036),)
-                              ],
+                              )),
+                        ),
+                        SizedBox(
+                          width: width * 0.02,
+                        ),
+                        GestureDetector(
+                          onTap: () => _showImageOptionsDialog(context),
+                          child: Container(
+                              height: height * 0.13,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black45),
+                                  borderRadius: BorderRadius.circular(11)),
+                              width: width * 0.45,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: width * 0.01),
+                              child: DottedBorder(
+                                stackFit: StackFit.expand,
+                                borderPadding: EdgeInsets.all(width * 0.027),
+                                color: Colors.black38,
+                                borderType: BorderType.RRect,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(IconlyLight.image,
+                                        size: width * 0.07,
+                                        color: PRIMARY_COLOR),
+                                    SizedBox(
+                                      height: height * 0.01,
+                                    ),
+                                    Text(
+                                      "ادراج صوره رخصه القياده",
+                                      style: TextStyle(fontSize: width * 0.036),
+                                    )
+                                  ],
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width * 0.03, vertical: height * 0.02),
+                      child: TextFieldModel(
+                        validator: (val) => validation.validator(val),
+                        onChanged: (val) {
+                          controller.driverBussNo = val;
+                        },
+                        text: "رقم الباص ",
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: _isUploaded ? null : () => _saveDriver(),
+                      // Disable button when loading
+                      style: ElevatedButton.styleFrom(
+                        primary: PRIMARY_COLOR,
+                        onPrimary: Colors.white,
+                        padding: EdgeInsets.symmetric(
+                          vertical: height * 0.02,
+                          horizontal: width * 0.2,
+                        ),
+                      ),
+                      child: _isLoading
+                          ? const CircularProgressIndicator() // Show loading indicator
+                          : const Text(
+                              "حفظ",
+                              style: TextStyle(color: Colors.white),
                             ),
-                          )),
                     ),
                     SizedBox(
-                      width: width * 0.02,
-                    ),
-                    GestureDetector(
-                      onTap: () => _showImageOptionsDialog(context),
-                      child: Container(
-                          height: height * 0.13,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black45),
-                              borderRadius: BorderRadius.circular(11)),
-                          width: width * 0.45,
-                          alignment: Alignment.center,
-                          padding:
-                          EdgeInsets.symmetric(horizontal: width * 0.01),
-                          child: DottedBorder(
-
-                            stackFit: StackFit.expand,
-                            borderPadding: EdgeInsets.all(width * 0.027),
-                            color: Colors.black38,
-                            borderType: BorderType.RRect,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(IconlyLight.image, size: width * 0.07,color: PRIMARY_COLOR),
-                                SizedBox(
-                                  height: height * 0.01,
-                                ),
-                                Text("ادراج صوره رخصه القياده", style: TextStyle(fontSize: width * 0.036),)
-                              ],
-                            ),
-                          )),
+                      height: height * 0.03,
                     ),
                   ],
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.03, vertical: height * 0.02),
-                  child: TextFieldModel(
-                    validator: (val) => validation.validator(val),
-                    onChanged: (val) {
-                      controller.driverBussNo = val;
-                    },
-                    text: "رقم الباص ",
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: _isLoading ? null : () => _saveDriver(),
-                  // Disable button when loading
-                  style: ElevatedButton.styleFrom(
-                    primary: PRIMARY_COLOR,
-                    onPrimary: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                      vertical: height * 0.02,
-                      horizontal: width * 0.2,
-                    ),
-                  ),
-                  child: _isLoading
-                      ? const CircularProgressIndicator() // Show loading indicator
-                      : const Text(
-                          "حفظ",
-                          style: TextStyle(color: Colors.white),
+
+                _isUploaded
+                    ? Container(
+                        height: height * 1.3,
+                        color: Colors.black54,
+                      )
+                    : const SizedBox(),
+                _isUploaded
+                    ? SizedBox(
+                        height: height,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
                         ),
-                ),
-                SizedBox(
-                  height: height * 0.03,
-                ),
+                      )
+                    : SizedBox(),
               ],
             ),
           ),

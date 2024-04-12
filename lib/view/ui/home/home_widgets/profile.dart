@@ -1,3 +1,5 @@
+import 'package:ameen/controller/sign_controller.dart';
+import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,8 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    SignController controller = Get.find();
+    DatabaseHelper dbHelper = DatabaseHelper();
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -113,7 +117,6 @@ class ProfilePage extends StatelessWidget {
                                   );
                                   await Future.delayed(
                                       const Duration(seconds: 1));
-                                  // Navigator.pop(context);
                                   Get.showSnackbar(
                                     GetSnackBar(
                                       borderRadius: 20,
@@ -172,6 +175,7 @@ class ProfilePage extends StatelessWidget {
                             buttonText: "حسنا",
                             content: "هل تريد تسجيل الخروج؟",
                             buttonOnTap: () async {
+
                               await FirebaseAuth.instance.signOut();
                               Get.offAll(() => const Start());
                             },

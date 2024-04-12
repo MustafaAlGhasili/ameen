@@ -1,6 +1,7 @@
 import 'package:ameen/model/student.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
+import 'package:ameen/view/ui/home/home.dart';
 import 'package:ameen/view/ui/home/home_widgets/home.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,11 @@ class About extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                Get.off( Home(index: 2));
+              },
+              icon: const Icon(Icons.arrow_back)),
           foregroundColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 113, 65, 146),
           centerTitle: true,

@@ -2,15 +2,13 @@ import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/controller/driver_controller.dart';
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/services/firebase_notification.dart';
-import 'package:ameen/view/ui/admin/admin_notification.dart';
-import 'package:ameen/view/ui/admin/send_notification.dart';
-import 'package:ameen/view/ui/home/home_widgets/parent_notification.dart';
+import 'package:ameen/view/ui/sign/splash_screen.dart';
 import 'package:ameen/view/ui/sign/start.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:map_location_picker/generated/l10n.dart';
-
+import 'controller/notification_controller.dart';
 import 'controller/camera_controller.dart';
 import 'controller/home_controller.dart';
 import 'firebase_options.dart';
@@ -29,12 +27,9 @@ void main() async {
   //await firebaseNotification.sendNotification("title2", "body2", token);
   //await firebaseNotification.sendToTopic("title3", "body3", "parents");
   Get.lazyPut(() => AdminController());
-  Get.lazyPut(() => HomeController());
-  Get.lazyPut(() => DriverController());
-  Get.lazyPut(() => NotificationController());
-  Get.put(CamController());
-  Get.put(SignController());
 
+  Get.lazyPut(() => CamController());
+  Get.put(SignController());
 
   runApp(GetMaterialApp(
     localizationsDelegates: const [
@@ -44,12 +39,12 @@ void main() async {
     useInheritedMediaQuery: true,
     theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146)),
-    home:  const ParentNotifications(),
+    home: SplashScreen(),
   ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class First extends StatelessWidget {
+  const First({super.key});
 
   @override
   Widget build(BuildContext context) {

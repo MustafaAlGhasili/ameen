@@ -3,6 +3,7 @@ import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
 import 'package:ameen/model/token.dart';
 import 'package:ameen/model/trip.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart'; // Import DateFormat for date formatting
 
@@ -19,6 +20,37 @@ class DatabaseHelper {
       FirebaseDatabase.instance.ref().child('students');
   static final DatabaseReference driverRef =
       FirebaseDatabase.instance.ref().child('drivers');
+
+  Future<Object?> getIdByEmail(String email) async {
+    try {
+      final database = FirebaseDatabase.instance;
+      final userRef = database.reference().child('parents'); // Replace with your user data path
+
+      final event = await userRef.orderByChild('email').equalTo(email).once();
+
+      if (event.snapshot != null) {
+        final data = event.snapshot.value as Map<Object?, Object?>;
+        final userId = data.keys.first; // Assuming email is unique and ID is the key
+        return userId;
+      } else {
+        print('No user found with email: $email');
+        return null;
+      }
+    } on FirebaseException catch (e) {
+      print('Error getting user ID: ${e.message}');
+      return null;
+    }
+  }
+
+  Future sendAbsences(String userId, DateTime timeCreated, StudentModel student) async{
+    final absences = await _rootRef.child("absences").child("$timeCreated");
+  }
+
+  Future<ParentModel?> getParentByEmail(String email, String userId) async {
+    DataSnapshot parentSnapshot =
+        await _rootRef.child('parents').child(userId).child(email).get();
+    return ParentModel.fromSnapshot(parentSnapshot);
+  }
 
   Future<String?> save<T extends ToMapConvertible>(
       T model, String refName) async {
@@ -574,7 +606,9 @@ class DatabaseHelper {
       final snapshot = await _rootRef
           .child('notifications')
           .orderByChild('parentId')
-          .startAt(parentId).endAt('none').get();
+          .startAt(parentId)
+          .endAt('none')
+          .get();
 
       print("Notifications snapshot$snapshot");
       print(snapshot.value);

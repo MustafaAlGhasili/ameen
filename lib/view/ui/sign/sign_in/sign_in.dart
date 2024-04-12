@@ -108,7 +108,7 @@ class SignIn extends StatelessWidget {
                                   if (result) {
                                     switch (loginType) {
                                       case 0:
-                                        Get.offAll(() => const Home());
+                                        Get.offAll(() =>  Home());
                                         break;
                                       case 1:
                                         Get.offAll(() => const DriverHome());
@@ -119,6 +119,7 @@ class SignIn extends StatelessWidget {
                                       default:
                                         break;
                                     }
+                                    controller.isLoading.value = false;
                                   } else {
                                     Get.showSnackbar(
                                       GetSnackBar(
