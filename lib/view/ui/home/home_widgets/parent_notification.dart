@@ -10,6 +10,7 @@ class ParentNotifications extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(NotificationController());
     NotificationController controller = Get.find();
 
     return Directionality(

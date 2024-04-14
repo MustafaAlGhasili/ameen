@@ -20,6 +20,8 @@ class SignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(CamController());
 
+    Get.put(CamController());
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Directionality(

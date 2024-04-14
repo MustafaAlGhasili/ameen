@@ -1,5 +1,6 @@
 import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/controller/sign_controller.dart';
+import 'package:ameen/model/driver.dart';
 import 'package:ameen/model/student.dart';
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/services/auth_service/AuthService.dart';
@@ -12,12 +13,13 @@ import 'package:ameen/view/ui/widget/custem_dropdown_menu.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_location_picker/export.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
 import '../../widget/button_model.dart';
 
-AdminController controller = Get.find();
+DatabaseHelper dbHelper = DatabaseHelper();
 
 class WaitingStudent extends StatelessWidget {
   final StudentModel student;
@@ -26,7 +28,9 @@ class WaitingStudent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseHelper dbHelper = DatabaseHelper();
+    Get.put(AdminController());
+    AdminController controller = Get.find();
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Directionality(
@@ -160,127 +164,9 @@ class WaitingStudent extends StatelessWidget {
                   ),
                   ButtonModel(
                     onTap: () {
-                      Get.dialog(Dialog(
-                        child: Container(
-                          height: height * 0.2,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("اختيار الباص المناسب"),
-                              ),
-                              Obx(
-                                () => GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    height: height * 0.06,
-                                    width: width * 0.6,
-                                    decoration: BoxDecoration(
-                                        color: PRIMARY_COLOR,
-                                        borderRadius:
-                                            BorderRadius.circular(30)),
-                                    child: CustomDropdownButton2(
-                                        selectedItemColor: Colors.white,
-                                        dropdownDecoration: BoxDecoration(
-                                          color: PRIMARY_COLOR,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        hintColor: Colors.white,
-                                        borderColor:
-                                            Colors.white.withOpacity(0),
-                                        iconEnabledColor: Colors.white,
-                                        icon: Icon(
-                                          Icons.keyboard_arrow_down,
-                                          size: width * 0.05,
-                                        ),
-                                        buttonHeight: height * 0.1,
-                                        // buttonWidth: width * 0.5,
-                                        // dropdownWidth: 20,
-                                        hint: 'الباصات',
-                                        value:
-                                            controller.selectedBus.value.isEmpty
-                                                ? null
-                                                : controller.selectedBus.value,
-                                        dropdownItems: controller.buses,
-                                        onChanged: (val) {
-                                          controller.selectedBus.value = val!;
-                                        }),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  dbHelper.updateField('parents',
-                                      student.parentId, "isEnabled", true);
-                                  dbHelper.updateField('students', student.id,
-                                      "busId", controller.selectedBus.value);
-                                  if (controller.selectedBus.value.isEmpty) {
-                                    Get.showSnackbar(
-                                      GetSnackBar(
-                                        borderRadius: 20,
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: width * 0.045,
-                                            vertical: height * 0.015),
-                                        icon: Icon(
-                                          IconlyLight.info_circle,
-                                          color: Colors.white,
-                                          size: width * 0.065,
-                                        ),
-                                        title: "خطأ",
-                                        message: "الرحاء اختيار رقم الباص",
-                                        duration: const Duration(seconds: 2),
-                                        animationDuration:
-                                            const Duration(milliseconds: 800),
-                                      ),
-                                    );
-                                  } else {
-                                    Get.dialog(const Center(
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
-                                      ),
-                                    ));
-                                    await Future.delayed(
-                                        const Duration(seconds: 1));
-                                    Get.offAll(() => const AdminHome());
-                                    Get.showSnackbar(
-                                      GetSnackBar(
-                                        borderRadius: 20,
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: width * 0.045,
-                                            vertical: height * 0.015),
-                                        icon: Icon(
-                                          IconlyLight.user,
-                                          color: Colors.white,
-                                          size: width * 0.065,
-                                        ),
-                                        message: "تم قبول الطالب بنجاح",
-                                        duration: const Duration(seconds: 2),
-                                        animationDuration:
-                                            const Duration(seconds: 1),
-                                      ),
-                                    );
-                                  }
-                                },
-                                child: Container(
-                                    margin: EdgeInsets.all(10),
-                                    height: height * 0.06,
-                                    width: width * 0.6,
-                                    decoration: BoxDecoration(
-                                        color: PRIMARY_COLOR,
-                                        borderRadius:
-                                            BorderRadius.circular(30)),
-                                    child: Center(
-                                        child: Text(
-                                      "موافق",
-                                      style: TextStyle(color: Colors.white),
-                                    ))),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ));
+                      Get.dialog(SizedBox(
+                          height: height * 0.3,
+                          child: DialogWidget(student: student)));
                     },
                     hMargin: width * 0.03,
                     height: height * 0.06,
@@ -325,6 +211,218 @@ class WaitingStudent extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class DialogWidget extends StatelessWidget {
+  final StudentModel student;
+
+  const DialogWidget({super.key, required this.student});
+
+  @override
+  Widget build(BuildContext context) {
+    AdminController controller = Get.find();
+
+    var offset;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Dialog(
+        child: Container(
+      height: height * 0.2,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text("اختيار الباص المناسب"),
+          ),
+          GestureDetector(
+            onPanStart: (details) {
+              offset = details.globalPosition;
+              showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(offset.dx, offset.dy,
+                    width - offset.dx, height - offset.dy),
+                items: [
+                  PopupMenuItem(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30)),
+                      width: double.maxFinite,
+                      height: height * 0.3,
+                      child: FutureBuilder<List<DriverModel>>(
+                          future: dbHelper.getAllBuses(),
+                          builder: (context, snapshot) {
+                            print("dataaaa ${snapshot.data}");
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return SizedBox(
+                                height: height * 0.3,
+                                child: const Center(
+                                    child: CircularProgressIndicator()),
+                              );
+                            } else if (snapshot.hasError) {
+                              print("Error: ${snapshot.error}");
+                            } else if (snapshot.data == []) {
+                              return Center(
+                                child: Text("NO student found",
+                                    style: TextStyle(fontSize: width * 0.05)),
+                              );
+                            }
+
+                            return ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, i) {
+                                DriverModel driver = snapshot.data![i];
+                                return IntrinsicHeight(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      controller.selectedBus.value =
+                                          driver.busId;
+                                      print(
+                                          "Bus = ${controller.selectedBus.value}");
+                                      Navigator.pop(context);
+
+                                    },
+                                    child: ButtonModel(
+                                      vMargin: height * 0.005,
+                                      height: height * 0.06,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      backColor: PRIMARY_COLOR,
+                                      content: driver.busId,
+                                      rowMainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                    ),
+                  ),
+                ],
+              );
+            },
+            child:Obx(()=> Container(
+                height: height * 0.06,
+                width: width * 0.6,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: PRIMARY_COLOR,
+                    borderRadius: BorderRadius.circular(30)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.white,
+                      size: width * 0.05,
+                    ),
+                    SizedBox(
+                      width: width * 0.01,
+                    ),
+                    Text(
+                      controller.selectedBus.value.isEmpty
+                          ? "الباصات"
+                          : controller.selectedBus.value,
+                      style: TextStyle(
+                          color: Colors.white, fontSize: width * 0.04),
+                    ),
+                  ],
+                ))
+
+                // child: CustomDropdownButton2(
+                //     selectedItemColor: Colors.white,
+                //     dropdownDecoration: BoxDecoration(
+                //       color: PRIMARY_COLOR,
+                //       borderRadius: BorderRadius.circular(20),
+                //     ),
+                //     hintColor: Colors.white,
+                //     borderColor: Colors.white.withOpacity(0),
+                //     iconEnabledColor: Colors.white,
+                //     icon: Icon(
+                //       Icons.keyboard_arrow_down,
+                //       size: width * 0.05,
+                //     ),
+                //     buttonHeight: height * 0.1,
+                //     // buttonWidth: width * 0.5,
+                //     // dropdownWidth: 20,
+                //     hint: 'الباصات',
+                //     value: controller.selectedBus.value.isEmpty
+                //         ? null
+                //         : controller.selectedBus.value,
+                //     dropdownItems: controller.buses,
+                //     onChanged: (val) {
+                //       controller.selectedBus.value = val!;
+                //     }),
+                ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              dbHelper.updateField(
+                  'parents', student.parentId, "isEnabled", true);
+              dbHelper.updateField('students', student.id, "busId",
+                  controller.selectedBus.value);
+              if (controller.selectedBus.value.isEmpty) {
+                Get.showSnackbar(
+                  GetSnackBar(
+                    borderRadius: 20,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: width * 0.045, vertical: height * 0.015),
+                    icon: Icon(
+                      IconlyLight.info_circle,
+                      color: Colors.white,
+                      size: width * 0.065,
+                    ),
+                    title: "خطأ",
+                    message: "الرحاء اختيار رقم الباص",
+                    duration: const Duration(seconds: 2),
+                    animationDuration: const Duration(milliseconds: 800),
+                  ),
+                );
+              } else {
+                Get.dialog(const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                ));
+                await Future.delayed(const Duration(seconds: 1));
+                Get.offAll(() => const AdminHome());
+                Get.showSnackbar(
+                  GetSnackBar(
+                    borderRadius: 20,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: width * 0.045, vertical: height * 0.015),
+                    icon: Icon(
+                      IconlyLight.user,
+                      color: Colors.white,
+                      size: width * 0.065,
+                    ),
+                    message: "تم قبول الطالب بنجاح",
+                    duration: const Duration(seconds: 2),
+                    animationDuration: const Duration(seconds: 1),
+                  ),
+                );
+              }
+            },
+            child: Container(
+                margin: EdgeInsets.all(10),
+                height: height * 0.06,
+                width: width * 0.6,
+                decoration: BoxDecoration(
+                    color: PRIMARY_COLOR,
+                    borderRadius: BorderRadius.circular(30)),
+                child: Center(
+                    child: Text(
+                  "موافق",
+                  style: TextStyle(color: Colors.white),
+                ))),
+          ),
+        ],
+      ),
+    ));
   }
 }
 

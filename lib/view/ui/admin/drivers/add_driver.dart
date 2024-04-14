@@ -16,7 +16,6 @@ import '../../widget/custem_dropdown_menu.dart';
 AdminController controller = Get.find();
 
 Future<void> _selectDate(BuildContext context) async {
-  Get.put(AdminController());
   final selected = await showDatePicker(
     context: context,
     initialDate: DateTime.now(),

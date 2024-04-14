@@ -1,3 +1,4 @@
+import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/model/driver.dart';
 import 'package:ameen/view/ui/admin/drivers/add_driver.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
+import '../../../../controller/camera_controller.dart';
+import '../../../../controller/sign_controller.dart';
 import '../../../../utils/DatabaseHelper.dart';
 import '../../widget/button_model.dart';
 import 'driver_info.dart';
@@ -136,6 +139,10 @@ class _DriversListState extends State<DriversList> {
               ),
               ButtonModel(
                 onTap: () {
+                  Get.lazyPut(()=> CamController());
+                  Get.lazyPut(()=> AdminController());
+                  Get.lazyPut(() => SignController());
+
                   Get.to(() => const AddDriver());
                 },
                 padding: 10,

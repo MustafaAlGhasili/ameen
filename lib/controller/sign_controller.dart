@@ -3,6 +3,7 @@ import 'package:ameen/model/admin.dart';
 import 'package:ameen/model/driver.dart';
 import 'package:ameen/model/parent.dart';
 import 'package:ameen/utils/constant.dart';
+import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -83,9 +84,9 @@ class SignController extends GetxController {
   RxBool isAccepted = false.obs;
   late DatabaseHelper _databaseHelper;
 
-  RxString fileNameValue = ''.obs;
+  String fileNameValue = '';
 
-  String get fileName => fileNameValue.value;
+  String get fileName => fileNameValue;
 
   late FirebaseAuth _auth;
 
@@ -179,7 +180,8 @@ class SignController extends GetxController {
 
       await _databaseHelper.saveParent(parent, "parents");
 
-      String imgUrl = Constants.STUDENT_IMAGES_URL + fileNameValue.value;
+      String imgUrl = "${Constants.STUDENT_IMAGES_URL}${fileNameValue}";
+      print("Value = $fileNameValue.");
       //
       final student = StudentModel(
         fName: studentFName.text,
@@ -282,8 +284,7 @@ class SignController extends GetxController {
           await LocalStorageService.saveStudent(student!);
           return true;
         }
-      }
-      else if (loginType == 1) {
+      } else if (loginType == 1) {
         DriverModel? driver =
             await _databaseHelper.getUserById<DriverModel>(userId, loginType);
         print("Found Driver");
@@ -301,8 +302,7 @@ class SignController extends GetxController {
           print("No Data for driver");
           return false;
         }
-      }
-      else {
+      } else {
         AdminModel? admin =
             await _databaseHelper.getUserById<AdminModel>(userId, loginType);
         print("Found Admin");
@@ -327,13 +327,12 @@ class SignController extends GetxController {
         loginErrorValue.value = "الإيميل او كلمة المرور خاطئة";
       } else if (e.code == 'user-disabled') {
         loginErrorValue.value = "الحساب موقف حالياُ";
-      }else if(e.code == 'channel-error'){
+      } else if (e.code == 'channel-error') {
         loginErrorValue.value = "حصل خطأ الرجاء المحاوله مره اخرى";
       }
       _isLoading(false);
       return false;
-    }
-    catch(e){
+    } catch (e) {
       print("Error: $e");
       loginErrorValue.value = e.toString();
       _isLoading(false);
@@ -375,9 +374,6 @@ class SignController extends GetxController {
     return null;
   }
 
-
-
-
   void addSchoolsToMenu() async {
     List<SchoolModel> schoolsList = await _databaseHelper.getAllSchools();
     generalSchoolsList = schoolsList.obs;
@@ -395,5 +391,20 @@ class SignController extends GetxController {
     }
   }
 
-
+  void clear() {
+    step = 0.obs;
+    parentFName.clear();
+    parentLName.clear();
+    parentEmail.clear();
+    parentNationalId.clear();
+    parentPhone.clear();
+    parenPassword.clear();
+    address.clear();
+    studentFName.clear();
+    studentLName.clear();
+    studentPhone.clear();
+    studentEmail.clear();
+    studentNationalId.clear();
+    studentBDate.clear();
+  }
 }

@@ -26,10 +26,7 @@ void main() async {
       "fE8Q0a7sQQ--yWhCLw-HqW:APA91bHeFJITcbqMiOM5qVQoLKx4uw-IQ-lR95UEbdHxyfi-iiBAUvim4uMRy7nExF91CveHfn20wYBG9xoV_nBlBEzPev_6SBdOll4vRTPbHyTiSLSr2R8VKmjJanZahssBMTDam3QK";
   //await firebaseNotification.sendNotification("title2", "body2", token);
   //await firebaseNotification.sendToTopic("title3", "body3", "parents");
-  Get.lazyPut(() => AdminController());
 
-  Get.lazyPut(() => CamController());
-  Get.put(SignController());
 
   runApp(GetMaterialApp(
     localizationsDelegates: const [

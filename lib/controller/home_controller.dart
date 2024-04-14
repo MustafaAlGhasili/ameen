@@ -18,13 +18,6 @@ class HomeController extends GetxController {
   // final parentNumber = TextEditingController();
   // final parentPassword = TextEditingController();
 
-  List studentStateNotification = [
-    "الباص علئ وشك الوصول",
-    "تم صعود الطالب للباص",
-    "تم صعود الطالب للباص",
-    "تم صعود الطالب للباص",
-    "تم نزول الطالب من الباص"
-  ];
 
   RxBool isInTheWay = false.obs;
   RxBool isClose = false.obs;

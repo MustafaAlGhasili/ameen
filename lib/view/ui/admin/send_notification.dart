@@ -6,15 +6,14 @@ import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/widget/text_field.dart';
 
 class SendNotification extends StatelessWidget {
-  const SendNotification({Key? key});
+  const SendNotification({super.key});
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     bool isLoading = false;
-
-    // Get the NotificationController instance
+    Get.put(NotificationController());
     NotificationController controller = Get.find();
 
     return Directionality(

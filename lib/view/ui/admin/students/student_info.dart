@@ -190,6 +190,7 @@ class StudentDetails extends StatelessWidget {
                                   );
                                 },
                                 onClose: () {
+
                                   Get.back();
                                 },
                                 buttonText: "نعم",

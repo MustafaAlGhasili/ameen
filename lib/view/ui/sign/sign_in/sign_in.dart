@@ -18,6 +18,7 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     Get.lazyPut(() => SignController());
 
     double height = MediaQuery.of(context).size.height;
@@ -119,7 +120,7 @@ class SignIn extends StatelessWidget {
                                       default:
                                         break;
                                     }
-                                    controller.isLoading.value = false;
+                                    controller.isLoading(false);
                                   } else {
                                     Get.showSnackbar(
                                       GetSnackBar(
@@ -140,6 +141,8 @@ class SignIn extends StatelessWidget {
                                             const Duration(milliseconds: 600),
                                       ),
                                     );
+                                    controller.isLoading(false);
+
                                   }
                                 },
                           style: ElevatedButton.styleFrom(

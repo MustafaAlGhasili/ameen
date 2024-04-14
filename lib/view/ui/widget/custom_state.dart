@@ -1,3 +1,4 @@
+import 'package:ameen/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class CustomState extends StatelessWidget {
@@ -28,7 +29,7 @@ class CustomState extends StatelessWidget {
             width: height * 0.055,
             decoration: BoxDecoration(
               color: state
-                  ? const Color.fromARGB(255, 113, 65, 146)
+                  ? PRIMARY_COLOR
                   : Colors.white,
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.circular(1000),

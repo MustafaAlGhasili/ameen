@@ -5,27 +5,23 @@ import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/home/home.dart';
-
-// import 'package:ameen/view/ui/home/info.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-
 import '../../../utils/validation.dart';
 import '../widget/custem_dropdown_menu.dart';
 import '../widget/text_field.dart';
-import 'info.dart';
 
 Validation validation = Validation();
 
 class Edit extends StatelessWidget {
-  final no;
-  StudentModel? student;
-  ParentModel? parent;
+  final int no;
+  final StudentModel? student;
+  final ParentModel? parent;
 
-  Edit({super.key, required this.no, this.parent, this.student});
+  const Edit({super.key, required this.no, this.parent, this.student});
 
   @override
   Widget build(BuildContext context) {
@@ -395,7 +391,7 @@ class Student extends StatelessWidget {
 
                     await dbHelper.update(student, 'students');
 
-                    Get.offAll(() => Home(
+                    Get.offAll(() => const Home(
                           index: 2,
                         ));
                     Get.showSnackbar(

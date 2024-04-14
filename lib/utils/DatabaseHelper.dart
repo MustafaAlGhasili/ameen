@@ -8,6 +8,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart'; // Import DateFormat for date formatting
 
 import '../model/admin.dart';
+import '../model/bus.dart';
 import '../model/driver.dart';
 import '../model/notification.dart';
 import '../model/school.dart';
@@ -24,13 +25,16 @@ class DatabaseHelper {
   Future<Object?> getIdByEmail(String email) async {
     try {
       final database = FirebaseDatabase.instance;
-      final userRef = database.reference().child('parents'); // Replace with your user data path
+      final userRef = database
+          .reference()
+          .child('parents'); // Replace with your user data path
 
       final event = await userRef.orderByChild('email').equalTo(email).once();
 
       if (event.snapshot != null) {
         final data = event.snapshot.value as Map<Object?, Object?>;
-        final userId = data.keys.first; // Assuming email is unique and ID is the key
+        final userId =
+            data.keys.first; // Assuming email is unique and ID is the key
         return userId;
       } else {
         print('No user found with email: $email');
@@ -42,7 +46,8 @@ class DatabaseHelper {
     }
   }
 
-  Future sendAbsences(String userId, DateTime timeCreated, StudentModel student) async{
+  Future sendAbsences(
+      String userId, DateTime timeCreated, StudentModel student) async {
     final absences = await _rootRef.child("absences").child("$timeCreated");
   }
 
@@ -617,6 +622,18 @@ class DatabaseHelper {
           .toList();
     } catch (error) {
       print('Error getting notifications : $error');
+      return [];
+    }
+  }
+
+  Future<List<DriverModel>> getAllBuses() async {
+    try {
+      final snapshot = await _rootRef.child('drivers').orderByChild('busId').get();
+      return snapshot.children
+          .map((child) => DriverModel.fromSnapshot(child))
+          .toList();
+    } catch (e) {
+      print('Error getting bus: $e');
       return [];
     }
   }

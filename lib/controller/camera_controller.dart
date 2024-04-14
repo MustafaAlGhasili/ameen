@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/utils/constant.dart';
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
@@ -15,6 +16,7 @@ import 'package:permission_handler/permission_handler.dart';
 class CamController extends GetxController {
 late List<CameraDescription> cameras;
 
+  SignController signController = Get.find<SignController>();
   late CameraController cameraController;
   late XFile picture;
   Uint8List? _imageBytes;
@@ -27,8 +29,10 @@ late List<CameraDescription> cameras;
   String get fileName => fileNameValue.value;
   RxString driverImgUrl = ''.obs;
 
+
   bool _isLoading = false; // Add this variable
   bool get isLoading => _isLoading;
+
 
   void setLoading(bool loading) {
     _isLoading = loading;
@@ -67,7 +71,6 @@ late List<CameraDescription> cameras;
     print('File Name: $fileName');
     fileNameValue.value = fileName;
 
-    String studentName = "Moha_Hasan_2444";
     final String url =
         'https://wyr5ba7f7h.execute-api.us-east-1.amazonaws.com/dev/students-image11/$fileName'; // Replace with your API Gateway endpoint
 /*
@@ -98,7 +101,7 @@ late List<CameraDescription> cameras;
       if (response.statusCode == 200) {
         // Image uploaded successfully.
         print('Image uploaded successfully!');
-
+        signController.fileNameValue = fileName;
         // await Future.delayed(const Duration(seconds: 1));
         return 200;
       } else {
@@ -246,7 +249,10 @@ late List<CameraDescription> cameras;
         if (xFile.path.isNotEmpty) {
           picture = xFile;
           File file = File(picture.path);
+          signController.fileNameValue = fileNameValue.value;
+
           return registerStudentFace(file: file);
+
         }
         print("pathh =========${picture.path}");
       }
