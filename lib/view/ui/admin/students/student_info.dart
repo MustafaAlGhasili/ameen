@@ -1,8 +1,11 @@
+import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
+import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 
 // import 'package:ameen/view/ui/driver/student/student_list.dart';
 import 'package:ameen/view/ui/widget/cusom_dialog.dart';
+import 'package:ameen/view/ui/widget/custom_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,6 +26,7 @@ class StudentDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ParentModel? parent;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -76,15 +80,7 @@ class StudentDetails extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: const Text("الاسم الاول"),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child: Text(student.fName),
-                  ),
+                  CustomContainer(text: student.fName),
                   SizedBox(
                     height: height * 0.025,
                   ),
@@ -92,15 +88,7 @@ class StudentDetails extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text("الاسم الاخير"),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child: Text(student.lName),
-                  ),
+                  CustomContainer(text: student.lName),
                   SizedBox(
                     height: height * 0.025,
                   ),
@@ -108,15 +96,7 @@ class StudentDetails extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text("الصف"),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child: Text("${student.grade}"),
-                  ),
+                  CustomContainer(text: "${student.grade}"),
                   SizedBox(
                     height: height * 0.025,
                   ),
@@ -124,15 +104,7 @@ class StudentDetails extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text("فصيلة الدم"),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child: Text(student.blood),
-                  ),
+                  CustomContainer(text: student.blood),
                   SizedBox(
                     height: height * 0.025,
                   ),
@@ -140,15 +112,22 @@ class StudentDetails extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text("رقم ولي الامر"),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child: Text(student.phone),
-                  ),
+                  FutureBuilder<ParentModel?>(
+                      future: dbHelper.getParentById(student.parentId),
+                      builder: (context, snapshot) {
+                        parent = snapshot.data;
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }else if(snapshot.hasError){
+                          return Center(child: Text("${snapshot.error}"),);
+                        }else if(snapshot.hasData){
+                          return CustomContainer(text: parent!.phone);
+                        }
+                        return SizedBox();
+                      }),
                   SizedBox(
                     height: height * 0.025,
                   ),
@@ -169,7 +148,8 @@ class StudentDetails extends StatelessWidget {
                             Get.dialog(CustomDialog(
                                 buttonOnTap: () {
                                   dbHelper.deleteById(student.id, "students");
-                                  dbHelper.deleteById(student.parentId, "parents");
+                                  dbHelper.deleteById(
+                                      student.parentId, "parents");
                                   Get.off(() => const StudentsList());
                                   Get.showSnackbar(
                                     GetSnackBar(
@@ -190,7 +170,6 @@ class StudentDetails extends StatelessWidget {
                                   );
                                 },
                                 onClose: () {
-
                                   Get.back();
                                 },
                                 buttonText: "نعم",

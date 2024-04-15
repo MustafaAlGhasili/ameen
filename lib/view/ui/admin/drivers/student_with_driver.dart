@@ -34,8 +34,9 @@ class StudentWithBusName extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               child: Container(
                 height: height * 0.7,
-                padding: EdgeInsets.only(top: height * 0.05),
+                padding: EdgeInsets.only(top: height * 0.035),
                 child: FirebaseAnimatedList(
+                  physics: const BouncingScrollPhysics(),
                   query: DatabaseHelper.studentsRef
                       .orderByChild('busId')
                       .equalTo(busId),
@@ -55,10 +56,10 @@ class StudentWithBusName extends StatelessWidget {
                       busName: student.busId ?? student.schoolId,
                       bus: true,
                       imgUrl:student.imgUrl!,
-                      padding: 10,
+                      padding: 7,
                       hMargin: width * 0.05,
                       vMargin: height * 0.02,
-                      height: height * 0.08,
+                      height: height * 0.085,
                       rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
                       backColor: const Color.fromARGB(255, 113, 65, 146),
                       style: TextStyle(

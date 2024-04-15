@@ -109,7 +109,7 @@ class SignIn extends StatelessWidget {
                                   if (result) {
                                     switch (loginType) {
                                       case 0:
-                                        Get.offAll(() =>  Home());
+                                        Get.offAll(() => const Home());
                                         break;
                                       case 1:
                                         Get.offAll(() => const DriverHome());
@@ -147,7 +147,7 @@ class SignIn extends StatelessWidget {
                                 },
                           style: ElevatedButton.styleFrom(
                             primary: const Color.fromARGB(255, 113, 65, 146),
-                            minimumSize: Size(width * 0.9, height * 0.055),
+                            minimumSize: Size(width * 0.9, height * 0.065),
                           ),
                           child: Visibility(
                             visible: !controller.isLoading.value,

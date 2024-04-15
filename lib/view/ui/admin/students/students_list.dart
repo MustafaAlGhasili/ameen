@@ -1,12 +1,8 @@
 import 'package:ameen/view/ui/admin/students/student_info.dart';
 import 'package:ameen/view/ui/admin/students/waiting_list.dart';
-import 'package:ameen/view/ui/home/info.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-
 import '../../../../model/student.dart';
 import '../../../../utils/DatabaseHelper.dart';
 import '../../widget/button_model.dart';
@@ -89,7 +85,7 @@ class _StudentsListState extends State<StudentsList> {
             children: [
               Container(
                   height: height * 0.75,
-                  padding: EdgeInsets.only(top: height * 0.05),
+                  padding: EdgeInsets.only(top: height * 0.03),
                   child: FutureBuilder(
                     future: dbHelper.getStudentsParentsByStatus(true),
                     builder: (context, snapshot) {
@@ -116,10 +112,10 @@ class _StudentsListState extends State<StudentsList> {
                               },
                               bus: true,
                               imgUrl: student![i].imgUrl!,
-                              padding: 10,
+                              padding: 7,
                               hMargin: width * 0.05,
                               vMargin: height * 0.02,
-                              height: height * 0.08,
+                              height: height * 0.083,
                               rowMainAxisAlignment:
                                   MainAxisAlignment.spaceBetween,
                               backColor:
@@ -141,10 +137,9 @@ class _StudentsListState extends State<StudentsList> {
                   onTap: () {
                     Get.to(() => const WaitingList());
                   },
-                  padding: 10,
                   hMargin: width * 0.05,
                   vMargin: height * 0.02,
-                  height: height * 0.06,
+                  height: height * 0.07,
                   rowMainAxisAlignment: MainAxisAlignment.center,
                   backColor: const Color.fromARGB(255, 113, 65, 146),
                   style: TextStyle(color: Colors.white, fontSize: width * 0.05),

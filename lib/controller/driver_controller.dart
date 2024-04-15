@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
 
 import '../model/student.dart';
 import '../model/trip.dart';
@@ -46,6 +48,22 @@ class DriverController extends GetxController {
 
       final students = await _databaseHelper.getStudentsByBusId(driver.busId);
       if (students.isEmpty) {
+        Get.showSnackbar(
+          GetSnackBar(
+            borderRadius: 20,
+            margin: EdgeInsets.symmetric(
+                horizontal: Get.width * 0.045, vertical: Get.height * 0.015),
+            icon: Icon(
+              IconlyLight.info_circle,
+              color: Colors.white,
+              size: Get.width * 0.065,
+            ),
+            title: "خطأ",
+            message: "لايوجد طلاب حاليا",
+            duration: const Duration(seconds: 3),
+            animationDuration: const Duration(milliseconds: 600),
+          ),
+        );
         throw Exception(
             "No students found for the driver's bus: ${driver.busId}");
       }

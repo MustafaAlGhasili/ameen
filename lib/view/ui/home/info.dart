@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../model/parent.dart';
 import '../../../services/LocalStorageService.dart';
+import '../widget/custom_container.dart';
 import 'edit_data.dart';
 
 StudentModel? student;
@@ -28,7 +29,7 @@ class About extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                Get.off( Home(index: 2));
+                Get.off(Home(index: 2));
               },
               icon: const Icon(Icons.arrow_back)),
           foregroundColor: Colors.white,
@@ -38,7 +39,7 @@ class About extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: SizedBox(
-            height: height * 1.8,
+            height: height * 1.9,
             width: width,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.07),
@@ -142,15 +143,7 @@ class StudentInfo extends StatelessWidget {
                 child: Text("الاسم الاول",
                     style: TextStyle(fontSize: width * 0.04)),
               ),
-              Container(
-                padding: EdgeInsets.all(width * 0.035),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(student!.fName),
-              ),
+              CustomContainer(text: student!.fName),
               SizedBox(
                 height: height * 0.03,
               ),
@@ -161,15 +154,7 @@ class StudentInfo extends StatelessWidget {
                   style: TextStyle(fontSize: width * 0.04),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(width * 0.035),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(student!.lName),
-              ),
+              CustomContainer(text: student!.lName),
               SizedBox(
                 height: height * 0.03,
               ),
@@ -180,15 +165,7 @@ class StudentInfo extends StatelessWidget {
                   style: TextStyle(fontSize: width * 0.04),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(width * 0.035),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(student!.nationalId),
-              ),
+              CustomContainer(text: student!.nationalId),
               SizedBox(
                 height: height * 0.03,
               ),
@@ -199,15 +176,7 @@ class StudentInfo extends StatelessWidget {
                   style: TextStyle(fontSize: width * 0.04),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(width * 0.035),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(student!.phone),
-              ),
+              CustomContainer(text: student!.phone),
               SizedBox(
                 height: height * 0.03,
               ),
@@ -218,15 +187,7 @@ class StudentInfo extends StatelessWidget {
                   style: TextStyle(fontSize: width * 0.04),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(width * 0.035),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(student!.email),
-              ),
+              CustomContainer(text: student!.email),
               SizedBox(
                 height: height * 0.03,
               ),
@@ -237,15 +198,7 @@ class StudentInfo extends StatelessWidget {
                   style: TextStyle(fontSize: width * 0.04),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(width * 0.035),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(student!.blood),
-              ),
+              CustomContainer(text: student!.blood),
               SizedBox(
                 height: height * 0.03,
               ),
@@ -256,15 +209,7 @@ class StudentInfo extends StatelessWidget {
                   style: TextStyle(fontSize: width * 0.04),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(width * 0.035),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text("${student!.busId}"),
-              ),
+              CustomContainer(text: "${student!.busId}"),
             ],
           );
         } else {
@@ -308,99 +253,58 @@ class _ParentInfoState extends State<ParentInfo> {
               SizedBox(
                 height: height * 0.05,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text("الاسم الاول"),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                child: Text(
+                  "الاسم الاول",
+                  style: TextStyle(fontSize: width * 0.037),
+                ),
               ),
-              Container(
-                padding: const EdgeInsets.all(13),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(parent!.fName),
-              ),
+              CustomContainer(text: parent!.fName),
               SizedBox(
                 height: height * 0.03,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text("الاسم الاخير"),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                child: Text(
+                  "الاسم الاخير",
+                  style: TextStyle(fontSize: width * 0.037),
+                ),
               ),
-              Container(
-                padding: const EdgeInsets.all(13),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(parent!.lName),
-              ),
+              CustomContainer(text: parent!.lName),
               SizedBox(
                 height: height * 0.03,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text("رقم الأحوال"),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                child: Text(
+                  "رقم الأحوال",
+                  style: TextStyle(fontSize: width * 0.037),
+                ),
               ),
-              Container(
-                padding: const EdgeInsets.all(13),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(parent!.nationalId),
-              ),
+              CustomContainer(text: parent!.nationalId),
               SizedBox(
                 height: height * 0.03,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text("رقم التواصل "),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                child: Text(
+                  "رقم التواصل ",
+                  style: TextStyle(fontSize: width * 0.037),
+                ),
               ),
-              Container(
-                padding: const EdgeInsets.all(13),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(parent!.phone),
-              ),
-              // SizedBox(
-              //   height: height * 0.03,
-              // ),
-              // const Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 8.0),
-              //   child: Text("تاريخ الميلاد"),
-              // ),
-              // Container(
-              //   padding: const EdgeInsets.all(13),
-              //   width: width,
-              //   height: height * 0.06,
-              //   decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(20),
-              //       border: Border.all(color: Colors.black)),
-              //   child: Text(parent!.email),
-              // ),
+              CustomContainer(text: parent!.phone),
               SizedBox(
                 height: height * 0.03,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text("البريد الالكتروني"),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                child: Text(
+                  "البريد الالكتروني",
+                  style: TextStyle(fontSize: width * 0.037),
+                ),
               ),
-              Container(
-                padding: const EdgeInsets.all(13),
-                width: width,
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black)),
-                child: Text(parent!.email),
-              ),
+              CustomContainer(text: parent!.email),
             ],
           );
         } else {

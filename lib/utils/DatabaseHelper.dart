@@ -22,28 +22,11 @@ class DatabaseHelper {
   static final DatabaseReference driverRef =
       FirebaseDatabase.instance.ref().child('drivers');
 
-  Future<Object?> getIdByEmail(String email) async {
-    try {
-      final database = FirebaseDatabase.instance;
-      final userRef = database
-          .reference()
-          .child('parents'); // Replace with your user data path
+  Future<ParentModel?> getParentById(String parentId) async {
+    DataSnapshot parentSnapshot =
+    await _rootRef.child('parents').child(parentId).get();
+    return ParentModel.fromSnapshot(parentSnapshot);
 
-      final event = await userRef.orderByChild('email').equalTo(email).once();
-
-      if (event.snapshot != null) {
-        final data = event.snapshot.value as Map<Object?, Object?>;
-        final userId =
-            data.keys.first; // Assuming email is unique and ID is the key
-        return userId;
-      } else {
-        print('No user found with email: $email');
-        return null;
-      }
-    } on FirebaseException catch (e) {
-      print('Error getting user ID: ${e.message}');
-      return null;
-    }
   }
 
   Future sendAbsences(
@@ -65,11 +48,11 @@ class DatabaseHelper {
       String modelId = newModelRef.key ?? '';
 
       if (model is StudentModel) {
-        model.id = modelId!;
+        model.id = modelId;
       }
 
       if (model is NotificationModel) {
-        model.id = modelId!;
+        model.id = modelId;
       }
       await newModelRef.set(model.toMap());
 
@@ -628,7 +611,8 @@ class DatabaseHelper {
 
   Future<List<DriverModel>> getAllBuses() async {
     try {
-      final snapshot = await _rootRef.child('drivers').orderByChild('busId').get();
+      final snapshot =
+          await _rootRef.child('drivers').orderByChild('busId').get();
       return snapshot.children
           .map((child) => DriverModel.fromSnapshot(child))
           .toList();

@@ -1,9 +1,9 @@
+import 'package:ameen/controller/sign_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../controller/home_controller.dart';
-import '../../../controller/notification_controller.dart';
 import 'home_widgets/home.dart';
 import 'home_widgets/parent_notification.dart';
 import 'home_widgets/profile.dart';
@@ -16,6 +16,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    Get.put(SignController());
 
     Get.put(HomeController());
     HomeController controller = Get.find();
