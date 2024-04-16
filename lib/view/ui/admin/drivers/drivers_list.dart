@@ -1,3 +1,4 @@
+import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/model/driver.dart';
 import 'package:ameen/view/ui/admin/drivers/add_driver.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
+import '../../../../controller/camera_controller.dart';
+import '../../../../controller/sign_controller.dart';
 import '../../../../utils/DatabaseHelper.dart';
 import '../../widget/button_model.dart';
 import 'driver_info.dart';
@@ -48,13 +51,11 @@ class _DriversListState extends State<DriversList> {
           centerTitle: true,
           title: _isSearching
               ? TextField(
-                
                   cursorColor: Colors.white,
                   controller: _searchController,
                   autofocus: true,
                   smartDashesType: SmartDashesType.enabled,
-                  decoration:const InputDecoration(
-
+                  decoration: const InputDecoration(
                     hintText: 'ابحث...',
                     hintStyle: TextStyle(color: Colors.white),
                     border: InputBorder.none,
@@ -87,12 +88,14 @@ class _DriversListState extends State<DriversList> {
           ],
         ),
         body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Container(
-                height: height * 0.75,
-                padding: EdgeInsets.only(top: height * 0.05),
+                height: height * 0.73,
+                padding: EdgeInsets.only(top: height * 0.03),
                 child: FirebaseAnimatedList(
+                  physics: const BouncingScrollPhysics(),
                   query: DatabaseHelper.driverRef,
                   itemBuilder: (BuildContext context, DataSnapshot snapshot,
                       Animation<double> animation, int index) {
@@ -109,16 +112,20 @@ class _DriversListState extends State<DriversList> {
                       return const SizedBox(); // Hide item if it doesn't match the search
                     }
 
+                    print("photo  ${driver.photo}");
+
                     return ButtonModel(
                       onTap: () {
                         Get.to(() => DriverInfo(driver: driver));
                       },
                       bus: true,
-                      imgUrl: "img/st1.png",
-                      padding: 10,
+                      imgUrl: driver.photo.isEmpty
+                          ? "img/driver.png"
+                          : driver.photo,
+                      padding: 7,
                       hMargin: width * 0.05,
                       vMargin: height * 0.02,
-                      height: height * 0.08,
+                      height: height * 0.085,
                       rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
                       backColor: const Color.fromARGB(255, 113, 65, 146),
                       style: TextStyle(
@@ -134,12 +141,15 @@ class _DriversListState extends State<DriversList> {
               ),
               ButtonModel(
                 onTap: () {
+                  Get.lazyPut(() => CamController());
+                  Get.lazyPut(() => AdminController());
+                  Get.lazyPut(() => SignController());
+
                   Get.to(() => const AddDriver());
                 },
-                padding: 10,
                 hMargin: width * 0.05,
                 vMargin: height * 0.02,
-                height: height * 0.06,
+                height: height * 0.07,
                 rowMainAxisAlignment: MainAxisAlignment.center,
                 backColor: const Color.fromARGB(255, 113, 65, 146),
                 style: TextStyle(color: Colors.white, fontSize: width * 0.05),
@@ -157,10 +167,3 @@ class _DriversListState extends State<DriversList> {
         driver.lName.contains(searchText);
   }
 }
-/*
-
-List<Map<String, String>> drivers = [
-  {"name": "احمد سعيد", "img": "img/img.png", "busName": "B1"},
-  {"name": "سعد عبدالله", "img": "img/img2.png", "busName": "C1"},
-];
-*/

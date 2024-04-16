@@ -18,6 +18,7 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     Get.lazyPut(() => SignController());
 
     double height = MediaQuery.of(context).size.height;
@@ -119,6 +120,7 @@ class SignIn extends StatelessWidget {
                                       default:
                                         break;
                                     }
+                                    controller.isLoading(false);
                                   } else {
                                     Get.showSnackbar(
                                       GetSnackBar(
@@ -139,11 +141,13 @@ class SignIn extends StatelessWidget {
                                             const Duration(milliseconds: 600),
                                       ),
                                     );
+                                    controller.isLoading(false);
+
                                   }
                                 },
                           style: ElevatedButton.styleFrom(
                             primary: const Color.fromARGB(255, 113, 65, 146),
-                            minimumSize: Size(width * 0.9, height * 0.055),
+                            minimumSize: Size(width * 0.9, height * 0.065),
                           ),
                           child: Visibility(
                             visible: !controller.isLoading.value,

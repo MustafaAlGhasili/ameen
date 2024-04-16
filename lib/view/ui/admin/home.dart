@@ -6,7 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controller/admin_controller.dart';
 import '../widget/button_model.dart';
+import '../widget/cusom_dialog.dart';
 import 'admin_notification.dart';
 
 class AdminHome extends StatelessWidget {
@@ -14,6 +16,8 @@ class AdminHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(() => AdminController());
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -24,8 +28,17 @@ class AdminHome extends StatelessWidget {
               margin: const EdgeInsets.all(15),
               child: IconButton(
                 onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Get.offAll(const Start());
+                  Get.dialog(
+                    CustomDialog(
+                        buttonOnTap: () async {
+                          await FirebaseAuth.instance.signOut();
+                          Get.offAll(
+                            const Start(),
+                          );
+                        },
+                        buttonText: "نعم",
+                        content: "هل انت متاكد من تسجيل الخروج؟"),
+                  );
                 },
                 icon: Icon(
                   Icons.arrow_back_outlined,
@@ -68,7 +81,7 @@ class AdminHome extends StatelessWidget {
                       },
                       vMargin: height * 0.05,
                       width: width * 0.87,
-                      height: height * 0.06,
+                      height: height * 0.067,
                       rowMainAxisAlignment: MainAxisAlignment.center,
                       backColor: const Color.fromARGB(255, 113, 65, 146),
                       style: TextStyle(
@@ -81,7 +94,7 @@ class AdminHome extends StatelessWidget {
                         Get.to(() => const StudentsList());
                       },
                       width: width * 0.87,
-                      height: height * 0.06,
+                      height: height * 0.067,
                       rowMainAxisAlignment: MainAxisAlignment.center,
                       backColor: const Color.fromARGB(255, 113, 65, 146),
                       style: TextStyle(
@@ -95,7 +108,7 @@ class AdminHome extends StatelessWidget {
                       },
                       vMargin: height * 0.05,
                       width: width * 0.87,
-                      height: height * 0.06,
+                      height: height * 0.067,
                       rowMainAxisAlignment: MainAxisAlignment.center,
                       backColor: const Color.fromARGB(255, 113, 65, 146),
                       style: TextStyle(

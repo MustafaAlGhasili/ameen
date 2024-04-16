@@ -1,28 +1,27 @@
+import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
-
-// import 'package:ameen/view/ui/home/info.dart';
+import 'package:ameen/view/ui/home/home.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-
 import '../../../utils/validation.dart';
+import '../widget/custem_dropdown_menu.dart';
 import '../widget/text_field.dart';
-import 'info.dart';
 
 Validation validation = Validation();
 
 class Edit extends StatelessWidget {
-  final no;
-  StudentModel? student;
-  ParentModel? parent;
+  final int no;
+  final StudentModel? student;
+  final ParentModel? parent;
 
-  Edit({super.key, required this.no, this.parent, this.student});
+  const Edit({super.key, required this.no, this.parent, this.student});
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +171,9 @@ class Parent extends StatelessWidget {
 
                   await dbHelper.update(parent, 'parents');
 
-                  Get.off(()=> const About());
+                  Get.off(() => Home(
+                        index: 2,
+                      ));
                   Get.showSnackbar(
                     GetSnackBar(
                       borderRadius: 20,
@@ -188,7 +189,6 @@ class Parent extends StatelessWidget {
                       animationDuration: const Duration(milliseconds: 800),
                     ),
                   );
-                  // Get.back();
                 }
               },
             ),
@@ -206,6 +206,7 @@ class Student extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SignController controller = SignController();
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
@@ -304,8 +305,70 @@ class Student extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               text: "الإيميل",
             ),
-            SizedBox(
-              height: height * 0.05,
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: height * 0.02, horizontal: width * 0.04),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: Text(
+                          "فصيلة الدم",
+                          style: TextStyle(fontSize: height * 0.021),
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 0.055,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Obx(() => CustomDropdownButton2(
+                              // dropdownWidth: 20,
+                              hint: '',
+                              value: controller.bloodValue.value.isEmpty
+                                  ? student.blood
+                                  : controller.bloodValue.value,
+                              dropdownItems: controller.blood,
+                              onChanged: (val) {
+                                student.blood = val!;
+                              })),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: Text(
+                          "الجنس",
+                          style: TextStyle(fontSize: height * 0.021),
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 0.055,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Obx(() => CustomDropdownButton2(
+                                hint: '',
+                                value: controller.genderValue.value.isEmpty
+                                    ? student.gender
+                                    : controller.genderValue.value,
+                                dropdownItems: controller.genders,
+                                onChanged: (val) {
+                                  student.gender = val!;
+                                },
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             ButtonModel(
               content: 'حفظ',
@@ -315,19 +378,41 @@ class Student extends StatelessWidget {
               backColor: PRIMARY_COLOR,
               style: TextStyle(color: Colors.white, fontSize: width * 0.05),
               onTap: () async {
-                if (formKey.currentState!.validate()) {
-                  Get.dialog(
-                    const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
+                try {
+                  if (formKey.currentState!.validate()) {
+                    Get.dialog(
+                      const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  );
-                  await LocalStorageService.saveStudent(student);
-                  await dbHelper.update(student, 'students');
+                    );
+                    await LocalStorageService.saveStudent(student);
 
-                  Get.off(() => const About());
-                  // Get.back();
+                    await dbHelper.update(student, 'students');
+
+                    Get.offAll(() => const Home(
+                          index: 2,
+                        ));
+                    Get.showSnackbar(
+                      GetSnackBar(
+                        borderRadius: 20,
+                        margin: EdgeInsets.symmetric(
+                            horizontal: width * 0.045,
+                            vertical: height * 0.015),
+                        icon: Icon(
+                          IconlyLight.info_circle,
+                          color: Colors.white,
+                          size: width * 0.065,
+                        ),
+                        message: "تم تحديث البيانات بنجاح",
+                        duration: const Duration(seconds: 2),
+                        animationDuration: const Duration(milliseconds: 800),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  print("Error $e");
                 }
               },
             ),

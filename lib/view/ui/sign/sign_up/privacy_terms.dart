@@ -75,6 +75,7 @@ class PrivacyTerms extends StatelessWidget {
                             controller.parentEmail.text,
                             controller.parenPassword.text);
                         Get.offAll(() => WaitingApprovalScreen());
+                        controller.clear();
                         // }
                       }
                     : null,

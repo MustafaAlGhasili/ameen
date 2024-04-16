@@ -7,9 +7,9 @@ class ParentNotificationCard extends StatelessWidget {
   final NotificationModel notification;
 
   const ParentNotificationCard({
-    Key? key,
+    super.key,
     required this.notification,
-  }) : super(key: key);
+  }) ;
 
   String _formatDate(String isoDate) {
     DateTime parsedDate = DateTime.parse(isoDate);
@@ -52,6 +52,7 @@ class ParentNotificationCard extends StatelessWidget {
                 color: Color.fromARGB(255, 113, 65, 146), size: 24),
             SizedBox(width: 16),
             Expanded(
+
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

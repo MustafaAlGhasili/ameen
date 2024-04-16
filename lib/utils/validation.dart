@@ -32,7 +32,7 @@ class Validation{
     if (value == null || value.isEmpty || value == 'null') {
       return '*required';
     }else if(value.length != 10){
-      return 'wrong number';
+      return 'phone must have 10 numbers';
     }
     return null;
   }

@@ -48,82 +48,76 @@ class HomePage extends StatelessWidget {
                       topRight: Radius.circular(50),
                       topLeft: Radius.circular(50),
                     )),
-                child: Obx(
-                  () => Column(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Colors.black45,
-                            ),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.black45,
                           ),
                         ),
-                        height: height * 0.09,
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                controller.map.value = false;
-                              },
-                              child: Container(
-                                decoration: const BoxDecoration(),
-                                alignment: Alignment.center,
-                                height: height * 0.09,
-                                width: width * 0.5,
-                                child: Text(
-                                  "الحالة ",
-                                  textAlign: TextAlign.center,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    fontSize: width * 0.05,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => TrackStudentMap());
-
-                                //controller.map.value = true;
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: height * 0.09,
-                                width: width * 0.5,
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: Colors.black45,
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  "الخريطه ",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: width * 0.05,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
-                      controller.map.value ? const Map() :  StatePage(),
-                    ],
-                  ),
+                      height: height * 0.09,
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              controller.map.value = false;
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(),
+                              alignment: Alignment.center,
+                              height: height * 0.09,
+                              width: width * 0.5,
+                              child: Text(
+                                "الحالة ",
+                                textAlign: TextAlign.center,
+                                softWrap: true,
+                                style: TextStyle(
+                                  fontSize: width * 0.05,
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(() => TrackStudentMap());
+
+                              //controller.map.value = true;
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: height * 0.09,
+                              width: width * 0.5,
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  right: BorderSide(
+                                    color: Colors.black45,
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                "الخريطه ",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: width * 0.05,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const StatePage(),
+                  ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-
-
-

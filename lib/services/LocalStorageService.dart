@@ -125,4 +125,7 @@ class LocalStorageService {
     print("Saved trip:");
     print(tripJson);
   }
+
+
+
 }

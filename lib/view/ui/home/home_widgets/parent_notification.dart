@@ -10,6 +10,7 @@ class ParentNotifications extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(NotificationController());
     NotificationController controller = Get.find();
 
     return Directionality(
@@ -17,10 +18,11 @@ class ParentNotifications extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          leading: const SizedBox(),
           backgroundColor: const Color.fromARGB(255, 113, 65, 146),
           foregroundColor: Colors.white,
           centerTitle: true,
-          title: Text("الإشعارات"),
+          title: const Text("الإشعارات"),
         ),
         body: FutureBuilder<List<NotificationModel>>(
           future: controller.getParentNotifications(),

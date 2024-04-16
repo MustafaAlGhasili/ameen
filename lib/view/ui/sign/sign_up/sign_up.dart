@@ -1,6 +1,7 @@
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../controller/camera_controller.dart';
 import 'parent_sign.dart';
 import 'student_sign.dart';
 import 'privacy_terms.dart';
@@ -12,10 +13,15 @@ import '../../../../controller/sign_controller.dart';
 SignController controller = Get.find();
 
 class SignUp extends StatelessWidget {
+
   const SignUp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Get.put(CamController());
+
+    Get.put(CamController());
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Directionality(
@@ -112,9 +118,9 @@ class SignUp extends StatelessWidget {
                           ),
                         ],
                         onStepReached: (index) {
-                          if(controller.step.value > index){
+                          // if(controller.step.value > index){
                             controller.step.value = index;
-                          }
+                          // }
                         },
                       ),
                     ),

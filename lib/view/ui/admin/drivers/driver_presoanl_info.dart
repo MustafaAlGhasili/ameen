@@ -1,4 +1,5 @@
 import 'package:ameen/model/driver.dart';
+import 'package:ameen/view/ui/widget/custom_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -29,22 +30,21 @@ class DriverPInfo extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Container(
                     alignment: Alignment.center,
-                    padding: const EdgeInsets.all(1),
+                    padding: const EdgeInsets.all(1.3),
                     margin: EdgeInsets.only(top: height * 0.035),
                     decoration: const BoxDecoration(
                         color: Colors.black, shape: BoxShape.circle),
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
-                      radius: width * 0.2,
+                      radius: width * 0.19,
                       child: CachedNetworkImage(
                         imageUrl: driver.photo ?? " ",
                         placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
+                            const CircularProgressIndicator(),
                         errorWidget: (context, url, error) =>
-                        const Image(image: AssetImage("img/st1.png")),
+                            const Image(image: AssetImage("img/st1.png")),
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -58,114 +58,79 @@ class DriverPInfo extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("الاسم الاول"),
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                    child: Text(
+                      "الاسم الاول",
+                      style: TextStyle(fontSize: width * 0.037),
+                    ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child: Text(driver.fName),
-                  ),
+                  CustomContainer(text: driver.fName),
                   SizedBox(
                     height: height * 0.03,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("الاسم الاخير"),
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                    child: Text(
+                      "الاسم الاخير",
+                      style: TextStyle(fontSize: width * 0.037),
+                    ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child: Text(driver.lName),
-                  ),
+                  CustomContainer(text: driver.lName),
                   SizedBox(
                     height: height * 0.03,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("رقم الأحوال"),
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                    child: Text(
+                      "رقم الأحوال",
+                      style: TextStyle(fontSize: width * 0.037),
+                    ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child: Text(driver.nationalId),
-                  ),
+                  CustomContainer(text: driver.nationalId),
                   SizedBox(
                     height: height * 0.03,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("رقم التواصل "),
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                    child: Text(
+                      "رقم التواصل ",
+                      style: TextStyle(fontSize: width * 0.037),
+                    ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child:  Text(driver.phone),
-                  ),
+                  CustomContainer(text: driver.phone),
                   SizedBox(
                     height: height * 0.03,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("تاريخ الميلاد"),
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                    child: Text(
+                      "تاريخ الميلاد",
+                      style: TextStyle(fontSize: width * 0.037),
+                    ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child:  Text(driver.driverBDate),
-                  ),
+                  CustomContainer(text: driver.driverBDate),
                   SizedBox(
                     height: height * 0.03,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("فصيلة الدم "),
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                    child: Text(
+                      "فصيلة الدم ",
+                      style: TextStyle(fontSize: width * 0.037),
+                    ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child:  Text(driver.blood),
-                  ),
+                  CustomContainer(text: driver.blood),
                   SizedBox(
                     height: height * 0.03,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("رقم الباص "),
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                    child: Text(
+                      "رقم الباص ",
+                      style: TextStyle(fontSize: width * 0.037),
+                    ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(13),
-                    width: width,
-                    height: height * 0.06,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black)),
-                    child: Text(driver.busId),
-                  ),
+                  CustomContainer(text: driver.busId),
                   SizedBox(
                     height: height * 0.03,
                   ),

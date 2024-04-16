@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadImage extends StatefulWidget {
+
   const UploadImage({Key? key}) : super(key: key);
 
   @override

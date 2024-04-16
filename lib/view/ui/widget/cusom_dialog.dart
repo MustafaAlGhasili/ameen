@@ -31,6 +31,7 @@ class CustomDialog extends StatelessWidget {
         ),
         padding: EdgeInsets.all(width * 0.02),
         height: height * 0.2,
+
         alignment: Alignment.center,
         child: SizedBox(
           height: height,
@@ -45,7 +46,7 @@ class CustomDialog extends StatelessWidget {
                 },
               ),
               SizedBox(
-                height: height * 0.025,
+                height: height * 0.01,
               ),
               Center(
                 child: Text(
@@ -57,13 +58,14 @@ class CustomDialog extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: height * 0.035,
+                height: height * 0.033,
               ),
               ButtonModel(
+
                 onTap: buttonOnTap,
                 height: height * 0.05,
                 hMargin: width * 0.02,
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white, fontSize: width * 0.04),
                 rowMainAxisAlignment: MainAxisAlignment.center,
                 content: buttonText,
                 backColor: PRIMARY_COLOR,

@@ -1,4 +1,5 @@
 import 'package:ameen/controller/home_controller.dart';
+import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -80,12 +81,11 @@ class ProfilePage extends StatelessWidget {
                         height: height * 0.05,
                       ),
                       ButtonModel(
-                        padding: width * 0.03,
                         rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
                         width: width * 0.9,
                         height: height * 0.07,
                         onTap: () {
-                          Get.to(() => About());
+                          Get.to(() => const About());
                         },
                         backColor: const Color.fromARGB(255, 113, 65, 146),
                         content: "حسابي",
@@ -97,7 +97,6 @@ class ProfilePage extends StatelessWidget {
                         vMargin: height * 0.01,
                       ),
                       ButtonModel(
-                        padding: width * 0.03,
                         rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
                         width: width * 0.9,
                         height: height * 0.07,
@@ -150,7 +149,6 @@ class ProfilePage extends StatelessWidget {
                         vMargin: height * 0.01,
                       ),
                       ButtonModel(
-                        padding: width * 0.03,
                         rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
                         width: width * 0.9,
                         height: height * 0.07,
@@ -166,6 +164,9 @@ class ProfilePage extends StatelessWidget {
                         iconSize: width * 0.06,
                         vMargin: height * 0.01,
                       ),
+                      SizedBox(
+                        height: height * 0.04,
+                      ),
                       ButtonModel(
                         rowMainAxisAlignment: MainAxisAlignment.center,
                         width: width * 0.9,
@@ -175,6 +176,7 @@ class ProfilePage extends StatelessWidget {
                             buttonText: "حسنا",
                             content: "هل تريد تسجيل الخروج؟",
                             buttonOnTap: () async {
+
                               await FirebaseAuth.instance.signOut();
                               Get.offAll(() => const Start());
                             },
@@ -185,7 +187,6 @@ class ProfilePage extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white, fontSize: width * 0.05),
-                        vMargin: height * 0.04,
                       ),
                     ],
                   );

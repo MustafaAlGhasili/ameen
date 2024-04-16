@@ -90,6 +90,28 @@ class StudentModel implements ToMapConvertible {
 
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'fName': fName,
+      'lName': lName,
+      'nationalId': nationalId,
+      'birthDate': birthDate,
+      'gender': gender,
+      'blood': blood,
+      'isEnabled': isEnabled,
+      'parentId': parentId,
+      'schoolId': schoolId,
+      'grade': grade,
+      'longitude': longitude,
+      'latitude': latitude,
+      'address': address,
+      'busId': busId,
+      'imgUrl': imgUrl,
+      'email': email,
+      'phone': phone,
+    };
+  }
 
   @override
   Map<String, dynamic> toMap() {

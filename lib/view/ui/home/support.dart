@@ -1,3 +1,4 @@
+import 'package:ameen/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_faq/flutter_faq.dart';
 import 'package:get/get.dart';
@@ -63,7 +64,7 @@ class Support extends StatelessWidget {
                   color: Colors.white,
                 )),
             centerTitle: true,
-            backgroundColor: const Color.fromARGB(255, 114, 64, 164),
+            backgroundColor: PRIMARY_COLOR,
           ),
           body: SizedBox(
             height: height,

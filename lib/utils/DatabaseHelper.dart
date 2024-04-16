@@ -4,11 +4,13 @@ import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
 import 'package:ameen/model/token.dart';
 import 'package:ameen/model/trip.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart'; // Import DateFormat for date formatting
 
 import '../model/admin.dart';
+import '../model/bus.dart';
 import '../model/driver.dart';
 import '../model/notification.dart';
 import '../model/school.dart';
@@ -24,6 +26,24 @@ class DatabaseHelper {
   static final DatabaseReference absenceRef =
       FirebaseDatabase.instance.ref().child('absences');
 
+  Future<ParentModel?> getParentById(String parentId) async {
+    DataSnapshot parentSnapshot =
+    await _rootRef.child('parents').child(parentId).get();
+    return ParentModel.fromSnapshot(parentSnapshot);
+
+  }
+
+  Future sendAbsences(
+      String userId, DateTime timeCreated, StudentModel student) async {
+    final absences = await _rootRef.child("absences").child("$timeCreated");
+  }
+
+  Future<ParentModel?> getParentByEmail(String email, String userId) async {
+    DataSnapshot parentSnapshot =
+        await _rootRef.child('parents').child(userId).child(email).get();
+    return ParentModel.fromSnapshot(parentSnapshot);
+  }
+
   Future<String?> save<T extends ToMapConvertible>(
       T model, String refName) async {
     try {
@@ -32,11 +52,11 @@ class DatabaseHelper {
       String modelId = newModelRef.key ?? '';
 
       if (model is StudentModel) {
-        model.id = modelId!;
+        model.id = modelId;
       }
 
       if (model is NotificationModel) {
-        model.id = modelId!;
+        model.id = modelId;
       }
       await newModelRef.set(model.toMap());
 
@@ -607,6 +627,19 @@ class DatabaseHelper {
           .toList();
     } catch (error) {
       print('Error getting notifications : $error');
+      return [];
+    }
+  }
+
+  Future<List<DriverModel>> getAllBuses() async {
+    try {
+      final snapshot =
+          await _rootRef.child('drivers').orderByChild('busId').get();
+      return snapshot.children
+          .map((child) => DriverModel.fromSnapshot(child))
+          .toList();
+    } catch (e) {
+      print('Error getting bus: $e');
       return [];
     }
   }

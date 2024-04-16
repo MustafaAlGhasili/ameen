@@ -18,6 +18,7 @@ class DriverHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(DriverController());
     DriverController controller = Get.find();
 
     double height = MediaQuery.of(context).size.height;
@@ -36,7 +37,7 @@ class DriverHome extends StatelessWidget {
             children: [
               Center(
                 child: Image(
-                  image: AssetImage('img/logo.png'),
+                  image: const AssetImage('img/logo.png'),
                   height: width * 0.6,
                 ),
               ),
@@ -53,7 +54,7 @@ class DriverHome extends StatelessWidget {
                   future: LocalStorageService.getDriver(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else {
                       if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');

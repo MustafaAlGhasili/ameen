@@ -7,8 +7,7 @@ import 'package:ameen/view/ui/widget/notification_card.dart'; // Import the Noti
 import 'package:ameen/model/notification.dart'; // Import the NotificationModel
 
 class AdminNotifications extends StatelessWidget {
-  const AdminNotifications({Key? key});
-
+  const AdminNotifications({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,7 @@ class AdminNotifications extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     DatabaseReference notificationsRef =
-    FirebaseDatabase.instance.ref().child('notifications');
+        FirebaseDatabase.instance.ref().child('notifications');
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -42,16 +41,19 @@ class AdminNotifications extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-        body: Container(
-          child: FirebaseAnimatedList(
-            query: notificationsRef,
-            itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                Animation<double> animation, int index) {
-              NotificationModel notification =
-              NotificationModel.fromSnapshot(snapshot);
-              return NotificationCard(notification: notification,);
-            },
+        body: FirebaseAnimatedList(
+          defaultChild: const Center(
+            child: CircularProgressIndicator(),
           ),
+          query: notificationsRef,
+          itemBuilder: (BuildContext context, DataSnapshot snapshot,
+              Animation<double> animation, int index) {
+            NotificationModel notification =
+                NotificationModel.fromSnapshot(snapshot);
+            return NotificationCard(
+              notification: notification,
+            );
+          },
         ),
       ),
     );

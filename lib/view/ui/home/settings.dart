@@ -25,7 +25,8 @@ class Settings extends StatelessWidget {
           elevation: 2,
           foregroundColor: Colors.white,
           centerTitle: true,
-          title: Text("الإعدادات", style: TextStyle(fontSize: width * 0.05, color: Colors.white)),
+          title: Text("الإعدادات",
+              style: TextStyle(fontSize: width * 0.05, color: Colors.white)),
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: height * 0.05),
@@ -41,7 +42,7 @@ class Settings extends StatelessWidget {
                         color: Colors.black,
                       )),
                   width: width * 0.9,
-                  height: height * 0.06,
+                  height: height * 0.075,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.04),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,10 +85,12 @@ class Settings extends StatelessWidget {
                           color: Colors.black,
                         )),
                     width: width * 0.9,
-                    height: height * 0.06,
+                    height: height * 0.075,
                     margin: EdgeInsets.symmetric(vertical: height * 0.03),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: width * 0.04, vertical: height * 0.01),
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: width * 0.03),
+                    // padding: EdgeInsets.symmetric(
+                    //     horizontal: width * 0.04, vertical: height * 0.01),
                     child: Text(
                       "الدعم",
                       style: TextStyle(fontSize: width * 0.045),
