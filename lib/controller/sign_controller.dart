@@ -3,7 +3,7 @@ import 'package:ameen/model/admin.dart';
 import 'package:ameen/model/driver.dart';
 import 'package:ameen/model/parent.dart';
 import 'package:ameen/utils/constant.dart';
-import 'package:camera/camera.dart';
+import 'package:ameen/utils/general_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +42,8 @@ class SignController extends GetxController {
 
   String forgetPassword = '';
   String code = '';
+
+  String studentId = generateRandomFirebaseId();
 
   DateTime? selectedDate;
 
@@ -205,9 +207,9 @@ class SignController extends GetxController {
       print("Student");
       print("Student school:" + student.imgUrl!);
 
-      String? studentId =
-          await _databaseHelper.save<StudentModel>(student, "students");
-      student.id = studentId!;
+      studentId = studentId.replaceAll('_', '');
+      student.id = studentId;
+      await _databaseHelper.saveStudent(student);
       await LocalStorageService.saveParent(parent);
       await LocalStorageService.saveStudent(student);
       print("saved");

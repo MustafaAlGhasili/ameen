@@ -66,7 +66,7 @@ class _UploadImageState extends State<UploadImage> {
                   onTap: () {
                     _handleCameraPick(
                       ImageSource.camera,
-                      '${controller.studentFName.text}_${controller.studentLName.text}_1',
+                      '${controller.studentFName.text}_${controller.studentLName.text}_${controller.studentId}',
                     );
                     Navigator.of(context).pop(); // Close dialog
                   },
@@ -74,9 +74,10 @@ class _UploadImageState extends State<UploadImage> {
                 ListTile(
                   title: const Text('معرض الصور'),
                   onTap: () {
+                    print("Stduent ID${controller.studentId}");
                     _handleCameraPick(
                       ImageSource.gallery,
-                      '${controller.studentFName.text}_${controller.studentLName.text}_1',
+                      '${controller.studentFName.text}_${controller.studentLName.text}_${controller.studentId}',
                     );
                     Navigator.of(context).pop(); // Close dialog
                   },

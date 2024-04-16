@@ -66,9 +66,11 @@ late List<CameraDescription> cameras;
   Future<int> registerStudentFace({required File file}) async {
     String fileExtension = extension(file.path);
 
+
     String fileName = "test${Random().nextInt(1000)}$fileExtension";
     fileName = '${this.fullName}$fileExtension';
     print('File Name: $fileName');
+
     fileNameValue.value = fileName;
 
     final String url =
@@ -121,15 +123,7 @@ late List<CameraDescription> cameras;
             duration: const Duration(seconds: 2),
             animationDuration: const Duration(milliseconds: 700),
             backgroundColor: Colors.black);
-        // GetSnackBar(
-        //
-        //   messageText: Text("pleas connect to the internet",
-        //       style: TextStyle(color: Colors.white)),
-        //   titleText: Text("Error", style: TextStyle(color: Colors.white)),
-        //   icon: Icon(Icons.error_outline, color: Colors.white),
-        //   duration: Duration(seconds: 2),
-        //   animationDuration: Duration(milliseconds: 500),
-        // );
+
       }
       // log(error.message);
       rethrow;

@@ -52,8 +52,8 @@ class DatabaseHelper {
       String modelId = newModelRef.key ?? '';
 
       if (model is StudentModel) {
-        model.id = modelId;
-      }
+    /*    model.id = modelId;
+    */  }
 
       if (model is NotificationModel) {
         model.id = modelId;
@@ -79,6 +79,19 @@ class DatabaseHelper {
       return parentModel.id;
     } catch (error) {
       print('Error saving ${parentModel.toString()}: $error');
+      return null;
+    }
+  }
+  Future<String?> saveStudent(StudentModel studentModel) async {
+    try {
+
+      DatabaseReference newModelRef =
+          _rootRef.child("students").child(studentModel.id);
+      await newModelRef.set(studentModel.toMap());
+
+      return studentModel.id;
+    } catch (error) {
+      print('Error saving ${studentModel.toString()}: $error');
       return null;
     }
   }

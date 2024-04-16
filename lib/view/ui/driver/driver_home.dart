@@ -1,4 +1,4 @@
-import 'package:ameen/controller/sign_controller.dart';
+import 'package:ameen/utils/general_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -77,9 +77,11 @@ class DriverHome extends StatelessWidget {
                                     return CircularProgressIndicator();
                                   } else {
                                     if (snapshot.hasData &&
-                                        snapshot.data != null) {
-                                      bool isMorningTrip =
-                                          snapshot.data!.type == 1;
+                                        snapshot.data != null && isSameDay(snapshot.data!.createdAt!,
+                                        DateTime.now())) {
+                                        bool isMorningTrip = snapshot.data!.type == 1;
+                                        print("Trip Home ${snapshot.data!}");
+
 
                                       // Show the dialog to choose the trip
                                       return Column(
@@ -89,8 +91,7 @@ class DriverHome extends StatelessWidget {
                                                   onTap: () {
                                                     Get.dialog(
                                                       CustomDialog(
-                                                        buttonText:
-                                                            'نعم',
+                                                        buttonText: 'نعم',
                                                         content:
                                                             'هل ترغب في مواصلة رحلة الصباح؟',
                                                         buttonOnTap: () {

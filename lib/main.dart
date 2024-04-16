@@ -30,22 +30,19 @@ void main() async {
   //await firebaseNotification.sendToTopic("title3", "body3", "parents");
 
 
-  runApp(DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) =>
-          GetMaterialApp(
-            useInheritedMediaQuery: true,
-            builder: DevicePreview.appBuilder,
-            localizationsDelegates: const [
-              S.delegate,
-            ],
-            supportedLocales: S.delegate.supportedLocales,
-            theme: ThemeData(
-                scaffoldBackgroundColor: const Color.fromARGB(
-                    255, 113, 65, 146)),
-
-            home: SplashScreen(),
-          )));
+  runApp(
+    GetMaterialApp(
+      useInheritedMediaQuery: true,
+      localizationsDelegates: const [
+        S.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146),
+      ),
+      home: SplashScreen(),
+    ),
+  );
   }
 
 class First extends StatelessWidget {
