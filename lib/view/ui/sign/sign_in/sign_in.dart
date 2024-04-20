@@ -1,3 +1,4 @@
+import 'package:ameen/controller/camera_controller.dart';
 import 'package:ameen/view/ui/admin/home.dart';
 import 'package:ameen/view/ui/driver/driver_home.dart';
 import 'package:ameen/view/ui/sign/sign_in/forget_password.dart';
@@ -178,6 +179,7 @@ class SignIn extends StatelessWidget {
                               child: ButtonModel(
                                 padding: 10,
                                 onTap: () {
+                                  Get.lazyPut(()=> CamController());
                                   Get.to(() => const SignUp());
                                 },
                                 content: "تسجيل جديد",
