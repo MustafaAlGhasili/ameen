@@ -2,6 +2,7 @@ import 'package:ameen/controller/sign_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import '../../../../controller/camera_controller.dart';
 import '../../widget/button_model.dart';
 import '../../widget/text_field.dart';
 import 'sign_up.dart';
@@ -154,6 +155,7 @@ class School extends StatelessWidget {
               ButtonModel(
                 onTap: () {
                   if(_formKey.currentState!.validate()){
+                    Get.put(CamController());
                     controller.step.value++;
                   }
                   // Get.to(() => const StudentInfo());

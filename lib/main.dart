@@ -33,8 +33,10 @@ void main() async {
   runApp(
     GetMaterialApp(
       useInheritedMediaQuery: true,
+      locale: const Locale.fromSubtags(countryCode: "ar"),
       localizationsDelegates: const [
         S.delegate,
+
       ],
       supportedLocales: S.delegate.supportedLocales,
       theme: ThemeData(
