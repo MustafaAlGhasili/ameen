@@ -4,6 +4,7 @@ import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
 import 'package:ameen/model/token.dart';
 import 'package:ameen/model/trip.dart';
+import 'package:ameen/utils/general_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -14,6 +15,7 @@ import '../model/bus.dart';
 import '../model/driver.dart';
 import '../model/notification.dart';
 import '../model/school.dart';
+import '../services/LocalStorageService.dart';
 import 'data_converter.dart';
 
 class DatabaseHelper {
@@ -509,6 +511,49 @@ class DatabaseHelper {
     return studentList;
   }
 
+  Future<void> trackStudentStatus(String busId) async {
+    try {
+
+      final student = await LocalStorageService.getStudent();
+      if (student == null) {
+        print('No student found in local storage');
+        return;
+      }
+
+      DataSnapshot busTripsSnapshot = await _rootRef
+          .child('trips')
+          .orderByChild('busId')
+          .equalTo(busId)
+          .limitToLast(1)
+          .get();
+
+      if (busTripsSnapshot.exists) {
+        // Get the latest trip from the snapshot
+        final tripData = TripModel.fromSnapshot(
+            busTripsSnapshot.children.first);
+
+        if(!isSameDay(tripData.createdAt!, DateTime.now())){
+          return;
+        }
+
+        final studentStatus = tripData.studentTripStatus?[student.id];
+
+        if (studentStatus == null) {
+          print('Student ${student.id} not found in trip status');
+          return;
+        } else {
+          print('Student Status $studentStatus');
+
+        }
+
+      }
+    }catch (e) {
+      print('Error fetching latest trip for bus ID: $busId - $e');
+      return null;
+    }
+    return null;
+  }
+
   Future<TripModel?> getTripById(String tripId) async {
     try {
       DataSnapshot tripSnapshot =
@@ -673,4 +718,7 @@ class DatabaseHelper {
       return [];
     }
   }
+
+
+
 }
