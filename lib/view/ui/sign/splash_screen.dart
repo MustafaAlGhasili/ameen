@@ -10,6 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -31,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (userType != null && isLoggedIn) {
       switch (userType) {
         case 0: // Parent
-          return  Home();
+          return  const Home();
         case 1: // Admin
           return const DriverHome();
         case 2: // Admin

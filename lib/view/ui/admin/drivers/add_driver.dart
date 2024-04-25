@@ -364,7 +364,6 @@ class _AddDriverState extends State<AddDriver> {
                     ),
                   ],
                 ),
-
                 _isUploaded
                     ? Container(
                         height: height * 1.3,
@@ -380,7 +379,7 @@ class _AddDriverState extends State<AddDriver> {
                           ),
                         ),
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
               ],
             ),
           ),

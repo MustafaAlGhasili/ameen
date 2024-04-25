@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/controller/notification_controller.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/widget/text_field.dart';
@@ -62,10 +61,10 @@ class SendNotification extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   primary: PRIMARY_COLOR,
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  padding: const  EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 ),
                 child: controller.isLoading.value
-                    ? SizedBox( // Show loading indicator when loading
+                    ? const  SizedBox( // Show loading indicator when loading
                   height: 20,
                   width: 20,
                   child: CircularProgressIndicator(

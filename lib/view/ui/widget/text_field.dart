@@ -41,7 +41,8 @@ class TextFieldModel extends StatefulWidget {
     this.validator,
     this.inputFormatters,
     this.onTap,
-    this.maxLines = 1, this.textStyle,
+    this.maxLines = 1,
+    this.textStyle,
     // this.validator,
   });
 
@@ -53,7 +54,8 @@ class _TextFieldModelState extends State<TextFieldModel> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: widget.vPadding, left: widget.hPadding, right: widget.hPadding),
+      padding: EdgeInsets.only(
+          top: widget.vPadding, left: widget.hPadding, right: widget.hPadding),
       child: TextFormField(
         maxLines: widget.maxLines,
         onTap: widget.onTap,

@@ -8,11 +8,10 @@ import 'package:iconly/iconly.dart';
 import '../../../model/driver.dart';
 import '../../../services/LocalStorageService.dart';
 import '../../../utils/constants.dart';
-import '../admin/drivers/driver_info.dart';
-import '../widget/cusom_dialog.dart';
+import '../widget/custom_dialog.dart';
 
 class DrawerModel extends StatelessWidget {
-  const DrawerModel({Key? key}) : super(key: key);
+  const DrawerModel({super.key});
 
   @override
   Widget build(BuildContext context) {

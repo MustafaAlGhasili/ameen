@@ -107,7 +107,7 @@ class ForgetPassword extends StatelessWidget {
                           ),
                           child: Visibility(
                             visible: !controller.isLoading.value,
-                            replacement: SizedBox(
+                            replacement: const SizedBox(
                               height: 20,
                               width: 20,
                               child: CircularProgressIndicator(

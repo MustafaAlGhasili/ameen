@@ -8,7 +8,7 @@ import '../../../../utils/DatabaseHelper.dart';
 import '../../admin/students/student_info.dart';
 
 class StudentList extends StatelessWidget {
-  final busId;
+  final String busId;
 
   const StudentList({super.key, required this.busId});
 
@@ -57,7 +57,7 @@ class StudentList extends StatelessWidget {
                   ),
                 );
               } else if (student!.isEmpty) {
-                return Center(
+                return const Center(
                   child: Text("No student found"),
                 );
               }

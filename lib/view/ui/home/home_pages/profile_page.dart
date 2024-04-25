@@ -1,17 +1,15 @@
 import 'package:ameen/controller/home_controller.dart';
-import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-
 import '../../../../model/student.dart';
 import '../../../../services/LocalStorageService.dart';
 import '../../sign/start.dart';
 import '../../widget/button_model.dart';
-import '../../widget/cusom_dialog.dart';
-import '../info.dart';
+import '../../widget/custom_dialog.dart';
+import '../info/info_page.dart';
 import '../settings.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -85,7 +83,7 @@ class ProfilePage extends StatelessWidget {
                         width: width * 0.9,
                         height: height * 0.07,
                         onTap: () {
-                          Get.to(() => const About());
+                          Get.to(() => const InfoPage());
                         },
                         backColor: const Color.fromARGB(255, 113, 65, 146),
                         content: "حسابي",
@@ -176,7 +174,6 @@ class ProfilePage extends StatelessWidget {
                             buttonText: "حسنا",
                             content: "هل تريد تسجيل الخروج؟",
                             buttonOnTap: () async {
-
                               await FirebaseAuth.instance.signOut();
                               Get.offAll(() => const Start());
                             },

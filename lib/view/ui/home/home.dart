@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../controller/home_controller.dart';
-import 'home_widgets/home.dart';
-import 'home_widgets/parent_notification.dart';
-import 'home_widgets/profile.dart';
+import 'home_pages/home_page.dart';
+import 'home_pages/parent_notification.dart';
+import 'home_pages/profile_page.dart';
 
 class Home extends StatelessWidget {
   final int index;
@@ -83,6 +83,6 @@ class Home extends StatelessWidget {
 
 List<Widget> homePages = [
   const HomePage(),
-  const ParentNotifications(),
+  const ParentNotificationsPage(),
   const ProfilePage(),
 ];

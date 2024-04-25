@@ -11,12 +11,12 @@ class CustomDialog extends StatelessWidget {
   final void Function()? onClose; // Callback for closing the dialog
 
   const CustomDialog({
-    Key? key,
+    super.key,
     this.buttonOnTap,
     required this.buttonText,
     required this.content,
     this.onClose, // Added callback parameter
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

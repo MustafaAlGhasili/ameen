@@ -72,6 +72,7 @@ dependencies:
   dotted_border: ^2.1.0
 
   quickalert: ^1.1.0
+  firebase_crashlytics: ^3.4.18
 
 
 dev_dependencies:

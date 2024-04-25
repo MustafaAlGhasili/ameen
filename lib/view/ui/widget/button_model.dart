@@ -85,8 +85,8 @@ class ButtonModel extends StatelessWidget {
   final bool bus;
   final IconData? icon;
   final double? iconSize;
-  final enableIcon;
-  final double contentPdding;
+  final bool enableIcon;
+  final double contentPadding;
 
   const ButtonModel(
       {super.key,
@@ -110,7 +110,7 @@ class ButtonModel extends StatelessWidget {
       this.icon,
       this.iconSize,
       this.enableIcon = false,
-      this.contentPdding = 0.0});
+      this.contentPadding = 0.0});
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +149,7 @@ class ButtonModel extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(contentPdding),
+                  padding: EdgeInsets.all(contentPadding),
                   child: Text(
                     textAlign: TextAlign.center,
                     content,

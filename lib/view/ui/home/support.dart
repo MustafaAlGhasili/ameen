@@ -1,9 +1,8 @@
 import 'package:ameen/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_faq/flutter_faq.dart';
-import 'package:get/get.dart';
 
-final String userGuied = "تصميم واجهة التطبيق أمين شريك طفلك بالرحلة المدرسية"
+const String userGuied = "تصميم واجهة التطبيق أمين شريك طفلك بالرحلة المدرسية"
     "تم تصميم واجهة التطبيق أمين شريك طفلك بالرحلة المدرسية لتلبية احتياجات الأهل والسائقين والمشرفين. ستجد هنا وصفًا مفصلاً للواجهات المختلفة في التطبيق ووظائفها."
     "واجهة الترحيب:"
     "تحتوي على شعار أمين وتوضح أن التطبيق هو شريك طفلك بالرحلة المدرسية"

@@ -1,10 +1,7 @@
 import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
-import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
-
-// import 'package:ameen/view/ui/driver/student/student_list.dart';
-import 'package:ameen/view/ui/widget/cusom_dialog.dart';
+import 'package:ameen/view/ui/widget/custom_dialog.dart';
 import 'package:ameen/view/ui/widget/custom_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -76,9 +73,9 @@ class StudentDetails extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("الاسم الاول"),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("الاسم الاول"),
                   ),
                   CustomContainer(text: student.fName),
                   SizedBox(
@@ -126,7 +123,7 @@ class StudentDetails extends StatelessWidget {
                         }else if(snapshot.hasData){
                           return CustomContainer(text: parent!.phone);
                         }
-                        return SizedBox();
+                        return const SizedBox();
                       }),
                   SizedBox(
                     height: height * 0.025,

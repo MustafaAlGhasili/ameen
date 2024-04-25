@@ -1,4 +1,3 @@
-import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/view/ui/admin/drivers/drivers_list.dart';
 import 'package:ameen/view/ui/admin/students/students_list.dart';
 import 'package:ameen/view/ui/sign/start.dart';
@@ -8,7 +7,7 @@ import 'package:get/get.dart';
 
 import '../../../controller/admin_controller.dart';
 import '../widget/button_model.dart';
-import '../widget/cusom_dialog.dart';
+import '../widget/custom_dialog.dart';
 import 'admin_notification.dart';
 
 class AdminHome extends StatelessWidget {

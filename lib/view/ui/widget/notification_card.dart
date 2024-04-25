@@ -8,9 +8,9 @@ class NotificationCard extends StatelessWidget {
   final NotificationModel notification;
 
   const NotificationCard({
-    Key? key,
+    super.key,
     required this.notification,
-  }) : super(key: key);
+  });
 
   String _formatDate(String isoDate) {
     DateTime parsedDate = DateTime.parse(isoDate);
@@ -29,31 +29,31 @@ class NotificationCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.notifications,
+            const Icon(Icons.notifications,
                 color: Color.fromARGB(255, 113, 65, 146), size: 24),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     _formatDate(notification.createdAt!), // Format the date
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.grey,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     notification.title!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
                     ),
@@ -62,7 +62,7 @@ class NotificationCard extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.delete,
                 color: Colors.redAccent,
               ),
@@ -72,14 +72,14 @@ class NotificationCard extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('تأكيد الحذف'),
-                      content: Text('هل أنت متأكد أنك تريد حذف هذا الإشعار؟'),
+                      title: const Text('تأكيد الحذف'),
+                      content: const Text('هل أنت متأكد أنك تريد حذف هذا الإشعار؟'),
                       actions: [
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop(); // Close the dialog
                           },
-                          child: Text('إلغاء'),
+                          child: const Text('إلغاء'),
                         ),
                         TextButton(
                           onPressed: () async {
@@ -90,7 +90,7 @@ class NotificationCard extends StatelessWidget {
                             // Then close the dialog
                             Navigator.of(context).pop();
                           },
-                          child: Text('حذف'),
+                          child: const Text('حذف'),
                         ),
                       ],
                     );
