@@ -2,16 +2,15 @@ import 'package:ameen/model/absence.dart';
 import 'package:ameen/model/location.dart';
 import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
+import 'package:ameen/model/student_tracking.dart';
 import 'package:ameen/model/token.dart';
 import 'package:ameen/model/trip.dart';
 import 'package:ameen/utils/general_helper.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart'; // Import DateFormat for date formatting
 
 import '../model/admin.dart';
-import '../model/bus.dart';
 import '../model/driver.dart';
 import '../model/notification.dart';
 import '../model/school.dart';
@@ -30,9 +29,8 @@ class DatabaseHelper {
 
   Future<ParentModel?> getParentById(String parentId) async {
     DataSnapshot parentSnapshot =
-    await _rootRef.child('parents').child(parentId).get();
+        await _rootRef.child('parents').child(parentId).get();
     return ParentModel.fromSnapshot(parentSnapshot);
-
   }
 
   Future sendAbsences(
@@ -54,8 +52,9 @@ class DatabaseHelper {
       String modelId = newModelRef.key ?? '';
 
       if (model is StudentModel) {
-    /*    model.id = modelId;
-    */  }
+        /*    model.id = modelId;
+    */
+      }
 
       if (model is NotificationModel) {
         model.id = modelId;
@@ -84,9 +83,9 @@ class DatabaseHelper {
       return null;
     }
   }
+
   Future<String?> saveStudent(StudentModel studentModel) async {
     try {
-
       DatabaseReference newModelRef =
           _rootRef.child("students").child(studentModel.id);
       await newModelRef.set(studentModel.toMap());
@@ -511,13 +510,12 @@ class DatabaseHelper {
     return studentList;
   }
 
-  Future<void> trackStudentStatus(String busId) async {
+  Future<StudentTrackingModel?> trackStudentStatus(String busId) async {
     try {
-
       final student = await LocalStorageService.getStudent();
       if (student == null) {
         print('No student found in local storage');
-        return;
+        return null;
       }
 
       DataSnapshot busTripsSnapshot = await _rootRef
@@ -529,25 +527,27 @@ class DatabaseHelper {
 
       if (busTripsSnapshot.exists) {
         // Get the latest trip from the snapshot
-        final tripData = TripModel.fromSnapshot(
-            busTripsSnapshot.children.first);
+        final tripData =
+            TripModel.fromSnapshot(busTripsSnapshot.children.first);
 
-        if(!isSameDay(tripData.createdAt!, DateTime.now())){
-          return;
+        if (!isSameDay(tripData.createdAt!, DateTime.now())) {
+          return null;
         }
 
         final studentStatus = tripData.studentTripStatus?[student.id];
 
         if (studentStatus == null) {
           print('Student ${student.id} not found in trip status');
-          return;
-        } else {
-          print('Student Status $studentStatus');
-
+          return null;
         }
+        final int status = studentStatus.status;
 
+        final studentTracking = StudentTrackingModel(
+            status: status, studentId: student.id, tripType: tripData.type!);
+        print('Student Status $studentStatus');
+        return studentTracking;
       }
-    }catch (e) {
+    } catch (e) {
       print('Error fetching latest trip for bus ID: $busId - $e');
       return null;
     }
@@ -704,7 +704,6 @@ class DatabaseHelper {
 
   Future<List<AbsenceModel>> getTodayAbsences() async {
     try {
-
       await initializeDateFormatting('en_US', null);
 
       final String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -718,7 +717,4 @@ class DatabaseHelper {
       return [];
     }
   }
-
-
-
 }

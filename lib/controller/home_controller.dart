@@ -1,7 +1,6 @@
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/model/absence.dart';
 import 'package:get/get.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 import '../model/parent.dart';
@@ -20,7 +19,6 @@ class HomeController extends GetxController {
   // final parentSN = TextEditingController();
   // final parentNumber = TextEditingController();
   // final parentPassword = TextEditingController();
-
 
   RxBool isInTheWay = false.obs;
   RxBool isClose = false.obs;
@@ -59,8 +57,6 @@ class HomeController extends GetxController {
         return false;
       }
 
-      await initializeDateFormatting('en_US', null);
-
       final String createdAt = DateFormat('yyyy-MM-dd').format(DateTime.now());
       final absence = AbsenceModel(studentId: student.id, createdAt: createdAt);
       String? absenceId = await _databaseHelper.saveAbsence(absence);
@@ -70,6 +66,29 @@ class HomeController extends GetxController {
       // Handle other exceptions
       print('Error creating absence: $e');
       return false;
+    }
+  }
+
+  Future<void> changeStudentTracking() async {
+    try {
+      final student = await LocalStorageService.getStudent();
+      if (student == null) {
+        print("No Student in local");
+        return;
+      }
+      final studentStatus =
+          await _databaseHelper.trackStudentStatus(student.busId!);
+      isInTheWay = false.obs;
+      isClose = false.obs;
+      isArrived = false.obs;
+
+      isInTheWay = (studentStatus!.status >= 0).obs;
+      isClose = (studentStatus.status > 2).obs;
+      isArrived = (studentStatus.status == 3).obs;
+    } catch (e) {
+      // Handle other exceptions
+      print('Error creating absence: $e');
+      return;
     }
   }
 }
