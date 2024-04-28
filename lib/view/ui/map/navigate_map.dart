@@ -25,7 +25,7 @@ import '../../../model/student.dart';
 import '../../../utils/DatabaseHelper.dart';
 import '../../../utils/constants.dart';
 import '../widget/button_model.dart';
-import '../widget/cusom_dialog.dart';
+import '../widget/custom_dialog.dart';
 import 'file_manager.dart';
 import 'location_handler.dart';
 import 'location_service_repository.dart';
@@ -34,11 +34,11 @@ class NavigationScreen extends StatefulWidget {
   final StudentModel student;
   final TripModel trip;
 
-  NavigationScreen({
-    Key? key,
+  const NavigationScreen({
+    super.key,
     required this.student,
     required this.trip,
-  }) : super(key: key);
+  });
 
   @override
   State<NavigationScreen> createState() => _NavigationScreenState();
@@ -51,7 +51,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Location location = Location();
   Marker? sourcePosition, destinationPosition;
   loc.LocationData? _currentPosition;
-  LatLng curLocation = LatLng(15.3546934, 44.163375);
+  LatLng curLocation = const LatLng(15.3546934, 44.163375);
   StreamSubscription<loc.LocationData>? locationSubscription;
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
@@ -615,12 +615,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
     print("Adding marker");
     setState(() {
       sourcePosition = Marker(
-        markerId: MarkerId('source'),
+        markerId: const MarkerId('source'),
         position: curLocation,
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
       );
       destinationPosition = Marker(
-        markerId: MarkerId('destination'),
+        markerId: const MarkerId('destination'),
         position: LatLng(widget.student.latitude!, widget.student.longitude!),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
         infoWindow:InfoWindow(title: widget.student.fName),

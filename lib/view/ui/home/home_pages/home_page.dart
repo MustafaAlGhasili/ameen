@@ -2,8 +2,7 @@ import 'package:ameen/controller/home_controller.dart';
 import 'package:ameen/view/ui/map/track_student_map.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'map.dart';
-import 'state.dart';
+import 'state_page.dart';
 
 HomeController controller = Get.find();
 

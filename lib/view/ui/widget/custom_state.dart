@@ -18,8 +18,7 @@ class CustomState extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: EdgeInsets.only(
-          right: width * 0.08, top: height * 0.0),
+      padding: EdgeInsets.only(right: width * 0.08, top: height * 0.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -28,9 +27,7 @@ class CustomState extends StatelessWidget {
             height: height * 0.055,
             width: height * 0.055,
             decoration: BoxDecoration(
-              color: state
-                  ? PRIMARY_COLOR
-                  : Colors.white,
+              color: state ? PRIMARY_COLOR : Colors.white,
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.circular(1000),
             ),

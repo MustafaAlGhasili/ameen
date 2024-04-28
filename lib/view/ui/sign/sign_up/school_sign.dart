@@ -1,7 +1,6 @@
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../../../../controller/camera_controller.dart';
 import '../../widget/button_model.dart';
 import '../../widget/text_field.dart';
@@ -12,13 +11,13 @@ class School extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     controller.addSchoolsToMenu();
     return Form(
-      key: _formKey,
+      key: formKey,
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -101,48 +100,46 @@ class School extends StatelessWidget {
               SizedBox(
                 height: height * 0.04,
               ),
-               GetBuilder<SignController>(
-
-                  builder: (controller) {
-                    controller.update();
-                    if (controller.mapSelected) {
-                      return ButtonModel(
-                        onTap: () {
-                          controller.getLocation(context);
-                        },
-                        icon: Icons.map,
-                        width: width * 0.9,
-                        height: height * 0.07,
-                        content: 'تعديل الموقع على الخريطة',
-                        rowMainAxisAlignment: MainAxisAlignment.center,
-                        textAlign: TextAlign.center,
-                        backColor: Colors.green,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: width * 0.05,
-                        ),
-                      );
-                    } else {
-                      return ButtonModel(
-                        onTap: () {
-                          controller.getLocation(context);
-                        },
-                        icon: Icons.map,
-                        width: width * 0.9,
-                        height: height * 0.07,
-                        content: 'اختر الموقع على الخريطة',
-                        rowMainAxisAlignment: MainAxisAlignment.center,
-                        textAlign: TextAlign.center,
-                        backColor: const Color.fromARGB(255, 113, 65, 146),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: width * 0.05,
-                        ),
-                      );
-                    }
-                  },
-                ),
-
+              GetBuilder<SignController>(
+                builder: (controller) {
+                  controller.update();
+                  if (controller.mapSelected) {
+                    return ButtonModel(
+                      onTap: () {
+                        controller.getLocation(context);
+                      },
+                      icon: Icons.map,
+                      width: width * 0.9,
+                      height: height * 0.07,
+                      content: 'تعديل الموقع على الخريطة',
+                      rowMainAxisAlignment: MainAxisAlignment.center,
+                      textAlign: TextAlign.center,
+                      backColor: Colors.green,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: width * 0.05,
+                      ),
+                    );
+                  } else {
+                    return ButtonModel(
+                      onTap: () {
+                        controller.getLocation(context);
+                      },
+                      icon: Icons.map,
+                      width: width * 0.9,
+                      height: height * 0.07,
+                      content: 'اختر الموقع على الخريطة',
+                      rowMainAxisAlignment: MainAxisAlignment.center,
+                      textAlign: TextAlign.center,
+                      backColor: const Color.fromARGB(255, 113, 65, 146),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: width * 0.05,
+                      ),
+                    );
+                  }
+                },
+              ),
               TextFieldModel(
                 controller: controller.address,
                 style: TextStyle(height: height * 0.0027),
@@ -154,7 +151,7 @@ class School extends StatelessWidget {
               ),
               ButtonModel(
                 onTap: () {
-                  if(_formKey.currentState!.validate()){
+                  if (formKey.currentState!.validate()) {
                     Get.put(CamController());
                     controller.step.value++;
                   }

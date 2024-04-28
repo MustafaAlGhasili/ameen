@@ -1,9 +1,7 @@
-import 'package:ameen/model/parent.dart';
 import 'package:ameen/utils/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import '../../../../utils/DatabaseHelper.dart';
 import '../../widget/button_model.dart';
 import '../../widget/text_field.dart';
 import 'sign_up.dart';
@@ -14,7 +12,6 @@ class Parent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    DatabaseHelper _databaseHelper = DatabaseHelper();
     controller.testDBQuery();
 
     Validation validation = Validation();
@@ -91,7 +88,7 @@ class Parent extends StatelessWidget {
               Directionality(
                 textDirection: TextDirection.ltr,
                 child: Obx(() => TextFieldModel(
-                  controller: controller.parenPassword,
+                    controller: controller.parenPassword,
                     validator: (val) => validation.passwordValidator(val),
                     obscureText: !controller.visibility.value,
                     text: "ادخل كلمة المرور",
@@ -112,7 +109,6 @@ class Parent extends StatelessWidget {
                 onTap: () {
                   if (formKey.currentState!.validate()) {
                     controller.step.value++;
-
                   }
                   // Get.to(() => const StudentInfo());
                 },

@@ -1,23 +1,19 @@
 import 'dart:io';
-
+import 'package:ameen/view/ui/widget/custom_dialog.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../controller/camera_controller.dart';
 import '../../../../utils/constants.dart';
 import '../../widget/button_model.dart';
 import 'sign_up.dart';
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class UploadImage extends StatefulWidget {
-
-  const UploadImage({Key? key}) : super(key: key);
+  const UploadImage({super.key});
 
   @override
   State<UploadImage> createState() => _UploadImageState();
@@ -88,11 +84,24 @@ class _UploadImageState extends State<UploadImage> {
         },
       );
     } else {
+      Get.dialog(
+        CustomDialog(
+          buttonText: "الاعدادات",
+          content: "يرجى اعطاء صلاحيه الوصول اللازمه",
+          buttonOnTap: () {
+            Navigator.pop(context);
+            openAppSettings();
+          },
+        ),
+      );
+
       Get.showSnackbar(
         GetSnackBar(
           borderRadius: 20,
           margin: EdgeInsets.symmetric(
-              horizontal: Get.width * 0.045, vertical: Get.height * 0.015),
+            horizontal: Get.width * 0.045,
+            vertical: Get.height * 0.015,
+          ),
           icon: Icon(
             IconlyLight.info_circle,
             color: Colors.white,
@@ -188,7 +197,7 @@ class _UploadImageState extends State<UploadImage> {
                   minHeight: 6,
                   color: PRIMARY_COLOR,
                 )
-              : SizedBox(),
+              : const SizedBox(),
         ],
       ),
     );

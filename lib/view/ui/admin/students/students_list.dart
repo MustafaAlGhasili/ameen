@@ -48,12 +48,12 @@ class _StudentsListState extends State<StudentsList> {
               ? TextField(
                   controller: _searchController,
                   autofocus: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'ابحث...',
                     hintStyle: TextStyle(color: Colors.white),
                     border: InputBorder.none,
                   ),
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   onChanged: (value) {
                     // Implement search logic here
                     setState(() {});
@@ -90,7 +90,6 @@ class _StudentsListState extends State<StudentsList> {
                     future: dbHelper.getStudentsParentsByStatus(true),
                     builder: (context, snapshot) {
                       final student = snapshot.data;
-                      print("student = $student");
 
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());

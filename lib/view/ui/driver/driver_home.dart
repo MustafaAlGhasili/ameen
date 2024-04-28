@@ -10,11 +10,11 @@ import '../../../services/LocalStorageService.dart';
 import '../../../utils/constants.dart';
 import '../sign/start.dart';
 import '../widget/button_model.dart';
-import '../widget/cusom_dialog.dart';
+import '../widget/custom_dialog.dart';
 import 'drawer.dart';
 
 class DriverHome extends StatelessWidget {
-  const DriverHome({Key? key}) : super(key: key);
+  const DriverHome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class DriverHome extends StatelessWidget {
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
+                                    return const CircularProgressIndicator();
                                   } else {
                                     if (snapshot.hasData &&
                                         snapshot.data != null && isSameDay(snapshot.data!.createdAt!,
@@ -260,7 +260,7 @@ class DriverHome extends StatelessWidget {
                           );
                         } else {
                           // If driver data is null, handle it accordingly
-                          return Center(child: Text('Driver data not found.'));
+                          return const Center(child: Text('Driver data not found.'));
                         }
                       }
                     }

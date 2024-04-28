@@ -1,27 +1,30 @@
 import 'package:ameen/model/student.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/widget/button_model.dart';
-import 'package:ameen/view/ui/widget/cusom_dialog.dart';
+import 'package:ameen/view/ui/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class StudentMap extends StatelessWidget {
   final StudentModel model;
+
   const StudentMap({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
-    LatLng point1 =  LatLng(model.latitude!, model.longitude!);
+    LatLng point1 = LatLng(model.latitude!, model.longitude!);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        drawer: Drawer(),
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text("الخريطة", style: TextStyle(fontSize: width * 0.065),),
+          title: Text(
+            "الخريطة",
+            style: TextStyle(fontSize: width * 0.065),
+          ),
           centerTitle: true,
         ),
         body: Stack(

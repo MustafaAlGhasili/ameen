@@ -60,7 +60,7 @@ class _DriversListState extends State<DriversList> {
                     hintStyle: TextStyle(color: Colors.white),
                     border: InputBorder.none,
                   ),
-                  style: TextStyle(color: Colors.white),
+                  style: const  TextStyle(color: Colors.white),
                   onChanged: (value) {
                     // Implement search logic here
                     setState(() {});

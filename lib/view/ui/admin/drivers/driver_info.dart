@@ -1,6 +1,6 @@
 import 'package:ameen/model/driver.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
-import 'package:ameen/view/ui/widget/cusom_dialog.dart';
+import 'package:ameen/view/ui/widget/custom_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

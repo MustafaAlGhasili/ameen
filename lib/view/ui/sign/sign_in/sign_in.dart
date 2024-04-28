@@ -15,11 +15,10 @@ import '../../widget/text_field.dart';
 class SignIn extends StatelessWidget {
   final int? loginType;
 
-  SignIn({Key? key, this.loginType}) : super(key: key);
+  const SignIn({super.key, this.loginType});
 
   @override
   Widget build(BuildContext context) {
-
     Get.lazyPut(() => SignController());
 
     double height = MediaQuery.of(context).size.height;
@@ -143,7 +142,6 @@ class SignIn extends StatelessWidget {
                                       ),
                                     );
                                     controller.isLoading(false);
-
                                   }
                                 },
                           style: ElevatedButton.styleFrom(
@@ -179,7 +177,7 @@ class SignIn extends StatelessWidget {
                               child: ButtonModel(
                                 padding: 10,
                                 onTap: () {
-                                  Get.lazyPut(()=> CamController());
+                                  Get.lazyPut(() => CamController());
                                   Get.to(() => const SignUp());
                                 },
                                 content: "تسجيل جديد",

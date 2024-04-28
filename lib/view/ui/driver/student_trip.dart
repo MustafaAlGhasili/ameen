@@ -17,14 +17,14 @@ import '../../../model/trip.dart';
 import '../../../utils/constant.dart';
 import '../map/navigate_map.dart';
 import '../widget/button_model.dart';
-import '../widget/cusom_dialog.dart';
+import '../widget/custom_dialog.dart';
 
 DriverController controller = Get.find();
 
 class Trip extends StatefulWidget {
   final int tripType;
 
-  const Trip({Key? key, required this.tripType}) : super(key: key);
+  const Trip({super.key, required this.tripType});
 
   @override
   State<Trip> createState() => _TripState();
@@ -93,11 +93,11 @@ class _TripState extends State<Trip> {
                   // Assuming this function returns a List<StudentModel>
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasData) {
                       final List<StudentModel> students = snapshot.data!;
                       if (students.isEmpty) {
-                        return Center(
+                        return const Center(
                           child: Text('No students found'),
                         );
                       } else {
@@ -131,7 +131,7 @@ class _TripState extends State<Trip> {
                                           child: CachedNetworkImage(
                                             imageUrl: student.imgUrl ?? "",
                                             placeholder: (context, url) =>
-                                                CircularProgressIndicator(),
+                                                const CircularProgressIndicator(),
                                             errorWidget:
                                                 (context, url, error) =>
                                                     const Image(
@@ -168,7 +168,7 @@ class _TripState extends State<Trip> {
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else {
-                      return Center(child: Text('No data available'));
+                      return const Center(child: Text('No data available'));
                     }
                   },
                 ),
@@ -255,7 +255,7 @@ class _TripState extends State<Trip> {
                                             child: CachedNetworkImage(
                                               imageUrl: student.imgUrl ?? " ",
                                               placeholder: (context, url) =>
-                                                  CircularProgressIndicator(),
+                                                  const CircularProgressIndicator(),
                                               errorWidget:
                                                   (context, url, error) =>
                                                       const Image(
@@ -292,7 +292,7 @@ class _TripState extends State<Trip> {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
                                         // Handle loading state
-                                        return CircularProgressIndicator();
+                                        return const CircularProgressIndicator();
                                       } else if (snapshot.hasData) {
                                         // Distance calculation successful
                                         double distanceInKm = snapshot.data!;
@@ -304,7 +304,7 @@ class _TripState extends State<Trip> {
                                         );
                                       } else {
                                         // Handle error state
-                                        return Text(
+                                        return const Text(
                                             'Error calculating distance');
                                       }
                                     },
@@ -339,7 +339,6 @@ class _TripState extends State<Trip> {
                       return const Center(child: Text('No data available'));
                     }
                     // Add a default return statement to ensure a non-nullable Widget is returned
-                    return SizedBox(); // You can return an empty SizedBox or any other appropriate Widget
                   },
                 ),
               ),
@@ -362,7 +361,7 @@ class _TripState extends State<Trip> {
       print(dataSnapshot);
       final result = TripModel?.fromSnapshot(dataSnapshot);
       print('data updated');
-      if (result != null) {
+      if (!result.isBlank!) {
         print(result.status);
 
         setState(() {
@@ -406,7 +405,7 @@ class _TripState extends State<Trip> {
     Position currentPosition = await Geolocator.getCurrentPosition();
 
     // Calculate distance between current location and the provided coordinates
-    double distanceInMeters = await Geolocator.distanceBetween(
+    double distanceInMeters = Geolocator.distanceBetween(
       currentPosition.latitude,
       currentPosition.longitude,
       latitude,

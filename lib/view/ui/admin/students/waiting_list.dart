@@ -1,11 +1,6 @@
 import 'package:ameen/view/ui/admin/students/waiting_student.dart';
-import 'package:ameen/view/ui/sign/sign_up/student_sign.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../model/student.dart';
 import '../../../../utils/DatabaseHelper.dart';
 import '../../widget/button_model.dart';
 
@@ -32,7 +27,6 @@ class WaitingList extends StatelessWidget {
           future: dbHelper.getStudentsParentsByStatus(false),
           builder: (context, snapshot) {
             final student = snapshot.data;
-            print("object $student");
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if ( student!.isEmpty) {
@@ -57,7 +51,7 @@ class WaitingList extends StatelessWidget {
                     backColor: const Color.fromARGB(255, 113, 65, 146),
                     style:
                         TextStyle(color: Colors.white, fontSize: width * 0.05),
-                    content: '${student![i].fName} ${student[i].lName}',
+                    content: '${student[i].fName} ${student[i].lName}',
                   );
                 },
               );

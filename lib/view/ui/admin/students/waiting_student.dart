@@ -2,18 +2,14 @@ import 'package:ameen/controller/admin_controller.dart';
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/model/driver.dart';
 import 'package:ameen/model/student.dart';
-import 'package:ameen/services/LocalStorageService.dart';
-import 'package:ameen/services/auth_service/AuthService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/admin/home.dart';
 import 'package:ameen/view/ui/admin/students/waiting_list.dart';
-import 'package:ameen/view/ui/widget/cusom_dialog.dart';
-import 'package:ameen/view/ui/widget/custem_dropdown_menu.dart';
+import 'package:ameen/view/ui/widget/custom_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_google_location_picker/export.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
@@ -29,7 +25,6 @@ class WaitingStudent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(AdminController());
-    AdminController controller = Get.find();
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -78,12 +73,12 @@ class WaitingStudent extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("الاسم الاول"),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("الاسم الاول"),
                   ),
                   Container(
-                    padding: EdgeInsets.all(13),
+                    padding: const EdgeInsets.all(13),
                     width: width,
                     height: height * 0.06,
                     decoration: BoxDecoration(
@@ -94,12 +89,12 @@ class WaitingStudent extends StatelessWidget {
                   SizedBox(
                     height: height * 0.025,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("الاسم الاخير"),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("الاسم الاخير"),
                   ),
                   Container(
-                    padding: EdgeInsets.all(13),
+                    padding: const EdgeInsets.all(13),
                     width: width,
                     height: height * 0.06,
                     decoration: BoxDecoration(
@@ -110,12 +105,12 @@ class WaitingStudent extends StatelessWidget {
                   SizedBox(
                     height: height * 0.025,
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text("رقم الأحوال"),
                   ),
                   Container(
-                    padding: EdgeInsets.all(13),
+                    padding: const EdgeInsets.all(13),
                     width: width,
                     height: height * 0.06,
                     decoration: BoxDecoration(
@@ -126,9 +121,9 @@ class WaitingStudent extends StatelessWidget {
                   SizedBox(
                     height: height * 0.025,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("رقم التواصل"),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("رقم التواصل"),
                   ),
                   Container(
                     padding: const EdgeInsets.all(13),
@@ -142,9 +137,9 @@ class WaitingStudent extends StatelessWidget {
                   SizedBox(
                     height: height * 0.025,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const Text("موقع المنزل "),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("موقع المنزل "),
                   ),
                   Container(
                     padding: const EdgeInsets.all(13),
@@ -223,11 +218,11 @@ class DialogWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     AdminController controller = Get.find();
 
-    var offset;
+    Offset offset;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Dialog(
-        child: Container(
+        child: SizedBox(
       height: height * 0.2,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -253,7 +248,6 @@ class DialogWidget extends StatelessWidget {
                       child: FutureBuilder<List<DriverModel>>(
                           future: dbHelper.getAllBuses(),
                           builder: (context, snapshot) {
-                            print("dataaaa ${snapshot.data}");
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               return SizedBox(
@@ -262,7 +256,7 @@ class DialogWidget extends StatelessWidget {
                                     child: CircularProgressIndicator()),
                               );
                             } else if (snapshot.hasError) {
-                              print("Error: ${snapshot.error}");
+                              return Center(child: Text("${snapshot.error}"),);
                             } else if (snapshot.data == []) {
                               return Center(
                                 child: Text("NO student found",
@@ -279,10 +273,8 @@ class DialogWidget extends StatelessWidget {
                                     onTap: () {
                                       controller.selectedBus.value =
                                           driver.busId;
-                                      print(
-                                          "Bus = ${controller.selectedBus.value}");
-                                      Navigator.pop(context);
 
+                                      Navigator.pop(context);
                                     },
                                     child: ButtonModel(
                                       vMargin: height * 0.005,
@@ -305,33 +297,33 @@ class DialogWidget extends StatelessWidget {
                 ],
               );
             },
-            child:Obx(()=> Container(
-                height: height * 0.06,
-                width: width * 0.6,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: PRIMARY_COLOR,
-                    borderRadius: BorderRadius.circular(30)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.white,
-                      size: width * 0.05,
-                    ),
-                    SizedBox(
-                      width: width * 0.01,
-                    ),
-                    Text(
-                      controller.selectedBus.value.isEmpty
-                          ? "الباصات"
-                          : controller.selectedBus.value,
-                      style: TextStyle(
-                          color: Colors.white, fontSize: width * 0.04),
-                    ),
-                  ],
-                ))
+            child: Obx(() => Container(
+                    height: height * 0.06,
+                    width: width * 0.6,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: PRIMARY_COLOR,
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.white,
+                          size: width * 0.05,
+                        ),
+                        SizedBox(
+                          width: width * 0.01,
+                        ),
+                        Text(
+                          controller.selectedBus.value.isEmpty
+                              ? "الباصات"
+                              : controller.selectedBus.value,
+                          style: TextStyle(
+                              color: Colors.white, fontSize: width * 0.04),
+                        ),
+                      ],
+                    ))
 
                 // child: CustomDropdownButton2(
                 //     selectedItemColor: Colors.white,
@@ -408,13 +400,13 @@ class DialogWidget extends StatelessWidget {
               }
             },
             child: Container(
-                margin: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
                 height: height * 0.06,
                 width: width * 0.6,
                 decoration: BoxDecoration(
                     color: PRIMARY_COLOR,
                     borderRadius: BorderRadius.circular(30)),
-                child: Center(
+                child: const Center(
                     child: Text(
                   "موافق",
                   style: TextStyle(color: Colors.white),

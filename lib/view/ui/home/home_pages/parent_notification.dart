@@ -1,12 +1,11 @@
 import 'package:ameen/model/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../controller/notification_controller.dart';
 import '../../widget/parent_notification_card.dart';
 
-class ParentNotifications extends StatelessWidget {
-  const ParentNotifications({Key? key});
+class ParentNotificationsPage extends StatelessWidget {
+  const ParentNotificationsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class ParentNotifications extends StatelessWidget {
                 List<Widget> notificationWidgets = [];
 
                 DateTime now = DateTime.now();
-                DateTime yesterday = now.subtract(Duration(days: 1));
+                DateTime yesterday = now.subtract(const Duration(days: 1));
 
                 List<NotificationModel> todayNotifications = [];
                 List<NotificationModel> yesterdayNotifications = [];
@@ -95,7 +94,7 @@ class ParentNotifications extends StatelessWidget {
                 );
               }
             } else {
-              return Center(
+              return const Center(
                 child: Text("No data found"),
               );
             }
@@ -114,16 +113,16 @@ class ParentNotifications extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-        SizedBox(),
+        const SizedBox(),
         ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: notifications.length,
           itemBuilder: (context, index) {
             NotificationModel notification = notifications[index];
