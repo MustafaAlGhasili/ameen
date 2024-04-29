@@ -2,14 +2,27 @@ import 'package:ameen/view/ui/sign/sign_in/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../services/LocalStorageService.dart';
+
 List data = [
   ["ولي الامر", 'img/parent.png', '1'],
   ["السائق", 'img/driver.png', '2'],
   ["المشرف", 'img/instractor.png', '3']
 ];
 
-class Start extends StatelessWidget {
+class Start extends StatefulWidget {
   const Start({super.key});
+
+  @override
+  State<Start> createState() => _StartState();
+}
+
+class _StartState extends State<Start> {
+  @override
+  void initState() {
+    super.initState();
+    LocalStorageService.clearAllData();
+  }
 
   @override
   Widget build(BuildContext context) {

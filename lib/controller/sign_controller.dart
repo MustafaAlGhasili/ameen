@@ -51,7 +51,7 @@ class SignController extends GetxController {
   var onTapRecognizer;
   RxInt step = 0.obs;
 
-  RxList<String> blood = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].obs;
+  RxList<String> blood = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].obs;
   RxString bloodValue = ''.obs;
   RxString loginErrorValue = ''.obs;
 
@@ -68,9 +68,6 @@ class SignController extends GetxController {
     'الصف الرابع': 4,
     'الصف الخامس': 5,
     'الصف السادس': 6,
-    'الصف السابع': 7,
-    'الصف الثامن': 8,
-    'الصف التاسع': 9,
   }.obs;
 
   RxMap<String, int> schools = {

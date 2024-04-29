@@ -89,6 +89,12 @@ class LocalStorageService {
 
   }
 
+  static Future<void> clearAllData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    print('All data cleared from SharedPreferences.');
+  }
+
   static void saveUserType(int userType) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('userType', userType);

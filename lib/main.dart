@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:ameen/services/firebase_notification.dart';
 import 'package:ameen/view/ui/sign/splash_screen.dart';
 import 'package:ameen/view/ui/sign/start.dart';
-import 'package:ameen/view/ui/test/test.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +41,7 @@ void main() async {
       theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146),
       ),
-      home: const TestFirebase(),
+      home: const SplashScreen(),
     ),
   );
 }
