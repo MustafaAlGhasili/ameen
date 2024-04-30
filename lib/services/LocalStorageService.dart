@@ -32,7 +32,6 @@ class LocalStorageService {
     await prefs.setString(parentKey, jsonModel);
   }
 
-
   static Future<void> saveDriver(DriverModel driver) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final parentJson =
@@ -85,9 +84,7 @@ class LocalStorageService {
     }
   }
 
-  static Future updateData()async {
-
-  }
+  static Future updateData() async {}
 
   static Future<void> clearAllData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -126,12 +123,14 @@ class LocalStorageService {
 
   static Future<void> saveTrip(TripModel? trip) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final tripJson = json.encode(trip!.toMap());
-    await prefs.setString(tripKey, tripJson);
-    print("Saved trip:");
-    print(tripJson);
+    if (trip == null) {
+      await prefs.remove(tripKey);
+      print("Trip data reset.");
+    } else {
+      final tripJson = json.encode(trip.toMap());
+      await prefs.setString(tripKey, tripJson);
+      print("Saved trip:");
+      print(tripJson);
+    }
   }
-
-
-
 }

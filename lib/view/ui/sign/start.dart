@@ -21,7 +21,6 @@ class _StartState extends State<Start> {
   @override
   void initState() {
     super.initState();
-    LocalStorageService.clearAllData();
   }
 
   @override

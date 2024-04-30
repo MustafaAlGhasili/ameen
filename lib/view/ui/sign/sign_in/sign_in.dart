@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
 import '../../../../controller/sign_controller.dart';
+import '../../../../services/LocalStorageService.dart';
 import '../../home/home.dart';
 import '../../widget/text_field.dart';
 
@@ -20,9 +21,9 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.lazyPut(() => SignController());
-
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    LocalStorageService.saveTrip(null);
 
     print("User Type:$loginType");
     SignController controller = Get.find();

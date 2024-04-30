@@ -350,6 +350,9 @@ class _TripState extends State<Trip> {
   }
 
   void updateUI() {
+    if(controller.currentTrip.id==null){
+      return;
+    }
     DatabaseReference databaseReference = FirebaseDatabase.instance
         .ref()
         .child('trips')
