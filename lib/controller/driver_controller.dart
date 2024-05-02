@@ -20,7 +20,7 @@ class DriverController extends GetxController {
 
   late var currentTrip;
   late String? tripId;
-  bool isWorking = true;
+  bool isWorking = false;
 
   @override
   void onInit() async {
@@ -41,7 +41,7 @@ class DriverController extends GetxController {
       await Future.delayed(const Duration(milliseconds: 200));
 
       print("Checking current trip");
-
+      isWorking = true;
       if (currentTrip != null &&
           isSameDay(currentTrip.createdAt!, DateTime.now()) &&
           currentTrip.type == type) {

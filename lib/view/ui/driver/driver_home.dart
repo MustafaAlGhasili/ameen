@@ -21,7 +21,6 @@ class DriverHome extends StatefulWidget {
 }
 
 class _DriverHomeState extends State<DriverHome> {
-
   @override
   Widget build(BuildContext context) {
     Get.put(DriverController());
@@ -88,10 +87,12 @@ class _DriverHomeState extends State<DriverHome> {
                                         ConnectionState.waiting) {
                                       return const CircularProgressIndicator();
                                     } else {
+                                      print("Checking value: ${controller.isWorking}");
                                       if (snapshot.hasData &&
                                           snapshot.data != null &&
                                           isSameDay(snapshot.data!.createdAt!,
-                                              DateTime.now())) {
+                                              DateTime.now()) &&
+                                          !controller.isWorking) {
                                         bool isMorningTrip =
                                             snapshot.data!.type == 1;
                                         print("Trip Home ${snapshot.data!}");
@@ -107,7 +108,7 @@ class _DriverHomeState extends State<DriverHome> {
                                                           buttonText: 'نعم',
                                                           content:
                                                               'هل ترغب في مواصلة رحلة الصباح؟',
-                                                          buttonOnTap: ()  {
+                                                          buttonOnTap: () {
                                                             controller
                                                                 .createTrip(
                                                                     snapshot
