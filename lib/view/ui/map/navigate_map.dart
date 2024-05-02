@@ -205,7 +205,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
             distanceFilter: 0,
             stopWithTerminate: true),
         autoStop: false,
-        androidSettings: AndroidSettings(
+        androidSettings: const AndroidSettings(
             accuracy: settings.LocationAccuracy.NAVIGATION,
             interval: 5,
             distanceFilter: 0,
@@ -229,7 +229,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       textDirection: TextDirection.rtl, // Set the text direction to RTL
       child: Scaffold(
         body: sourcePosition == null
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : Stack(
                 children: [
                   GoogleMap(
@@ -256,7 +256,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                       onTap: () {
                         Get.back();
                       },
-                      child: Icon(Icons.arrow_back),
+                      child: const Icon(Icons.arrow_back),
                     ),
                   ),
                   Align(
@@ -314,7 +314,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                               padding: EdgeInsets.all(width * 0.04),
                               child: Center(
                                 child: Text(
-                                  "${widget.student.address}",
+                                  widget.student.address,
                                   style: TextStyle(fontSize: width * 0.045),
                                   textAlign: TextAlign.center,
                                 ),
@@ -326,30 +326,30 @@ class _NavigationScreenState extends State<NavigationScreen> {
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 8.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
                                     // Adjust the horizontal margin as needed
                                     child: SizedBox(
                                       height: height * 0.07,
                                       child: ElevatedButton.icon(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.red,
-                                          textStyle:
-                                              TextStyle(color: Colors.white),
+                                          textStyle: const TextStyle(
+                                              color: Colors.white),
                                         ),
                                         onPressed: () {
                                           problemDialog(context);
                                         },
-                                        icon: Icon(Icons.warning),
-                                        label: Text('تواجه مشكلة ؟'),
+                                        icon: const Icon(Icons.warning),
+                                        label: const Text('تواجه مشكلة ؟'),
                                       ),
                                     ),
                                   ),
                                 ),
                                 Expanded(
                                   child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 8.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
                                     // Adjust the horizontal margin as needed
                                     child: SizedBox(
                                       height: height * 0.07,
@@ -359,8 +359,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                           await launchUrl(Uri.parse(
                                               'google.navigation:q=${widget.student.latitude}, ${widget.student.longitude}&key=${Constants.GOOGLE_MAPS_API_KEY}'));
                                         },
-                                        icon: Icon(Icons.map),
-                                        label: Text('عرض المسار'),
+                                        icon: const Icon(Icons.map),
+                                        label: const Text('عرض المسار'),
                                       ),
                                     ),
                                   ),
@@ -404,7 +404,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                     content: 'نعم',
                     buttonOnTap: () async {
                       Get.dialog(
-                        AlertDialog(
+                        const AlertDialog(
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -415,11 +415,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
                           ),
                         ),
                         barrierDismissible:
-                        false, // Prevent dismissing dialog by tapping outside
+                            false, // Prevent dismissing dialog by tapping outside
                       );
-                      final databaseHelper = new DatabaseHelper();
+                      final databaseHelper = DatabaseHelper();
                       await databaseHelper.makeManualAttendance(
-                          widget.trip.id!, widget.student.id,3);
+                          widget.trip.id!, widget.student.id, 1);
                       Get.back();
                       navigator?.pop();
                       Get.back();
@@ -427,7 +427,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   ),
                 );
               },
-
               hMargin: width * 0.04,
               height: height * 0.06,
               content: 'الطالب لم ياتي',
@@ -444,7 +443,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                     content: 'نعم',
                     buttonOnTap: () async {
                       Get.dialog(
-                        AlertDialog(
+                        const AlertDialog(
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -457,9 +456,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
                         barrierDismissible:
                             false, // Prevent dismissing dialog by tapping outside
                       );
-                      final databaseHelper = new DatabaseHelper();
+                      final databaseHelper = DatabaseHelper();
                       await databaseHelper.makeManualAttendance(
-                          widget.trip.id!, widget.student.id,1);
+                          widget.trip.id!, widget.student.id, 1);
                       Get.back();
                       navigator?.pop();
                       Get.back();
@@ -542,7 +541,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
             curLocation =
                 LatLng(currentLocation.latitude!, currentLocation.longitude!);
             sourcePosition = Marker(
-              markerId: MarkerId('source'),
+              markerId: const MarkerId('source'),
               // Use a fixed ID for source marker
               icon: BitmapDescriptor.defaultMarkerWithHue(
                   BitmapDescriptor.hueBlue),
@@ -623,7 +622,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         markerId: const MarkerId('destination'),
         position: LatLng(widget.student.latitude!, widget.student.longitude!),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
-        infoWindow:InfoWindow(title: widget.student.fName),
+        infoWindow: InfoWindow(title: widget.student.fName),
       );
     });
   }

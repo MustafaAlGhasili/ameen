@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ameen/model/absence.dart';
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
+import 'package:ameen/view/ui/test/test_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -17,7 +18,7 @@ class DriverController extends GetxController {
   late List<AbsenceModel> absenceList;
   late List<String> absenceIdsList = [];
   final _databaseHelper = DatabaseHelper();
-  var currentTrip;
+  late var currentTrip;
   late String? tripId;
 
   @override
@@ -33,6 +34,11 @@ class DriverController extends GetxController {
   Future<bool> createTrip(int type) async {
     try {
       currentTrip = await LocalStorageService.getTrip();
+      Get.dialog(const Center(
+        child: CircularProgressIndicator(color: Colors.white),
+      ));
+      await Future.delayed(const Duration(milliseconds: 200));
+
       print("Checking current trip");
 
       if (currentTrip != null &&

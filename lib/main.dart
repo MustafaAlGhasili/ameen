@@ -1,14 +1,16 @@
 import 'dart:ui';
-
+import 'package:ameen/controller/driver_controller.dart';
 import 'package:ameen/services/firebase_notification.dart';
 import 'package:ameen/view/ui/sign/splash_screen.dart';
 import 'package:ameen/view/ui/sign/start.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:map_location_picker/generated/l10n.dart';
 import 'firebase_options.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +31,8 @@ void main() async {
       "fE8Q0a7sQQ--yWhCLw-HqW:APA91bHeFJITcbqMiOM5qVQoLKx4uw-IQ-lR95UEbdHxyfi-iiBAUvim4uMRy7nExF91CveHfn20wYBG9xoV_nBlBEzPev_6SBdOll4vRTPbHyTiSLSr2R8VKmjJanZahssBMTDam3QK";
   //await firebaseNotification.sendNotification("title2", "body2", token);
   //await firebaseNotification.sendToTopic("title3", "body3", "parents");
-
+  final connectType = await Connectivity().checkConnectivity();
+  Get.put(DriverController());
   runApp(
     GetMaterialApp(
       useInheritedMediaQuery: true,
