@@ -113,6 +113,8 @@ class LocalStorageService {
         final Map<String, dynamic> tripMap = json.decode(tripJson);
         return TripModel.fromMap(tripMap);
       } else {
+        print("Local Trip Data Is Null");
+
         return null;
       }
     } catch (e) {
