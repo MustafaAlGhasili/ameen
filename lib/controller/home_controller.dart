@@ -1,5 +1,6 @@
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/model/absence.dart';
+import 'package:ameen/model/student.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -9,6 +10,9 @@ import '../utils/DatabaseHelper.dart';
 
 class HomeController extends GetxController {
   SignController controller = Get.find<SignController>();
+
+  late  StudentModel studentData;
+  late ParentModel parentData;
 
   RxInt bottomIndex = 0.obs;
   RxBool map = false.obs;

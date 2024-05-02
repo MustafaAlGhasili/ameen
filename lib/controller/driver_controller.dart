@@ -17,6 +17,7 @@ class DriverController extends GetxController {
   late List<AbsenceModel> absenceList;
   late List<String> absenceIdsList = [];
   final _databaseHelper = DatabaseHelper();
+
   late var currentTrip;
   late String? tripId;
   bool isWorking = true;
@@ -25,9 +26,9 @@ class DriverController extends GetxController {
   void onInit() async {
     super.onInit();
     print("Current Trip");
-    /* currentTrip = await LocalStorageService.getTrip();
+    currentTrip = await LocalStorageService.getTrip();
     tripId = await currentTrip!.id;
-   */
+
     await getTodayAbsence();
   }
 

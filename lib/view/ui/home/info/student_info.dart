@@ -1,13 +1,16 @@
+import 'package:ameen/controller/home_controller.dart';
 import 'package:ameen/model/student.dart';
 import 'package:flutter/material.dart';
 import '../../../../services/LocalStorageService.dart';
 import '../../widget/custom_container.dart';
+import 'package:get/get.dart';
 
 class StudentInfo extends StatelessWidget {
   const StudentInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
+    HomeController controller = Get.find();
     StudentModel? student;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -15,6 +18,8 @@ class StudentInfo extends StatelessWidget {
       future: LocalStorageService.getStudent(),
       builder: (context, snapshot) {
         student = snapshot.data;
+        controller.studentData = student!;
+
         print("erro ${snapshot.error}");
         print("connectionState ${snapshot.connectionState}");
         print("studentModel ${snapshot.data}");

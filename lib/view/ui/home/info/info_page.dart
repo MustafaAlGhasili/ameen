@@ -1,3 +1,4 @@
+import 'package:ameen/controller/home_controller.dart';
 import 'package:ameen/model/student.dart';
 import 'package:ameen/utils/constants.dart';
 import 'package:ameen/view/ui/home/home.dart';
@@ -19,6 +20,7 @@ class InfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    HomeController controller = Get.find();
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -47,9 +49,9 @@ class InfoPage extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: ButtonModel(
-                      onTap: () => Get.to(() => EditPage(
+                      onTap: () => Get.off(() => EditPage(
                             no: 0,
-                            student: student,
+                            student: controller.studentData,
                           )),
                       textAlign: TextAlign.center,
                       content: 'تعديل',
@@ -63,9 +65,6 @@ class InfoPage extends StatelessWidget {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    // height: height * 0.01,
-                    // width: width * 0.,
-
                     padding: EdgeInsets.symmetric(
                         horizontal: width * 0.07, vertical: height * 0.015),
                     child: Text("معلومات الطالب",
@@ -80,7 +79,7 @@ class InfoPage extends StatelessWidget {
                     child: ButtonModel(
                       onTap: () => Get.off(() => EditPage(
                             no: 1,
-                            parent: parent,
+                            parent: controller.parentData,
                           )),
                       textAlign: TextAlign.center,
                       content: 'تعديل',

@@ -1,4 +1,6 @@
+import 'package:ameen/controller/home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../model/parent.dart';
 import '../../../../services/LocalStorageService.dart';
 import '../../widget/custom_container.dart';
@@ -13,6 +15,7 @@ class ParentInfo extends StatefulWidget {
 class _ParentInfoState extends State<ParentInfo> {
   @override
   Widget build(BuildContext context) {
+    HomeController controller = Get.find();
     ParentModel? parent;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -21,7 +24,7 @@ class _ParentInfoState extends State<ParentInfo> {
       future: LocalStorageService.getParent(),
       builder: (context, snapshot) {
         parent = snapshot.data;
-
+        controller.parentData = parent!;
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else if (snapshot.hasData) {
