@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../model/driver.dart';
 import '../../../services/LocalStorageService.dart';
@@ -49,7 +50,7 @@ class DrawerModel extends StatelessWidget {
                           placeholder: (context, url) =>
                               const CircularProgressIndicator(),
                           errorWidget: (context, url, error) =>
-                              const Image(image: AssetImage("img/st1.png")),
+                              const Image(image: AssetImage("img/driver.png")),
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
@@ -128,7 +129,10 @@ class DrawerModel extends StatelessWidget {
                       onTap: () {
                         Get.dialog(
                           CustomDialog(
-                              buttonOnTap: () {},
+                              buttonOnTap: () async {
+                                await launchUrl(Uri.parse('tel:911'));
+
+                              },
                               buttonText: 'نعم',
                               content: 'هل انت متأكد من حالة الطوائ'),
                         );
