@@ -9,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:iconly/iconly.dart';
 import 'package:map_location_picker/google_map_location_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -21,7 +22,7 @@ import '../utils/DatabaseHelper.dart';
 class SignController extends GetxController {
   RxBool visibility = false.obs;
   bool isLocationPicked = false;
-
+  RxBool canGo = false.obs;
 
   final parentFName = TextEditingController();
   final address = TextEditingController();
@@ -331,6 +332,8 @@ class SignController extends GetxController {
         loginErrorValue.value = "الحساب موقف حالياُ";
       } else if (e.code == 'channel-error') {
         loginErrorValue.value = "حصل خطأ الرجاء المحاوله مره اخرى";
+      } else {
+        loginErrorValue.value = "حدث خطأ الرجاء اعاده المحاوله";
       }
       _isLoading(false);
       return false;
@@ -354,7 +357,7 @@ class SignController extends GetxController {
 
       // Get the newly created user's ID
       final String userId = userCredential.user!.uid;
-
+      canGo = true.obs;
       // Perform any additional actions, e.g., store user data, navigate to a different screen
       print('User created successfully: $userId');
       return userId;
@@ -362,14 +365,43 @@ class SignController extends GetxController {
       print('FirebaseAuthException - Code: ${e.code}, Message: ${e.message}');
 
       if (e.code == 'weak-password') {
-        loginErrorValue.value = "The password provided is too weak";
+        loginErrorValue.value = "كلمه السر ضعيفه";
         print('The password provided is too weak.');
+        // Get.showSnackbar(const GetSnackBar(
+        //   borderRadius: 20,
+        //   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        //   icon: Icon(
+        //     IconlyLight.info_circle,
+        //     color: Colors.white,
+        //   ),
+        //   title: "خطأ",
+        //   message: "كلمه السر ضعيفه",
+        //   duration: Duration(seconds: 2),
+        //   animationDuration: Duration(milliseconds: 600),
+        // ));
       } else if (e.code == 'email-already-in-use') {
+        loginErrorValue.value = "الايميل مستخدم في حساب اخر";
+
         print('The email address is already in use by another user.');
       } else {
         print("Error");
         print(e.code);
       }
+
+      Get.showSnackbar(
+        GetSnackBar(
+          borderRadius: 20,
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          icon: const Icon(
+            IconlyLight.info_circle,
+            color: Colors.white,
+          ),
+          title: "خطأ",
+          message: loginErrorValue.value,
+          duration: const Duration(seconds: 2),
+          animationDuration: const Duration(milliseconds: 600),
+        ),
+      );
     } catch (e) {
       print(e); // Handle other exceptions
     }

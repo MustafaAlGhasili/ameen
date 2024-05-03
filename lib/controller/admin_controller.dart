@@ -37,6 +37,7 @@ class AdminController extends GetxController {
     driverNationalID = '';
     driverLicence.value = '';
     driverBussNo = '';
+    bDate.text = '';
   }
 
   Future<bool> saveDriver() async {

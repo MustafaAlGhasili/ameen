@@ -19,7 +19,7 @@ Future<void> _selectDate(BuildContext context) async {
   if (selected != null && selected != DateTime.now()) {
     // controller.selectedDate = selected;
     controller.studentBDate.text =
-    "${selected.year}-${selected.month}-${selected.day}";
+        "${selected.year}-${selected.month}-${selected.day}";
     print(controller.studentBDate.text);
   }
 }
@@ -32,14 +32,8 @@ class Student extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     Validation validation = Validation();
 
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     SignController controller = Get.find();
     return Form(
       key: formKey,
@@ -131,18 +125,17 @@ class Student extends StatelessWidget {
                             height: height * 0.055,
                             child: FittedBox(
                               fit: BoxFit.fill,
-                              child: Obx(() =>
-                                  CustomDropdownButton2(
+                              child: Obx(() => CustomDropdownButton2(
 
-                                    // dropdownWidth: 20,
-                                      hint: '',
-                                      value: controller.bloodValue.value.isEmpty
-                                          ? null
-                                          : controller.bloodValue.value,
-                                      dropdownItems: controller.blood,
-                                      onChanged: (val) {
-                                        controller.bloodValue.value = val!;
-                                      })),
+                                  // dropdownWidth: 20,
+                                  hint: '',
+                                  value: controller.bloodValue.value.isEmpty
+                                      ? null
+                                      : controller.bloodValue.value,
+                                  dropdownItems: controller.blood,
+                                  onChanged: (val) {
+                                    controller.bloodValue.value = val!;
+                                  })),
                             ),
                           ),
                         ],
@@ -161,8 +154,7 @@ class Student extends StatelessWidget {
                             height: height * 0.055,
                             child: FittedBox(
                               fit: BoxFit.fill,
-                              child: Obx(() =>
-                                  CustomDropdownButton2(
+                              child: Obx(() => CustomDropdownButton2(
                                     hint: '',
                                     value: controller.genderValue.value.isEmpty
                                         ? null
@@ -192,8 +184,7 @@ class Student extends StatelessWidget {
                         snack(context, "الرجاء ادخال فصيله الدم");
                       } else if (controller.genderValue.value == '') {
                         snack(context, "الرجاء ادخال الجنس");
-                      }
-                      else {
+                      } else {
                         controller.step.value++;
                       }
                     }
@@ -218,15 +209,14 @@ class Student extends StatelessWidget {
   }
 }
 
-void snack(BuildContext context, String message){
+void snack(BuildContext context, String message) {
   double width = MediaQuery.of(context).size.width;
   double height = MediaQuery.of(context).size.height;
   Get.showSnackbar(
     GetSnackBar(
       borderRadius: 20,
       margin: EdgeInsets.symmetric(
-          horizontal: width * 0.045,
-          vertical: height * 0.015),
+          horizontal: width * 0.045, vertical: height * 0.015),
       icon: Icon(
         IconlyLight.info_circle,
         color: Colors.white,
