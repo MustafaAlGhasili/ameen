@@ -6,6 +6,8 @@ import 'package:ameen/model/student_tracking.dart';
 import 'package:ameen/model/token.dart';
 import 'package:ameen/model/trip.dart';
 import 'package:ameen/utils/general_helper.dart';
+import 'package:ameen/view/ui/home/info/info_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart'; // Import DateFormat for date formatting
@@ -407,30 +409,37 @@ class DatabaseHelper {
     return students;
   }
 
-  Future<List<StudentModel>> getStudentsParentsByStatus(bool status) async {
-    print("I'm Called ");
-    DatabaseReference studentsRef = _rootRef.child('students');
-    DatabaseReference parentsRef = _rootRef.child('parents');
+  Future<List<StudentModel>?> getStudentsParentsByStatus(bool status) async {
+    try {
+      print("I'm Called ");
 
-    final parentSnapshot =
-        await parentsRef.orderByChild('isEnabled').equalTo(status).get();
-    final parentList = parentSnapshot.children
-        .map((child) => ParentModel.fromSnapshot(child))
-        .toList();
+      DatabaseReference studentsRef = _rootRef.child('students');
+      DatabaseReference parentsRef = _rootRef.child('parents');
 
-    final studentSnapshot = await studentsRef.orderByChild('parentId').get();
+      final parentSnapshot =
+          await parentsRef.orderByChild('isEnabled').equalTo(status).get();
+      final parentList = parentSnapshot.children
+          .map((child) => ParentModel.fromSnapshot(child))
+          .toList();
 
-    final List<StudentModel> students = studentSnapshot.children
-        .map((studentChild) => StudentModel.fromSnapshot(studentChild))
-        .where((student) =>
-            parentList.any((parent) => parent.id == student.parentId))
-        .toList();
+      final studentSnapshot = await studentsRef.orderByChild('parentId').get();
 
-    students.forEach((student) {
-      print('Student ID: ${student.id}, Parent ID: ${student.parentId}');
-    });
 
-    return students;
+      final List<StudentModel> students = studentSnapshot.children
+          .map((studentChild) => StudentModel.fromSnapshot(studentChild))
+          .where((student) =>
+              parentList.any((parent) => parent.id == student.parentId))
+          .toList();
+
+      students.forEach((student) {
+        print('Student ID: ${student.id}, Parent ID: ${student.parentId}');
+      });
+
+      return students;
+    } catch (e) {
+      print("error1122 = $e");
+      return null;
+    }
   }
 
   Future<DriverLocationModel?> getDriverLocation() async {
