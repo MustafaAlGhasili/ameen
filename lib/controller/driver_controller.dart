@@ -17,6 +17,8 @@ class DriverController extends GetxController {
   late List<AbsenceModel> absenceList;
   late List<String> absenceIdsList = [];
   final _databaseHelper = DatabaseHelper();
+  bool studentsEmpty  = false;
+  bool endWorkUpdate = false;
 
   late var currentTrip;
   late String? tripId;
