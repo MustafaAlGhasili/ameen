@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:ameen/model/location.dart';
+import 'package:ameen/model/student.dart';
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
 import 'package:ameen/utils/constant.dart';
 import 'package:ameen/utils/map_helper.dart';
+import 'package:ameen/view/ui/home/info/info_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +28,7 @@ class _TrackStudentMapState extends State<TrackStudentMap> {
   List<LatLng> polylinePoints = [];
   Uint8List? busMarker;
   BitmapDescriptor? busMarker2;
+  StudentModel? studentModel;
   late Completer<GoogleMapController> _mapController = Completer();
   final _databaseHelper = DatabaseHelper();
 
@@ -40,6 +43,7 @@ class _TrackStudentMapState extends State<TrackStudentMap> {
   Future<void> fetchStudentLocation() async {
     try {
       final student = await LocalStorageService.getStudent();
+      studentModel = student;
       if (student != null) {
         setState(() {
           point1 = LatLng(student.latitude ?? 0, student.longitude ?? 0);
@@ -55,7 +59,7 @@ class _TrackStudentMapState extends State<TrackStudentMap> {
 
   void getLocation() {
     DatabaseReference databaseReference =
-        FirebaseDatabase.instance.ref().child('tracking').child('driverId');
+        FirebaseDatabase.instance.ref().child('tracking').child(studentModel!.busId!);
 
     databaseReference.onValue.listen((event) {
       DataSnapshot dataSnapshot = event.snapshot;

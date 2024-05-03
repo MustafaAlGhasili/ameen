@@ -120,7 +120,7 @@ class DatabaseHelper {
       print("Is being save");
       print("Driver Id:${driverLocationModel.driverId}");
       DatabaseReference newModelRef =
-          _rootRef.child(refName).child(driverLocationModel.driverId);
+          _rootRef.child(refName).child(driverLocationModel.busId);
       await newModelRef.set(driverLocationModel.toMap());
     } catch (error) {
       print('Error saving ${driverLocationModel.toString()}: $error');
@@ -291,7 +291,9 @@ class DatabaseHelper {
       String? tripId = currentTrip?.id;
       print("make trip: $tripId");
       DatabaseReference tripRef = _rootRef.child('trips').child(tripId!);
-      await tripRef.update({'status': status});
+      await tripRef.update(
+          {'status': status}
+      );
       print("tripRef $tripRef");
       print('changeTripStatus in Trip $tripId status: $status');
     } catch (error) {

@@ -46,9 +46,8 @@ class _UploadImageState extends State<UploadImage> {
 
   void _showImageOptionsDialog(BuildContext context) async {
     final cameraStatus = await Permission.camera.request();
-    final storageStatus = await Permission.storage.request();
 
-    if (cameraStatus.isGranted && storageStatus.isGranted) {
+    if (cameraStatus.isGranted ) {
       await showDialog(
         context: context,
         builder: (context) {
