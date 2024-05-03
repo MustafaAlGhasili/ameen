@@ -20,6 +20,8 @@ import '../utils/DatabaseHelper.dart';
 
 class SignController extends GetxController {
   RxBool visibility = false.obs;
+  bool isLocationPicked = false;
+
 
   final parentFName = TextEditingController();
   final address = TextEditingController();
@@ -135,6 +137,7 @@ class SignController extends GetxController {
         update();
         latitude.value = result.latLng.latitude;
         longitude.value = result.latLng.longitude;
+        isLocationPicked = true;
       } else {
         print("Location picking canceled");
       }

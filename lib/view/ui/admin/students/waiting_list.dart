@@ -29,12 +29,13 @@ class WaitingList extends StatelessWidget {
             final student = snapshot.data;
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
-            } else if ( student!.isEmpty) {
+            } else if (student!.isEmpty) {
               return const Center(
                 child: Text("No student found"),
               );
             } else if (snapshot.hasData) {
               return ListView.builder(
+                shrinkWrap: true,
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, i) {
                   return ButtonModel(

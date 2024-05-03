@@ -1,6 +1,7 @@
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
 import '../../../../controller/camera_controller.dart';
 import '../../widget/button_model.dart';
 import '../../widget/text_field.dart';
@@ -25,77 +26,52 @@ class School extends StatelessWidget {
           child: Column(
             children: [
               Text("معلومات المدرسة", style: TextStyle(fontSize: width * 0.07)),
-              Container(
-                padding: EdgeInsets.only(right: 6, top: height * 0.02),
-                width: width,
-                child: Text(
-                  "اختر مدرستك",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: width * 0.045),
-                ),
-              ),
               SizedBox(
-                width: width * 0.9,
-                height: height * 0.07,
-                child: FittedBox(
-                  fit: BoxFit.fill,
-                  child: DropdownMenu(
-                    inputDecorationTheme: InputDecorationTheme(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-                    ),
-                    menuStyle: const MenuStyle(),
-                    width: width * 0.9,
-                    dropdownMenuEntries: controller.schools.keys.map((school) {
-                      return DropdownMenuEntry(
-                        label: school,
-                        value: controller.schools[school],
-                      );
-                    }).toList(),
-                    onSelected: (value) {
-                      controller.schoolValue.value = value!;
-                      print(
-                          'Selected: $value'); // Replace with your actual action
-                    },
+                height: height * 0.03,
+              ),
+              DropdownButtonFormField(
+                hint: const Text("اختر مدرستك"),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(13),
                   ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.only(right: 6, top: height * 0.02),
-                width: width,
-                child: Text(
-                  "اختر صفك",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: width * 0.045),
-                ),
+                borderRadius: BorderRadius.circular(5),
+                items: controller.schools.keys.map((school) {
+                  return DropdownMenuItem(
+                    alignment: Alignment.centerRight,
+                    value: controller.schools[school],
+                    child: Text(school),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  controller.schoolValue.value = value!;
+                },
+                validator: (val) => validator(val),
+
               ),
               SizedBox(
-                width: width * 0.9,
-                height: height * 0.07,
-                child: FittedBox(
-                  fit: BoxFit.fill,
-                  child: DropdownMenu(
-                    inputDecorationTheme: InputDecorationTheme(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-                    ),
-                    menuStyle: const MenuStyle(),
-                    width: width * 0.9,
-                    dropdownMenuEntries: controller.grades.keys.map((grade) {
-                      return DropdownMenuEntry(
-                        label: grade,
-                        value: controller.grades[grade],
-                      );
-                    }).toList(),
-                    onSelected: (value) {
-                      controller.gradeValue.value = value!;
-                      print(
-                          'Selected: $value'); // Replace with your actual action
-                    },
+                height: height * 0.05,
+              ),
+              DropdownButtonFormField(
+                hint: const Text("اختر صفك"),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(13),
                   ),
                 ),
+                borderRadius: BorderRadius.circular(5),
+                items: controller.grades.keys.map((grade) {
+                  return DropdownMenuItem(
+                    alignment: Alignment.centerRight,
+                    value: controller.grades[grade],
+                    child: Text(grade, style: const TextStyle(height: 0.5)),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  controller.gradeValue.value = value!;
+                },
+                validator: (val) => validator(val),
               ),
               SizedBox(
                 height: height * 0.04,
@@ -123,7 +99,9 @@ class School extends StatelessWidget {
                   } else {
                     return ButtonModel(
                       onTap: () {
+
                         controller.getLocation(context);
+
                       },
                       icon: Icons.map,
                       width: width * 0.9,
@@ -152,8 +130,28 @@ class School extends StatelessWidget {
               ButtonModel(
                 onTap: () {
                   if (formKey.currentState!.validate()) {
-                    Get.put(CamController());
-                    controller.step.value++;
+                    if (controller.isLocationPicked == true) {
+                      Get.put(CamController());
+                      controller.step.value++;
+                    } else {
+                      Get.showSnackbar(
+                        GetSnackBar(
+                          borderRadius: 20,
+                          margin: EdgeInsets.symmetric(
+                              horizontal: width * 0.045,
+                              vertical: height * 0.015),
+                          icon: Icon(
+                            IconlyLight.info_circle,
+                            color: Colors.white,
+                            size: width * 0.065,
+                          ),
+                          title: "خطأ",
+                          message: "الرجاء ادخال الموقع",
+                          duration: const Duration(seconds: 2),
+                          animationDuration: const Duration(milliseconds: 600),
+                        ),
+                      );
+                    }
                   }
                   // Get.to(() => const StudentInfo());
                 },
@@ -174,6 +172,13 @@ class School extends StatelessWidget {
       ),
     );
   }
+}
+
+String? validator(int? value) {
+  if (value == null) {
+    return '*required';
+  }
+  return null;
 }
 //
 // String? validateDropdown() {
