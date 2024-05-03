@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:ameen/model/absence.dart';
 import 'package:ameen/services/LocalStorageService.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
-import 'package:ameen/view/ui/test/test_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -21,6 +20,7 @@ class DriverController extends GetxController {
 
   late var currentTrip;
   late String? tripId;
+  bool isWorking = false;
 
   @override
   void onInit() async {
@@ -41,7 +41,7 @@ class DriverController extends GetxController {
       await Future.delayed(const Duration(milliseconds: 200));
 
       print("Checking current trip");
-
+      isWorking = true;
       if (currentTrip != null &&
           isSameDay(currentTrip.createdAt!, DateTime.now()) &&
           currentTrip.type == type) {
@@ -101,6 +101,7 @@ class DriverController extends GetxController {
       await _databaseHelper.saveTrip(trip);
       tripId = trip.id!;
       await LocalStorageService.saveTrip(trip);
+      currentTrip = trip;
       Get.to(() => Trip(
             tripType: type,
           ));

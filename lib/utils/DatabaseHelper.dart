@@ -270,6 +270,7 @@ class DatabaseHelper {
   Future<void> makeManualAttendance(
       String tripId, String studentId, int status) async {
     try {
+      print("makeManualAttendance trip: $tripId");
       DatabaseReference tripRef = _rootRef
           .child('trips')
           .child(tripId)
@@ -277,10 +278,24 @@ class DatabaseHelper {
           .child(studentId);
 
       await tripRef.update({'status': status});
-
-      print('Student with ID: $studentId in Trip $tripId');
+      print("tripRef $tripRef");
+      print('Student with ID: $studentId in Trip $tripId status: $status');
     } catch (error) {
       print('Error updating parent isEnabled status: $error');
+    }
+  }
+
+  Future<void> changeTripStatus(int status) async {
+    try {
+      final currentTrip = await LocalStorageService.getTrip();
+      String? tripId = currentTrip?.id;
+      print("make trip: $tripId");
+      DatabaseReference tripRef = _rootRef.child('trips').child(tripId!);
+      await tripRef.update({'status': status});
+      print("tripRef $tripRef");
+      print('changeTripStatus in Trip $tripId status: $status');
+    } catch (error) {
+      print('Error changeTripStatus status: $error');
     }
   }
 

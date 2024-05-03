@@ -119,12 +119,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
     _databaseHelper.saveDriverLocation(driverLocation, "tracking");
 
-    setState(() {
-      if (data != null) {
-        lastLocation = locationDto;
-      }
-      // logStr = log;
-    });
+    if (mounted) {
+      setState(() {
+        if (data != null) {
+          lastLocation = locationDto;
+        }
+      });
+    }
   }
 
   Future<void> _updateNotificationText(LocationDto data) async {
@@ -419,7 +420,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                       );
                       final databaseHelper = DatabaseHelper();
                       await databaseHelper.makeManualAttendance(
-                          widget.trip.id!, widget.student.id, 1);
+                          widget.trip.id!, widget.student.id, 4);
                       Get.back();
                       navigator?.pop();
                       Get.back();

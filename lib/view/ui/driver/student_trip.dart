@@ -14,6 +14,7 @@ import '../../../controller/driver_controller.dart';
 import '../../../model/absence.dart';
 import '../../../model/student.dart';
 import '../../../model/trip.dart';
+import '../../../utils/DatabaseHelper.dart';
 import '../../../utils/constant.dart';
 import '../map/navigate_map.dart';
 import '../widget/button_model.dart';
@@ -224,38 +225,61 @@ class _TripState extends State<Trip> {
                           final List<StudentModel> students = snapshot.data!;
                           if (students.isEmpty) {
                             return Center(
-                              child: ButtonModel(
-                                onTap: () async {
-                                  if (widget.tripType == 1) {
-                                    await launchUrl(Uri.parse(
-                                        'google.navigation:q=24.7851092,46.5693527&key=${Constants.GOOGLE_MAPS_API_KEY}'));
-                                  } else {
-                                    Get.dialog(
-                                      CustomDialog(
-                                        buttonText: "انهاء العمل",
-                                        content: "الرجاء التحقق من المركبة",
-                                        buttonOnTap: () async {
-                                          await LocalStorageService.saveTrip(
-                                              null);
-                                          Get.back();
-                                        },
-                                      ),
-                                    );
-                                  }
-                                },
-                                hMargin: width * 0.05,
-                                style: const TextStyle(color: Colors.white),
-                                rowMainAxisAlignment: MainAxisAlignment.center,
-                                content: buttonTitle,
-                                backColor: PRIMARY_COLOR,
-                                height: height * 0.07,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ButtonModel(
+                                    onTap: () async {
+                                      Get.dialog(
+                                        CustomDialog(
+                                          buttonText: "انهاء العمل",
+                                          content: "الرجاء التحقق من المركبة",
+                                          buttonOnTap: () async {
+                                            final databaseHelper =
+                                                DatabaseHelper();
+                                            await databaseHelper
+                                                .changeTripStatus(1);
+                                            controller.isWorking = false;
+                                            await LocalStorageService.saveTrip(
+                                                null);
+                                            Get.back();
+                                            Get.offAll(
+                                                () => const DriverHome());
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    hMargin: width * 0.05,
+                                    style: const TextStyle(color: Colors.white),
+                                    rowMainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    content: "انهاء العمل",
+                                    backColor: PRIMARY_COLOR,
+                                    height: height * 0.07,
+                                  ),
+                                  SizedBox(height: height * 0.02),
+                                  if (widget.tripType == 1)
+                                    ButtonModel(
+                                      onTap: () async {
+                                        await launchUrl(Uri.parse(
+                                            'google.navigation:q=24.7851092,46.5693527&key=${Constants.GOOGLE_MAPS_API_KEY}'));
+                                      },
+                                      hMargin: width * 0.05,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      rowMainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      content: "التوجه إلى المدرسة ",
+                                      backColor: PRIMARY_COLOR,
+                                      height: height * 0.07,
+                                    ),
+                                ],
                               ),
                             );
                           } else {
                             // Render your list of students here
                             return ListView.builder(
                               physics: const BouncingScrollPhysics(),
-
                               itemCount: students.length,
                               itemBuilder: (context, index) {
                                 final StudentModel student = students[index];
