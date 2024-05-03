@@ -50,6 +50,7 @@ class _TripState extends State<Trip> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
     String title = widget.tripType == 2
         ? "رحلة المساء"
         : "رحلة الصباح"; // Set the title based on tripType
@@ -119,74 +120,200 @@ class _TripState extends State<Trip> {
                         } else if (snapshot.hasData) {
                           final List<StudentModel> students = snapshot.data!;
                           if (students.isEmpty) {
+                            if (controller.endWorkUpdate) {
+                              controller.studentsEmpty = true;
+                            }
                             return const Center(
                               child: Text('No students found'),
                             );
                           } else {
+                            controller.endWorkUpdate = true;
+                            // if (students.isEmpty) {
+                            // }
                             // Render your list of students here
-                            return ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: students.length,
-                              itemBuilder: (context, index) {
-                                final StudentModel student = students[index];
-
-                                return Container(
-                                  margin: EdgeInsets.symmetric(
+                            if (widget.tripType == 2) {
+                              return ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: students.length,
+                                itemBuilder: (context, index) {
+                                  final StudentModel student = students[index];
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(
                                       horizontal: width * 0.05,
-                                      vertical: height * 0.015),
-                                  decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  height: height * 0.07,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 8.0),
-                                            child: CircleAvatar(
-                                              radius: 25,
-                                              backgroundColor: Colors.white,
-                                              child: CachedNetworkImage(
-                                                imageUrl: student.imgUrl ?? "",
-                                                placeholder: (context, url) =>
-                                                    const CircularProgressIndicator(),
-                                                errorWidget:
-                                                    (context, url, error) =>
+                                      vertical: height * 0.015,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.yellow,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    height: height * 0.07,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8.0),
+                                                child: CircleAvatar(
+                                                  radius: 25,
+                                                  backgroundColor: Colors.white,
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:
+                                                        student.imgUrl ?? " ",
+                                                    placeholder: (context,
+                                                            url) =>
+                                                        const CircularProgressIndicator(),
+                                                    errorWidget: (context, url,
+                                                            error) =>
                                                         const Image(
                                                             image: AssetImage(
                                                                 "img/st1.png")),
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
+                                                    imageBuilder: (context,
+                                                            imageProvider) =>
                                                         Container(
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        image: DecorationImage(
+                                                          image: imageProvider,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: width * 0.02),
+                                              Expanded(
+                                                child: Text(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  '${student.fName} ${student.lName}',
+                                                  style: TextStyle(
+                                                      fontSize: width * 0.045),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        FutureBuilder<double>(
+                                          future: _calculateDistance(
+                                              student.latitude!,
+                                              student.longitude!),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              // Handle loading state
+                                              return const CircularProgressIndicator();
+                                            } else if (snapshot.hasData) {
+                                              // Distance calculation successful
+                                              double distanceInKm =
+                                                  snapshot.data!;
+                                              return Text(
+                                                '${distanceInKm.toStringAsFixed(2)} كم',
+                                                style: TextStyle(
+                                                    fontSize: width * 0.035),
+                                              );
+                                            } else {
+                                              // Handle error state
+                                              return Text(
+                                                'Error calculating distance',
+                                                style: TextStyle(
+                                                    fontSize: width * 0.02),
+                                              );
+                                            }
+                                          },
+                                        ),
+                                        ButtonModel(
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                              builder: (context) =>
+                                                  NavigationScreen(
+                                                student: student,
+                                                trip: controller.currentTrip,
+                                              ),
+                                            ));
+                                          },
+                                          rowMainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          hMargin: width * 0.03,
+                                          height: height * 0.03,
+                                          width: width * 0.15,
+                                          content: 'بدء',
+                                          backColor: Colors.white,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            } else {
+                              return ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: students.length,
+                                itemBuilder: (context, index) {
+                                  final StudentModel student = students[index];
+
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: width * 0.05,
+                                        vertical: height * 0.015),
+                                    decoration: BoxDecoration(
+                                      color: Colors.yellow,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    height: height * 0.07,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
+                                              child: CircleAvatar(
+                                                radius: 25,
+                                                backgroundColor: Colors.white,
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      student.imgUrl ?? "",
+                                                  placeholder: (context, url) =>
+                                                      const CircularProgressIndicator(),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Image(
+                                                          image: AssetImage(
+                                                              "img/st1.png")),
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(width: width * 0.02),
-                                          Text(
-                                            '${student.fName} ${student.lName}',
-                                            style: TextStyle(
-                                                fontSize: width * 0.045),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
+                                            SizedBox(width: width * 0.02),
+                                            Text(
+                                              '${student.fName} ${student.lName}',
+                                              style: TextStyle(
+                                                  fontSize: width * 0.045),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            }
                           }
                         } else if (snapshot.hasError) {
                           return Center(
@@ -228,37 +355,41 @@ class _TripState extends State<Trip> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  ButtonModel(
-                                    onTap: () async {
-                                      Get.dialog(
-                                        CustomDialog(
-                                          buttonText: "انهاء العمل",
-                                          content: "الرجاء التحقق من المركبة",
-                                          buttonOnTap: () async {
-                                            final databaseHelper =
-                                                DatabaseHelper();
-                                            await databaseHelper
-                                                .changeTripStatus(1);
-                                            controller.isWorking = false;
-                                            await LocalStorageService.saveTrip(
-                                                null);
-                                            Get.back();
-                                            Get.offAll(
-                                                () => const DriverHome());
-                                          },
-                                        ),
-                                      );
-                                    },
-                                    hMargin: width * 0.05,
-                                    style: const TextStyle(color: Colors.white),
-                                    rowMainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                    content: "انهاء العمل",
-                                    backColor: PRIMARY_COLOR,
-                                    height: height * 0.07,
-                                  ),
+                                  if (students.isEmpty &&
+                                      controller.studentsEmpty)
+                                    ButtonModel(
+                                      onTap: () async {
+                                        Get.dialog(
+                                          CustomDialog(
+                                            buttonText: "إنهاء العمل",
+                                            content: "الرجاء التحقق من المركبة",
+                                            buttonOnTap: () async {
+                                              final databaseHelper =
+                                                  DatabaseHelper();
+                                              await databaseHelper
+                                                  .changeTripStatus(1);
+                                              controller.isWorking = false;
+                                              await LocalStorageService
+                                                  .saveTrip(null);
+                                              Get.back();
+                                              Get.offAll(
+                                                  () => const DriverHome());
+                                            },
+                                          ),
+                                        );
+                                      },
+                                      hMargin: width * 0.05,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      rowMainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      content: "انهاء العمل",
+                                      backColor: PRIMARY_COLOR,
+                                      height: height * 0.07,
+                                    ),
                                   SizedBox(height: height * 0.02),
-                                  if (widget.tripType == 1)
+                                  if (students.isEmpty &&
+                                      !controller.studentsEmpty)
                                     ButtonModel(
                                       onTap: () async {
                                         await launchUrl(Uri.parse(
@@ -278,7 +409,73 @@ class _TripState extends State<Trip> {
                             );
                           } else {
                             // Render your list of students here
-                            return ListView.builder(
+                            if(widget.tripType == 2){
+                              return ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: students.length,
+                                itemBuilder: (context, index) {
+                                  final StudentModel student = students[index];
+
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: width * 0.05,
+                                        vertical: height * 0.015),
+                                    decoration: BoxDecoration(
+                                      color: PRIMARY_COLOR,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    height: height * 0.07,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
+                                              child: CircleAvatar(
+                                                radius: 25,
+                                                backgroundColor: Colors.white,
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                  student.imgUrl ?? "",
+                                                  placeholder: (context, url) =>
+                                                  const CircularProgressIndicator(),
+                                                  errorWidget: (context, url,
+                                                      error) =>
+                                                  const Image(
+                                                      image: AssetImage(
+                                                          "img/st1.png")),
+                                                  imageBuilder: (context,
+                                                      imageProvider) =>
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          image: DecorationImage(
+                                                            image: imageProvider,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: width * 0.02),
+                                            Text(
+                                              '${student.fName} ${student.lName}',
+                                              style: TextStyle(
+                                                  fontSize: width * 0.045, color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            }else {
+                              return ListView.builder(
                               physics: const BouncingScrollPhysics(),
                               itemCount: students.length,
                               itemBuilder: (context, index) {
@@ -395,6 +592,7 @@ class _TripState extends State<Trip> {
                                 );
                               },
                             );
+                            }
                           }
                         } else if (snapshot.hasError) {
                           return Center(

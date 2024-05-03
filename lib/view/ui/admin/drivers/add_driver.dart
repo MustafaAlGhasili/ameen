@@ -342,7 +342,8 @@ class _AddDriverState extends State<AddDriver> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: _isUploaded ? null : () => _saveDriver(),
+                      onPressed:
+                          _isUploaded ? null : () => _saveDriver(context),
                       // Disable button when loading
                       style: ElevatedButton.styleFrom(
                         primary: PRIMARY_COLOR,
@@ -388,25 +389,46 @@ class _AddDriverState extends State<AddDriver> {
     );
   }
 
-  Future<void> _saveDriver() async {
+  Future<void> _saveDriver(BuildContext context) async {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     // Validate form
     if (key.currentState!.validate()) {
-      setState(() {
-        _isLoading = true; // Set loading state to true
-      });
+      if (controller.driverBlood.value.isEmpty) {
+        Get.showSnackbar(
+          GetSnackBar(
+            borderRadius: 20,
+            margin: EdgeInsets.symmetric(
+                horizontal: width * 0.045, vertical: height * 0.015),
+            icon: Icon(
+              IconlyLight.info_circle,
+              color: Colors.white,
+              size: width * 0.065,
+            ),
+            title: "خطأ",
+            message: "الرجاء ادخال فصيله الدم",
+            duration: const Duration(seconds: 2),
+            animationDuration: const Duration(milliseconds: 600),
+          ),
+        );
+      } else {
+        setState(() {
+          _isLoading = true; // Set loading state to true
+        });
 
-      // Call saveDriver method from controller
-      final result = await controller.saveDriver();
-      print("result is $result");
+        // Call saveDriver method from controller
+        final result = await controller.saveDriver();
+        print("result is $result");
 
-      setState(() {
-        _isLoading = false; // Set loading state to false
-      });
+        setState(() {
+          _isLoading = false; // Set loading state to false
+        });
 
-      // Navigate back
-      Get.back();
-      controller.clearData();
-      Get.back();
+        // Navigate back
+        Get.back();
+        controller.clearData();
+        Get.back();
+      }
     } else {
       print("error");
     }

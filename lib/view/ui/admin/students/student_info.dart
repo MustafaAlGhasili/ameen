@@ -1,6 +1,7 @@
 import 'package:ameen/model/parent.dart';
 import 'package:ameen/model/student.dart';
 import 'package:ameen/utils/DatabaseHelper.dart';
+import 'package:ameen/view/ui/admin/home.dart';
 import 'package:ameen/view/ui/widget/custom_dialog.dart';
 import 'package:ameen/view/ui/widget/custom_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -118,9 +119,11 @@ class StudentDetails extends StatelessWidget {
                           return const Center(
                             child: CircularProgressIndicator(),
                           );
-                        }else if(snapshot.hasError){
-                          return Center(child: Text("${snapshot.error}"),);
-                        }else if(snapshot.hasData){
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text("${snapshot.error}"),
+                          );
+                        } else if (snapshot.hasData) {
                           return CustomContainer(text: parent!.phone);
                         }
                         return const SizedBox();
@@ -147,7 +150,7 @@ class StudentDetails extends StatelessWidget {
                                   dbHelper.deleteById(student.id, "students");
                                   dbHelper.deleteById(
                                       student.parentId, "parents");
-                                  Get.off(() => const StudentsList());
+                                  Get.offAll(const AdminHome());
                                   Get.showSnackbar(
                                     GetSnackBar(
                                       borderRadius: 20,
@@ -165,9 +168,6 @@ class StudentDetails extends StatelessWidget {
                                           const Duration(milliseconds: 600),
                                     ),
                                   );
-                                },
-                                onClose: () {
-                                  Get.back();
                                 },
                                 buttonText: "نعم",
                                 content: "هل متأكد من ازاله الطالب؟"));

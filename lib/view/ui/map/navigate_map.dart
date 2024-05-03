@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:isolate';
 import 'dart:math' show cos, sqrt, asin;
 import 'dart:ui';
-
 import 'package:ameen/model/trip.dart';
 import 'package:ameen/utils/constant.dart';
 import 'package:background_locator_2/background_locator.dart';
@@ -11,6 +10,7 @@ import 'package:background_locator_2/settings/android_settings.dart';
 import 'package:background_locator_2/settings/ios_settings.dart';
 import 'package:background_locator_2/settings/locator_settings.dart'
     as settings;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
@@ -283,8 +283,25 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                     CircleAvatar(
                                       backgroundColor: Colors.white,
                                       radius: width * 0.08,
-                                      child: const Image(
-                                        image: AssetImage('img/img.png'),
+                                      child: CachedNetworkImage(
+                                        imageUrl: widget.student.imgUrl ?? " ",
+                                        placeholder: (context, url) =>
+                                            const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            const Image(
+                                                image:
+                                                    AssetImage("img/st1.png")),
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     SizedBox(width: width * 0.04),
@@ -341,8 +358,14 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                         onPressed: () {
                                           problemDialog(context);
                                         },
-                                        icon: const Icon(Icons.warning),
-                                        label: const Text('تواجه مشكلة ؟'),
+                                        icon: const Icon(
+                                          Icons.warning,
+                                          color: Colors.white,
+                                        ),
+                                        label: const Text(
+                                          'تواجه مشكلة ؟',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ),
                                   ),

@@ -1,5 +1,6 @@
 import 'package:ameen/controller/sign_controller.dart';
 import 'package:ameen/view/ui/sign/sign_up/waiting_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -67,16 +68,21 @@ class PrivacyTerms extends StatelessWidget {
               () => ElevatedButton(
                 onPressed: controller.isAccepted.value
                     ? () async {
-                        final result = await controller.registerParent();
+                        try {
+                          final result = await controller.registerParent();
 
-                        print("result is $result");
-                        // if (result) {
-                        controller.createUserWithEmailAndPassword(
-                            controller.parentEmail.text,
-                            controller.parenPassword.text);
-                        Get.offAll(() => WaitingApprovalScreen());
-                        controller.clear();
-                        // }
+                          print("result is $result");
+                          // if (result) {
+                          controller.createUserWithEmailAndPassword(
+                              controller.parentEmail.text,
+                              controller.parenPassword.text);
+                          if (controller.canGo.value) {
+                            Get.offAll(() => const WaitingApprovalScreen());
+                            controller.clear();
+                          }
+                        } on FirebaseException catch (e) {
+                          print("errorrrroo $e");
+                        }
                       }
                     : null,
                 // Set onPressed to null if checkbox is not checked
