@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:isolate';
 import 'dart:math' show cos, sqrt, asin;
 import 'dart:ui';
+
 import 'package:ameen/model/trip.dart';
 import 'package:ameen/utils/constant.dart';
 import 'package:background_locator_2/background_locator.dart';
@@ -443,7 +444,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                       );
                       final databaseHelper = DatabaseHelper();
                       await databaseHelper.makeManualAttendance(
-                          widget.trip.id!, widget.student.id, 4);
+                          widget.trip.id!, widget.student.id, 4, false);
                       Get.back();
                       navigator?.pop();
                       Get.back();
@@ -482,7 +483,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                       );
                       final databaseHelper = DatabaseHelper();
                       await databaseHelper.makeManualAttendance(
-                          widget.trip.id!, widget.student.id, 1);
+                          widget.trip.id!, widget.student.id, 0, true);
                       Get.back();
                       navigator?.pop();
                       Get.back();

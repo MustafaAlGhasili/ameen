@@ -268,7 +268,7 @@ class DatabaseHelper {
   }
 
   Future<void> makeManualAttendance(
-      String tripId, String studentId, int status) async {
+      String tripId, String studentId,int status, bool isDynamic,) async {
     try {
       print("makeManualAttendance trip: $tripId");
       DatabaseReference tripRef = _rootRef
@@ -277,9 +277,42 @@ class DatabaseHelper {
           .child("studentTripStatus")
           .child(studentId);
 
-      await tripRef.update({'status': status});
-      print("tripRef $tripRef");
-      print('Student with ID: $studentId in Trip $tripId status: $status');
+      if(!isDynamic){
+        await tripRef.update({'status': status});
+        print("tripRef $tripRef");
+        print('Student with ID: $studentId in Trip $tripId status: $status');
+        return;
+      }
+      // Retrieve current status with null-safety check
+      DataSnapshot snapshot = await tripRef.get();
+      if (snapshot.exists) {
+
+        Object? data = snapshot.value;
+        if(isDynamic)
+        print("Data is: $data");
+        if (data != null && data is Map) {
+          String id = data['id'];
+          int status = data['status'].toInt();
+          print("Hi is: $status");
+
+          // Get current status value with null-safety check
+          int newStatus = status + 1;
+
+          // Update the status in the database
+          await tripRef.update({'status': newStatus});
+
+          print(
+              'Student with ID: $studentId in Trip $tripId. New status: $newStatus');
+        } else {
+          // Handle the case where the student data doesn't exist
+          print(
+              'Error: Student data not found for trip $tripId and student $studentId');
+        }
+      } else {
+        // Handle the case where the student data doesn't exist
+        print(
+            'Error: Student data not found for trip $tripId and student $studentId');
+      }
     } catch (error) {
       print('Error updating parent isEnabled status: $error');
     }
