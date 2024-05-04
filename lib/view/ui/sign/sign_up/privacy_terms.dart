@@ -72,14 +72,9 @@ class PrivacyTerms extends StatelessWidget {
                           final result = await controller.registerParent();
 
                           print("result is $result");
-                          // if (result) {
-                          controller.createUserWithEmailAndPassword(
-                              controller.parentEmail.text,
-                              controller.parenPassword.text);
-                          if (controller.canGo.value) {
-                            Get.offAll(() => const WaitingApprovalScreen());
-                            controller.clear();
-                          }
+
+                          Get.offAll(() => const WaitingApprovalScreen());
+                          controller.clear();
                         } on FirebaseException catch (e) {
                           print("errorrrroo $e");
                         }

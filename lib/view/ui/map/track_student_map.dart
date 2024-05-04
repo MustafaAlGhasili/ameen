@@ -37,18 +37,21 @@ class _TrackStudentMapState extends State<TrackStudentMap> {
     super.initState();
     fetchStudentLocation();
     loadMarkers();
-    getLocation();
   }
 
   Future<void> fetchStudentLocation() async {
     try {
       final student = await LocalStorageService.getStudent();
       studentModel = student;
+      print("studentModel  in Map $studentModel");
       if (student != null) {
+
         setState(() {
           point1 = LatLng(student.latitude ?? 0, student.longitude ?? 0);
           studentName = "${student.fName} ${student.lName}";
         });
+        getLocation();
+
       } else {
         print("Student data not found in local storage");
       }
