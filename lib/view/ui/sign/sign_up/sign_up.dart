@@ -121,9 +121,9 @@ class SignUp extends StatelessWidget {
                             ),
                           ],
                           onStepReached: (index) {
-                            // if(controller.step.value > index){
+                            if(controller.step.value > index){
                             controller.step.value = index;
-                            // }
+                            }
                           },
                         ),
                       ),

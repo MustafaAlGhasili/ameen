@@ -4,7 +4,7 @@ import 'package:Amin/model/driver.dart';
 import 'package:Amin/model/student.dart';
 import 'package:Amin/utils/DatabaseHelper.dart';
 import 'package:Amin/utils/constants.dart';
-import 'package:Amin/view/ui/admin/home.dart';
+import 'package:Amin/view/ui/admin/admin_home.dart';
 import 'package:Amin/view/ui/admin/students/waiting_list.dart';
 import 'package:Amin/view/ui/widget/custom_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';

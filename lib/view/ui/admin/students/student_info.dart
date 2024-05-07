@@ -1,7 +1,7 @@
 import 'package:Amin/model/parent.dart';
 import 'package:Amin/model/student.dart';
 import 'package:Amin/utils/DatabaseHelper.dart';
-import 'package:Amin/view/ui/admin/home.dart';
+import 'package:Amin/view/ui/admin/admin_home.dart';
 import 'package:Amin/view/ui/widget/custom_dialog.dart';
 import 'package:Amin/view/ui/widget/custom_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
