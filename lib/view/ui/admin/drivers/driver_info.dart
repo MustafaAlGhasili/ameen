@@ -52,7 +52,7 @@ class DriverInfo extends StatelessWidget {
                     placeholder: (context, url) =>
                     const CircularProgressIndicator(),
                     errorWidget: (context, url, error) =>
-                    const Image(image: AssetImage("img/st1.png")),
+                    const Image(image: AssetImage("img/driver.png")),
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,

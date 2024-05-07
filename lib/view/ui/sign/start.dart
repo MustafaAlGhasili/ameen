@@ -53,6 +53,7 @@ class _StartState extends State<Start> {
               SizedBox(
                 height: height * 0.5,
                 child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: 3,
                   itemBuilder: (context, i) {
                     return Padding(

@@ -267,7 +267,6 @@ class _TripState extends State<Trip> {
                                       children: [
                                         Row(
                                           children: [
-
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   right: 8.0),
@@ -304,11 +303,24 @@ class _TripState extends State<Trip> {
                                               style: TextStyle(
                                                   fontSize: width * 0.045),
                                             ),
-
-
                                           ],
                                         ),
-
+                                        ButtonModel(
+                                          onTap: () {
+                                            controller.problemDialog(
+                                                context,
+                                                controller.currentTrip.id,
+                                                student.id,
+                                                false);
+                                          },
+                                          rowMainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          hMargin: width * 0.03,
+                                          height: height * 0.03,
+                                          width: width * 0.15,
+                                          content: 'بدء',
+                                          backColor: Colors.white,
+                                        ),
                                       ],
                                     ),
                                   );
@@ -477,10 +489,14 @@ class _TripState extends State<Trip> {
                                         ),
                                         ButtonModel(
                                           onTap: () {
-                                            controller.problemDialog(context, controller.currentTrip.id, student.id, false);
+                                            controller.problemDialog(
+                                                context,
+                                                controller.currentTrip.id,
+                                                student.id,
+                                                false);
                                           },
                                           rowMainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                              MainAxisAlignment.center,
                                           hMargin: width * 0.03,
                                           height: height * 0.03,
                                           width: width * 0.15,

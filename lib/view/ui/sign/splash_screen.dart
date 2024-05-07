@@ -1,11 +1,9 @@
 import 'package:Amin/main.dart';
 import 'package:Amin/services/LocalStorageService.dart';
-import 'package:Amin/utils/constants.dart';
 import 'package:Amin/view/ui/admin/home.dart';
 import 'package:Amin/view/ui/driver/driver_home.dart';
 import 'package:Amin/view/ui/home/home.dart';
 import 'package:Amin/view/ui/sign/start.dart';
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -48,11 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
-      splash: 'img/logo.png',
-      splashIconSize: 150,
-      backgroundColor: PRIMARY_COLOR,
-      nextScreen: FutureBuilder<Widget>(
+    return  FutureBuilder<Widget>(
         future: _nextScreen,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -61,9 +55,6 @@ class _SplashScreenState extends State<SplashScreen> {
             return const SizedBox();
           }
         },
-      ),
-      splashTransition: SplashTransition.fadeTransition,
-      duration: 2000,
-    );
+      );
   }
 }

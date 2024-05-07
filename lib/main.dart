@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:map_location_picker/generated/l10n.dart';
 import 'firebase_options.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
