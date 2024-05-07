@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'dart:math' show cos, sqrt, asin;
 import 'dart:ui';
 
+import 'package:Amin/controller/driver_controller.dart';
 import 'package:Amin/model/trip.dart';
 import 'package:Amin/utils/constant.dart';
 import 'package:background_locator_2/background_locator.dart';
@@ -227,6 +228,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    DriverController driverController = Get.find();
     return Directionality(
       textDirection: TextDirection.rtl, // Set the text direction to RTL
       child: Scaffold(
@@ -357,7 +359,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                               color: Colors.white),
                                         ),
                                         onPressed: () {
-                                          problemDialog(context);
+                                          driverController.problemDialog(
+                                              context,
+                                              widget.trip.id!,
+                                              widget.student.id,
+                                              true);
                                         },
                                         icon: const Icon(
                                           Icons.warning,
@@ -401,119 +407,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
               ),
       ),
     );
-  }
-
-  void problemDialog(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    Get.dialog(Dialog(
-      backgroundColor: Colors.white,
-      child: SizedBox(
-        height: height * 0.3,
-        child: Column(
-          children: [
-            SizedBox(
-              height: height * 0.015,
-            ),
-            Text(
-              "تواجهة مشكلة ؟",
-              style: TextStyle(fontSize: width * 0.05),
-            ),
-            SizedBox(height: height * 0.01),
-            ButtonModel(
-              onTap: () {
-                navigator?.pop();
-                Get.dialog(
-                  CustomDialog(
-                    buttonText: 'هل أنت متأكد؟',
-                    content: 'نعم',
-                    buttonOnTap: () async {
-                      Get.dialog(
-                        const AlertDialog(
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircularProgressIndicator(),
-                              SizedBox(height: 16),
-                              Text('جارٍ التسجيل...'),
-                            ],
-                          ),
-                        ),
-                        barrierDismissible:
-                            false, // Prevent dismissing dialog by tapping outside
-                      );
-                      final databaseHelper = DatabaseHelper();
-                      await databaseHelper.makeManualAttendance(
-                          widget.trip.id!, widget.student.id, 4, false);
-                      Get.back();
-                      navigator?.pop();
-                      Get.back();
-                    },
-                  ),
-                );
-              },
-              hMargin: width * 0.04,
-              height: height * 0.06,
-              content: 'الطالب لم ياتي',
-              rowMainAxisAlignment: MainAxisAlignment.center,
-              backColor: PRIMARY_COLOR,
-              style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-            ),
-            ButtonModel(
-              onTap: () {
-                navigator?.pop();
-                Get.dialog(
-                  CustomDialog(
-                    buttonText: 'هل أنت متأكد؟',
-                    content: 'نعم',
-                    buttonOnTap: () async {
-                      Get.dialog(
-                        const AlertDialog(
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircularProgressIndicator(),
-                              SizedBox(height: 16),
-                              Text('جارٍ تسجيل الحضور...'),
-                            ],
-                          ),
-                        ),
-                        barrierDismissible:
-                            false, // Prevent dismissing dialog by tapping outside
-                      );
-                      final databaseHelper = DatabaseHelper();
-                      await databaseHelper.makeManualAttendance(
-                          widget.trip.id!, widget.student.id, 0, true);
-                      Get.back();
-                      navigator?.pop();
-                      Get.back();
-                    },
-                  ),
-                );
-              },
-              hMargin: width * 0.04,
-              vMargin: height * 0.015,
-              height: height * 0.06,
-              content: 'تسجيل الحضور يدويا',
-              rowMainAxisAlignment: MainAxisAlignment.center,
-              backColor: PRIMARY_COLOR,
-              style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-            ),
-            ButtonModel(
-              onTap: () {
-                launchUrl(Uri(scheme: 'tel', path: '911'));
-              },
-              hMargin: width * 0.04,
-              height: height * 0.06,
-              content: 'الاتصال بالمشرف',
-              rowMainAxisAlignment: MainAxisAlignment.center,
-              backColor: PRIMARY_COLOR,
-              style: TextStyle(color: Colors.white, fontSize: width * 0.05),
-            )
-          ],
-        ),
-      ),
-    ));
   }
 
   Future<void> getNavigation() async {

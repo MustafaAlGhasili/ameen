@@ -126,8 +126,7 @@ class _TripState extends State<Trip> {
                             );
                           } else {
                             controller.studentsEmpty = false;
-                            // if (students.isEmpty) {
-                            // }
+
                             // Render your list of students here
                             if (widget.tripType == 2) {
                               return ListView.builder(
@@ -268,6 +267,7 @@ class _TripState extends State<Trip> {
                                       children: [
                                         Row(
                                           children: [
+
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   right: 8.0),
@@ -304,8 +304,11 @@ class _TripState extends State<Trip> {
                                               style: TextStyle(
                                                   fontSize: width * 0.045),
                                             ),
+
+
                                           ],
                                         ),
+
                                       ],
                                     ),
                                   );
@@ -389,7 +392,8 @@ class _TripState extends State<Trip> {
                                     ),
                                   SizedBox(height: height * 0.02),
                                   if (students.isEmpty &&
-                                      !controller.studentsEmpty&& widget.tripType==1)
+                                      !controller.studentsEmpty &&
+                                      widget.tripType == 1)
                                     ButtonModel(
                                       onTap: () async {
                                         await launchUrl(Uri.parse(
@@ -408,7 +412,7 @@ class _TripState extends State<Trip> {
                               ),
                             );
                           } else {
-                           controller.studentsWaitingEmpty = false;
+                            controller.studentsWaitingEmpty = false;
                             // Render your list of students here
                             if (widget.tripType == 2) {
                               return ListView.builder(
@@ -470,6 +474,18 @@ class _TripState extends State<Trip> {
                                                   color: Colors.white),
                                             ),
                                           ],
+                                        ),
+                                        ButtonModel(
+                                          onTap: () {
+                                            controller.problemDialog(context, controller.currentTrip.id, student.id, false);
+                                          },
+                                          rowMainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          hMargin: width * 0.03,
+                                          height: height * 0.03,
+                                          width: width * 0.15,
+                                          content: 'بدء',
+                                          backColor: Colors.white,
                                         ),
                                       ],
                                     ),

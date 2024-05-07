@@ -6,10 +6,14 @@ import 'package:Amin/utils/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../model/student.dart';
 import '../model/trip.dart';
+import '../utils/constants.dart';
 import '../view/ui/driver/student_trip.dart';
+import '../view/ui/widget/button_model.dart';
+import '../view/ui/widget/custom_dialog.dart';
 
 class DriverController extends GetxController {
   RxBool isOneEmpty = false.obs;
@@ -17,8 +21,8 @@ class DriverController extends GetxController {
   late List<AbsenceModel> absenceList;
   late List<String> absenceIdsList = [];
   final _databaseHelper = DatabaseHelper();
-  bool studentsEmpty  = false;
-  bool studentsWaitingEmpty  = false;
+  bool studentsEmpty = false;
+  bool studentsWaitingEmpty = false;
   bool endWorkUpdate = false;
 
   late var currentTrip;
@@ -214,5 +218,119 @@ class DriverController extends GetxController {
       print("Error fetching bus students with status: $e");
       return []; // Return an empty list in case of error
     }
+  }
+
+  void problemDialog(
+      BuildContext context, String tripId, String studentId, bool type) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    Get.dialog(Dialog(
+      backgroundColor: Colors.white,
+      child: SizedBox(
+        height: height * 0.3,
+        child: Column(
+          children: [
+            SizedBox(
+              height: height * 0.015,
+            ),
+            Text(
+              "تواجهة مشكلة ؟",
+              style: TextStyle(fontSize: width * 0.05),
+            ),
+            SizedBox(height: height * 0.01),
+            ButtonModel(
+              onTap: () {
+                navigator?.pop();
+                Get.dialog(
+                  CustomDialog(
+                    buttonText: 'هل أنت متأكد؟',
+                    content: 'نعم',
+                    buttonOnTap: () async {
+                      Get.dialog(
+                        const AlertDialog(
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CircularProgressIndicator(),
+                              SizedBox(height: 16),
+                              Text('جارٍ التسجيل...'),
+                            ],
+                          ),
+                        ),
+                        barrierDismissible:
+                            false, // Prevent dismissing dialog by tapping outside
+                      );
+                      final databaseHelper = DatabaseHelper();
+                      await databaseHelper.makeManualAttendance(
+                          tripId, studentId, 4, false);
+                      Get.back();
+                      navigator?.pop();
+                      Get.back();
+                    },
+                  ),
+                );
+              },
+              hMargin: width * 0.04,
+              height: height * 0.06,
+              content: 'الطالب لم ياتي',
+              rowMainAxisAlignment: MainAxisAlignment.center,
+              backColor: PRIMARY_COLOR,
+              style: TextStyle(color: Colors.white, fontSize: width * 0.05),
+            ),
+            ButtonModel(
+              onTap: () {
+                navigator?.pop();
+                Get.dialog(
+                  CustomDialog(
+                    buttonText: 'هل أنت متأكد؟',
+                    content: 'نعم',
+                    buttonOnTap: () async {
+                      Get.dialog(
+                        const AlertDialog(
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CircularProgressIndicator(),
+                              SizedBox(height: 16),
+                              Text('جارٍ تسجيل الحضور...'),
+                            ],
+                          ),
+                        ),
+                        barrierDismissible:
+                            false, // Prevent dismissing dialog by tapping outside
+                      );
+                      final databaseHelper = DatabaseHelper();
+                      await databaseHelper.makeManualAttendance(
+                          tripId, studentId, 0, true);
+                      Get.back();
+                      type ? navigator?.pop() : null;
+                      Get.back();
+                    },
+                  ),
+                );
+              },
+              hMargin: width * 0.04,
+              vMargin: height * 0.015,
+              height: height * 0.06,
+              content: 'تسجيل الحضور يدويا',
+              rowMainAxisAlignment: MainAxisAlignment.center,
+              backColor: PRIMARY_COLOR,
+              style: TextStyle(color: Colors.white, fontSize: width * 0.05),
+            ),
+            ButtonModel(
+              onTap: () {
+                launchUrl(Uri(scheme: 'tel', path: '911'));
+              },
+              hMargin: width * 0.04,
+              height: height * 0.06,
+              content: 'الاتصال بالمشرف',
+              rowMainAxisAlignment: MainAxisAlignment.center,
+              backColor: PRIMARY_COLOR,
+              style: TextStyle(color: Colors.white, fontSize: width * 0.05),
+            )
+          ],
+        ),
+      ),
+    ));
   }
 }
