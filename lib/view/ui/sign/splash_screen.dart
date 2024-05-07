@@ -1,10 +1,10 @@
-import 'package:ameen/main.dart';
-import 'package:ameen/services/LocalStorageService.dart';
-import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/admin/home.dart';
-import 'package:ameen/view/ui/driver/driver_home.dart';
-import 'package:ameen/view/ui/home/home.dart';
-import 'package:ameen/view/ui/sign/start.dart';
+import 'package:Amin/main.dart';
+import 'package:Amin/services/LocalStorageService.dart';
+import 'package:Amin/utils/constants.dart';
+import 'package:Amin/view/ui/admin/home.dart';
+import 'package:Amin/view/ui/driver/driver_home.dart';
+import 'package:Amin/view/ui/home/home.dart';
+import 'package:Amin/view/ui/sign/start.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

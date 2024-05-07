@@ -1,4 +1,4 @@
-import 'package:ameen/view/ui/widget/button_model.dart';
+import 'package:Amin/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
 
 // import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';

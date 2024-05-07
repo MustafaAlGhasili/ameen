@@ -1,4 +1,4 @@
-import 'package:ameen/utils/general_helper.dart';
+import 'package:Amin/utils/general_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

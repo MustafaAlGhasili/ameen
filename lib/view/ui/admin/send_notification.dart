@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ameen/controller/notification_controller.dart';
-import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/widget/text_field.dart';
+import 'package:Amin/controller/notification_controller.dart';
+import 'package:Amin/utils/constants.dart';
+import 'package:Amin/view/ui/widget/text_field.dart';
 
 class SendNotification extends StatelessWidget {
   const SendNotification({super.key});

@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:ameen/controller/sign_controller.dart';
-import 'package:ameen/utils/constant.dart';
+import 'package:Amin/controller/sign_controller.dart';
+import 'package:Amin/utils/constant.dart';
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';

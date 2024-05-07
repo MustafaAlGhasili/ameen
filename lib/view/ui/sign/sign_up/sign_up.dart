@@ -1,4 +1,4 @@
-import 'package:ameen/view/ui/sign/start.dart';
+import 'package:Amin/view/ui/sign/start.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

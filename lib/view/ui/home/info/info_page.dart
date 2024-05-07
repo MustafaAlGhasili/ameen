@@ -1,10 +1,10 @@
-import 'package:ameen/controller/home_controller.dart';
-import 'package:ameen/model/student.dart';
-import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/home/home.dart';
-import 'package:ameen/view/ui/home/info/parent_info.dart';
-import 'package:ameen/view/ui/home/info/student_info.dart';
-import 'package:ameen/view/ui/widget/button_model.dart';
+import 'package:Amin/controller/home_controller.dart';
+import 'package:Amin/model/student.dart';
+import 'package:Amin/utils/constants.dart';
+import 'package:Amin/view/ui/home/home.dart';
+import 'package:Amin/view/ui/home/info/parent_info.dart';
+import 'package:Amin/view/ui/home/info/student_info.dart';
+import 'package:Amin/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../model/parent.dart';

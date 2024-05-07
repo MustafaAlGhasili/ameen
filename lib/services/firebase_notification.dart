@@ -1,5 +1,5 @@
-import 'package:ameen/model/token.dart';
-import 'package:ameen/utils/DatabaseHelper.dart';
+import 'package:Amin/model/token.dart';
+import 'package:Amin/utils/DatabaseHelper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

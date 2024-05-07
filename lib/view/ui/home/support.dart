@@ -1,4 +1,4 @@
-import 'package:ameen/utils/constants.dart';
+import 'package:Amin/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_faq/flutter_faq.dart';
 

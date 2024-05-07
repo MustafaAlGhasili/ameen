@@ -1,4 +1,4 @@
-import 'package:ameen/view/ui/sign/sign_in/sign_in.dart';
+import 'package:Amin/view/ui/sign/sign_in/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

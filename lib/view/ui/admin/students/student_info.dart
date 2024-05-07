@@ -1,9 +1,9 @@
-import 'package:ameen/model/parent.dart';
-import 'package:ameen/model/student.dart';
-import 'package:ameen/utils/DatabaseHelper.dart';
-import 'package:ameen/view/ui/admin/home.dart';
-import 'package:ameen/view/ui/widget/custom_dialog.dart';
-import 'package:ameen/view/ui/widget/custom_container.dart';
+import 'package:Amin/model/parent.dart';
+import 'package:Amin/model/student.dart';
+import 'package:Amin/utils/DatabaseHelper.dart';
+import 'package:Amin/view/ui/admin/home.dart';
+import 'package:Amin/view/ui/widget/custom_dialog.dart';
+import 'package:Amin/view/ui/widget/custom_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

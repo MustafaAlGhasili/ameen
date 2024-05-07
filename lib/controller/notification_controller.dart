@@ -1,5 +1,5 @@
-import 'package:ameen/model/notification.dart';
-import 'package:ameen/utils/DatabaseHelper.dart';
+import 'package:Amin/model/notification.dart';
+import 'package:Amin/utils/DatabaseHelper.dart';
 import 'package:get/get.dart';
 
 import '../services/LocalStorageService.dart';

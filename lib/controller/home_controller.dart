@@ -1,6 +1,6 @@
-import 'package:ameen/controller/sign_controller.dart';
-import 'package:ameen/model/absence.dart';
-import 'package:ameen/model/student.dart';
+import 'package:Amin/controller/sign_controller.dart';
+import 'package:Amin/model/absence.dart';
+import 'package:Amin/model/student.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 

@@ -1,4 +1,4 @@
-import 'package:ameen/view/ui/admin/students/waiting_student.dart';
+import 'package:Amin/view/ui/admin/students/waiting_student.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../utils/DatabaseHelper.dart';

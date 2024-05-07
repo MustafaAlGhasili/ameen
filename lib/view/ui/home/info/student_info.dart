@@ -1,5 +1,5 @@
-import 'package:ameen/controller/home_controller.dart';
-import 'package:ameen/model/student.dart';
+import 'package:Amin/controller/home_controller.dart';
+import 'package:Amin/model/student.dart';
 import 'package:flutter/material.dart';
 import '../../../../services/LocalStorageService.dart';
 import '../../widget/custom_container.dart';

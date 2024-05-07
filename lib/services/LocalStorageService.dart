@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:ameen/model/driver.dart';
-import 'package:ameen/model/student.dart';
+import 'package:Amin/model/driver.dart';
+import 'package:Amin/model/student.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/parent.dart';

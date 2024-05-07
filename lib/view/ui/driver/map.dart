@@ -1,7 +1,7 @@
-import 'package:ameen/model/student.dart';
-import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/widget/button_model.dart';
-import 'package:ameen/view/ui/widget/custom_dialog.dart';
+import 'package:Amin/model/student.dart';
+import 'package:Amin/utils/constants.dart';
+import 'package:Amin/view/ui/widget/button_model.dart';
+import 'package:Amin/view/ui/widget/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

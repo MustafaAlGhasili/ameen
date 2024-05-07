@@ -1,6 +1,6 @@
-import 'package:ameen/controller/home_controller.dart';
-import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/home/support.dart';
+import 'package:Amin/controller/home_controller.dart';
+import 'package:Amin/utils/constants.dart';
+import 'package:Amin/view/ui/home/support.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

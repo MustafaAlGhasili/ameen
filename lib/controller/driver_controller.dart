@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:ameen/model/absence.dart';
-import 'package:ameen/services/LocalStorageService.dart';
-import 'package:ameen/utils/DatabaseHelper.dart';
+import 'package:Amin/model/absence.dart';
+import 'package:Amin/services/LocalStorageService.dart';
+import 'package:Amin/utils/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';

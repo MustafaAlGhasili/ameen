@@ -1,5 +1,5 @@
-import 'package:ameen/model/student.dart';
-import 'package:ameen/utils/constants.dart';
+import 'package:Amin/model/student.dart';
+import 'package:Amin/utils/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

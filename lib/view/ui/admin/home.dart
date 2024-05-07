@@ -1,6 +1,6 @@
-import 'package:ameen/view/ui/admin/drivers/drivers_list.dart';
-import 'package:ameen/view/ui/admin/students/students_list.dart';
-import 'package:ameen/view/ui/sign/start.dart';
+import 'package:Amin/view/ui/admin/drivers/drivers_list.dart';
+import 'package:Amin/view/ui/admin/students/students_list.dart';
+import 'package:Amin/view/ui/sign/start.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

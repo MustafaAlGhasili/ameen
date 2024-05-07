@@ -1,5 +1,5 @@
-import 'package:ameen/controller/sign_controller.dart';
-import 'package:ameen/view/ui/sign/sign_up/waiting_screen.dart';
+import 'package:Amin/controller/sign_controller.dart';
+import 'package:Amin/view/ui/sign/sign_up/waiting_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

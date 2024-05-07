@@ -1,5 +1,5 @@
-import 'package:ameen/model/driver.dart';
-import 'package:ameen/view/ui/widget/custom_container.dart';
+import 'package:Amin/model/driver.dart';
+import 'package:Amin/view/ui/widget/custom_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 

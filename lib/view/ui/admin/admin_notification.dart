@@ -2,9 +2,9 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_database/firebase_database.dart'; // Import Firebase database
-import 'package:ameen/view/ui/admin/send_notification.dart';
-import 'package:ameen/view/ui/widget/notification_card.dart'; // Import the NotificationCard widget
-import 'package:ameen/model/notification.dart'; // Import the NotificationModel
+import 'package:Amin/view/ui/admin/send_notification.dart';
+import 'package:Amin/view/ui/widget/notification_card.dart'; // Import the NotificationCard widget
+import 'package:Amin/model/notification.dart'; // Import the NotificationModel
 
 class AdminNotifications extends StatelessWidget {
   const AdminNotifications({super.key});

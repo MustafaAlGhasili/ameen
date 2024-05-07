@@ -1,5 +1,5 @@
-import 'package:ameen/controller/home_controller.dart';
-import 'package:ameen/view/ui/map/track_student_map.dart';
+import 'package:Amin/controller/home_controller.dart';
+import 'package:Amin/view/ui/map/track_student_map.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'state_page.dart';

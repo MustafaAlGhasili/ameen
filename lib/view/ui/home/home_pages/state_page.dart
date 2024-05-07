@@ -1,4 +1,4 @@
-import 'package:ameen/controller/home_controller.dart';
+import 'package:Amin/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

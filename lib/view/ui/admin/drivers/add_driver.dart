@@ -1,6 +1,6 @@
-import 'package:ameen/controller/admin_controller.dart';
-import 'package:ameen/utils/constants.dart';
-import 'package:ameen/view/ui/widget/text_field.dart';
+import 'package:Amin/controller/admin_controller.dart';
+import 'package:Amin/utils/constants.dart';
+import 'package:Amin/view/ui/widget/text_field.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

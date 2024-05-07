@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math' show cos, sqrt, asin;
 
-import 'package:ameen/utils/constant.dart';
-import 'package:ameen/view/ui/test/test_map_uber.dart';
+import 'package:Amin/utils/constant.dart';
+import 'package:Amin/view/ui/test/test_map_uber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

@@ -1,9 +1,9 @@
-import 'package:ameen/controller/camera_controller.dart';
-import 'package:ameen/view/ui/admin/home.dart';
-import 'package:ameen/view/ui/driver/driver_home.dart';
-import 'package:ameen/view/ui/sign/sign_in/forget_password.dart';
-import 'package:ameen/view/ui/sign/sign_up/sign_up.dart';
-import 'package:ameen/view/ui/widget/button_model.dart';
+import 'package:Amin/controller/camera_controller.dart';
+import 'package:Amin/view/ui/admin/home.dart';
+import 'package:Amin/view/ui/driver/driver_home.dart';
+import 'package:Amin/view/ui/sign/sign_in/forget_password.dart';
+import 'package:Amin/view/ui/sign/sign_up/sign_up.dart';
+import 'package:Amin/view/ui/widget/button_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';

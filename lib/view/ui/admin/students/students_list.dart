@@ -1,5 +1,5 @@
-import 'package:ameen/view/ui/admin/students/student_info.dart';
-import 'package:ameen/view/ui/admin/students/waiting_list.dart';
+import 'package:Amin/view/ui/admin/students/student_info.dart';
+import 'package:Amin/view/ui/admin/students/waiting_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';

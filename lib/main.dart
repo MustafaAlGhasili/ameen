@@ -1,8 +1,8 @@
 import 'dart:ui';
-import 'package:ameen/controller/driver_controller.dart';
-import 'package:ameen/services/firebase_notification.dart';
-import 'package:ameen/view/ui/sign/splash_screen.dart';
-import 'package:ameen/view/ui/sign/start.dart';
+import 'package:Amin/controller/driver_controller.dart';
+import 'package:Amin/services/firebase_notification.dart';
+import 'package:Amin/view/ui/sign/splash_screen.dart';
+import 'package:Amin/view/ui/sign/start.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -30,10 +30,10 @@ void main() async {
       "fE8Q0a7sQQ--yWhCLw-HqW:APA91bHeFJITcbqMiOM5qVQoLKx4uw-IQ-lR95UEbdHxyfi-iiBAUvim4uMRy7nExF91CveHfn20wYBG9xoV_nBlBEzPev_6SBdOll4vRTPbHyTiSLSr2R8VKmjJanZahssBMTDam3QK";
   //await firebaseNotification.sendNotification("title2", "body2", token);
   //await firebaseNotification.sendToTopic("title3", "body3", "parents");
-  final connectType = await Connectivity().checkConnectivity();
   Get.put(DriverController());
   runApp(
     GetMaterialApp(
+      title: "Amin",
       useInheritedMediaQuery: true,
       locale: const Locale.fromSubtags(countryCode: "ar"),
       localizationsDelegates: const [

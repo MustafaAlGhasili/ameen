@@ -29,7 +29,7 @@
         </intent>
     </queries>
     <application
-        android:label="ameen"
+        android:label="Amin"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

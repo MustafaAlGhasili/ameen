@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:ameen/view/ui/widget/custom_dialog.dart';
+import 'package:Amin/view/ui/widget/custom_dialog.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';

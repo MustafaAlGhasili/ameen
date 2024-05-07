@@ -1,6 +1,6 @@
-import 'package:ameen/model/parent.dart';
-import 'package:ameen/model/student.dart';
-import 'package:ameen/utils/constants.dart';
+import 'package:Amin/model/parent.dart';
+import 'package:Amin/model/student.dart';
+import 'package:Amin/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'edit_parent.dart';
 import 'edit_student.dart';

@@ -70,7 +70,7 @@ class DefaultFirebaseOptions {
     projectId: 'amin-519f2',
     databaseURL: 'https://amin-519f2-default-rtdb.firebaseio.com',
     storageBucket: 'amin-519f2.appspot.com',
-    iosBundleId: 'com.example.ameen',
+    iosBundleId: 'com.example.Amin',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -80,6 +80,6 @@ class DefaultFirebaseOptions {
     projectId: 'amin-519f2',
     databaseURL: 'https://amin-519f2-default-rtdb.firebaseio.com',
     storageBucket: 'amin-519f2.appspot.com',
-    iosBundleId: 'com.example.ameen.RunnerTests',
+    iosBundleId: 'com.example.Amin.RunnerTests',
   );
 }

@@ -1,4 +1,4 @@
-import 'package:ameen/services/auth_service/AuthService.dart';
+import 'package:Amin/services/auth_service/AuthService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

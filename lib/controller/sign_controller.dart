@@ -1,9 +1,9 @@
 // import 'package:camera/camera.dart';
-import 'package:ameen/model/admin.dart';
-import 'package:ameen/model/driver.dart';
-import 'package:ameen/model/parent.dart';
-import 'package:ameen/utils/constant.dart';
-import 'package:ameen/utils/general_helper.dart';
+import 'package:Amin/model/admin.dart';
+import 'package:Amin/model/driver.dart';
+import 'package:Amin/model/parent.dart';
+import 'package:Amin/utils/constant.dart';
+import 'package:Amin/utils/general_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

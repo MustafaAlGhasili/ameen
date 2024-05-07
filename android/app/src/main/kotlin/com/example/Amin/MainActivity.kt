@@ -1,4 +1,4 @@
-package com.example.ameen
+package com.example.Amin
 
 import io.flutter.embedding.android.FlutterActivity
 

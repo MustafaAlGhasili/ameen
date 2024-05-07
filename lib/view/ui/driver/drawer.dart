@@ -1,5 +1,5 @@
-import 'package:ameen/view/ui/admin/drivers/driver_presoanl_info.dart';
-import 'package:ameen/view/ui/driver/student/student_list.dart';
+import 'package:Amin/view/ui/admin/drivers/driver_presoanl_info.dart';
+import 'package:Amin/view/ui/driver/student/student_list.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

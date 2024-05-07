@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 
-import 'package:ameen/model/location.dart';
-import 'package:ameen/model/student.dart';
-import 'package:ameen/services/LocalStorageService.dart';
-import 'package:ameen/utils/DatabaseHelper.dart';
-import 'package:ameen/utils/constant.dart';
-import 'package:ameen/utils/map_helper.dart';
-import 'package:ameen/view/ui/home/info/info_page.dart';
+import 'package:Amin/model/location.dart';
+import 'package:Amin/model/student.dart';
+import 'package:Amin/services/LocalStorageService.dart';
+import 'package:Amin/utils/DatabaseHelper.dart';
+import 'package:Amin/utils/constant.dart';
+import 'package:Amin/utils/map_helper.dart';
+import 'package:Amin/view/ui/home/info/info_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

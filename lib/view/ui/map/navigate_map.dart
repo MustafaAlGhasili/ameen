@@ -3,8 +3,8 @@ import 'dart:isolate';
 import 'dart:math' show cos, sqrt, asin;
 import 'dart:ui';
 
-import 'package:ameen/model/trip.dart';
-import 'package:ameen/utils/constant.dart';
+import 'package:Amin/model/trip.dart';
+import 'package:Amin/utils/constant.dart';
 import 'package:background_locator_2/background_locator.dart';
 import 'package:background_locator_2/location_dto.dart';
 import 'package:background_locator_2/settings/android_settings.dart';
