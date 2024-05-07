@@ -1,16 +1,16 @@
 import 'dart:ui';
 import 'package:Amin/controller/driver_controller.dart';
 import 'package:Amin/services/firebase_notification.dart';
+import 'package:Amin/view/ui/offlin_page.dart';
 import 'package:Amin/view/ui/sign/splash_screen.dart';
 import 'package:Amin/view/ui/sign/start.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_no_internet_widget/flutter_no_internet_widget.dart';
 import 'package:get/get.dart';
 import 'package:map_location_picker/generated/l10n.dart';
 import 'firebase_options.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,18 +33,21 @@ void main() async {
   //await firebaseNotification.sendToTopic("title3", "body3", "parents");
   Get.put(DriverController());
   runApp(
-    GetMaterialApp(
-      title: "Amin",
-      useInheritedMediaQuery: true,
-      locale: const Locale.fromSubtags(countryCode: "ar"),
-      localizationsDelegates: const [
-        S.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      theme: ThemeData(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146),
+    InternetWidget(
+      offline: const OfflinePage(),
+      online: GetMaterialApp(
+        title: "Amin",
+        useInheritedMediaQuery: true,
+        locale: const Locale.fromSubtags(countryCode: "ar"),
+        localizationsDelegates: const [
+          S.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        theme: ThemeData(
+          scaffoldBackgroundColor: const Color.fromARGB(255, 113, 65, 146),
+        ),
+        home: const SplashScreen(),
       ),
-      home: const SplashScreen(),
     ),
   );
 }

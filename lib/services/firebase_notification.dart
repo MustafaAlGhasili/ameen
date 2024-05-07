@@ -1,5 +1,6 @@
 import 'package:Amin/model/token.dart';
 import 'package:Amin/utils/DatabaseHelper.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -11,21 +12,26 @@ class FirebaseNotification {
       'AAAARpR19j8:APA91bFn_EfZ04pOfz0n5jH6FfH5khXEzLvULxZLdmH5zIuOoj0qBNOc9mn4rlNpSA8ZdeTYdYzx9pNaosxjSX9XmplWmghaXwetl4MYQvGtit9SiZJPmnABFdSIIMUvLAaprsDEVl3R';
 
   Future<void> initialize() async {
-    _firebaseMessaging.requestPermission();
-    String? token = await _firebaseMessaging.getToken();
-    print("FCM token: $token");
-    if (token != null) {
-      TokenModel tokenModel = TokenModel(userId: "userId", token: token);
-      await _databaseHelper.saveToken(tokenModel, "parents");
+    Connectivity connectivity = Connectivity();
+    if (connectivity.checkConnectivity() == ConnectivityResult.wifi ||
+        connectivity.checkConnectivity() == ConnectivityResult.mobile) {
+      _firebaseMessaging.requestPermission();
+      String? token = await _firebaseMessaging.getToken();
+      print("FCM token: $token");
+      if (token != null) {
+        TokenModel tokenModel = TokenModel(userId: "userId", token: token);
+        await _databaseHelper.saveToken(tokenModel, "parents");
+      }
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        print("onMessage: $message");
+      });
+
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        print("onMessageOpenedApp: $message");
+      });
     }
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("onMessage: $message");
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print("onMessageOpenedApp: $message");
-    });
   }
 
   Future<void> sendNotification(String title, String body, String token) async {
@@ -73,7 +79,8 @@ class FirebaseNotification {
     if (response.statusCode == 200) {
       print('Notification sent successfully to topic: $topic');
     } else {
-      print('Failed to send notification to topic: $topic, StatusCode: ${response.statusCode}');
+      print(
+          'Failed to send notification to topic: $topic, StatusCode: ${response.statusCode}');
     }
   }
 }
