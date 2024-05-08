@@ -134,7 +134,7 @@ class SignIn extends StatelessWidget {
                                           color: Colors.white,
                                           size: width * 0.065,
                                         ),
-                                        title: "Error",
+                                        title: "خطأ",
                                         message:
                                             controller.loginErrorValue.value,
                                         duration: const Duration(seconds: 2),

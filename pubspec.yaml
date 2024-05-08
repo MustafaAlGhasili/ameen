@@ -145,17 +145,18 @@ flutter_native_splash:
 flutter_launcher_icons:
     android: "launcher_icon"
     ios: true
-    image_path: "img/app_icon.png"
+    image_path: "img/logo.png"
     min_sdk_android: 21 # android min sdk min:16, default 21
     web:
       generate: true
-      image_path: "img/app_icon.png"
-      background_color: "#714192"
+      image_path: "img/logo.png"
       theme_color: "#ffffff"
+      background_color: "#714192"
+
     windows:
       generate: true
-      image_path: "img/app_icon.png"
+      image_path: "img/logo.png"
       icon_size: 48 # min:48, max:256, default: 48
     macos:
       generate: true
-      image_path: "img/app_icon.png"
+      image_path: "img/logo.png"

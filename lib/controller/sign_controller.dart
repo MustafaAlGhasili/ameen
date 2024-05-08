@@ -303,6 +303,7 @@ class SignController extends GetxController {
           return true;
         } else {
           print("No Data for driver");
+          loginErrorValue.value = "لايوجد بيانات للسائق";
           return false;
         }
       } else {
